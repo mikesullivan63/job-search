@@ -17,7 +17,7 @@ function ResultsCompany(props) {
     return (
       <div className="Company">
           <h2>{props.company.company}</h2>
-          {props.company.jobs.map(function(job, index){
+          {props.company.jobs && props.company.jobs.map(function(job, index){
                     return (
                         <div className="Job">
                             <div className="JobTitle">{job.title}</div>
@@ -52,8 +52,9 @@ function ResultsCompany(props) {
         <div class="search-results">
             {props && props.data? 
                 props.data.map(function(company, index){
+                    alert('index: ' + index + ' company:' + company)
                     return (
-                        <ResultsCompany company={company} />
+                        <ResultsCompany key={company.company} company={company} />
                     );
                 })
             : ( <div class="no-results">No Results</div> )

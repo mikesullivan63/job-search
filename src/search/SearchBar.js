@@ -3,13 +3,23 @@ import './SearchBar.css';
 import Results from '../results/Results';
 import processGreenhouse from '../processors/greenhouse/Greenhouse';
 
+
+const GreenhouseBoards = [
+    {name: "InVision", url:"invision", notes: "Design tool"},
+    {name: "Abstract", url:"abstract", notes: "Sketch platform"},
+]
+
 class SearchBar extends React.Component {
     constructor(props) {
         super(props);
+
+        let results = [];
+        results = results.concat(GreenhouseBoards.map(board => ({company: board.name})));
+
         this.state = {
             title: null,
             location: null,
-            results: null,
+            results: results,
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -57,7 +67,7 @@ class SearchBar extends React.Component {
                     url: "URL-to-posting-3"
             }]
         }];
-        data = data.concat(processGreenhouse('https://boards.greenhouse.io/invision/'));
+        //data = data.concat(processGreenhouse('https://boards.greenhouse.io/invision/'));
 
         this.updateResults(data);
     }
