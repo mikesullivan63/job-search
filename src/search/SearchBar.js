@@ -1,5 +1,6 @@
 import React from 'react';
 import './SearchBar.css';
+import Results from '../results/Results';
 
 class SearchBar extends React.Component {
     constructor(props) {
@@ -31,28 +32,35 @@ class SearchBar extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label> 
-                    Job Title:
-                    <input 
-                        type="text" 
-                        name="title" 
-                        value={this.state.title} 
-                        onChange={this.handleInputChange} 
-                    />
-                </label>
-                <br />
-                <label>
-                    Location:
-                    <input 
-                        type="text" 
-                        name="location" 
-                        value={this.state.location} 
-                        onChange={this.handleInputChange} 
-                    />
-                </label>
-                <input type="submit" value="Search" />
-            </form> 
+            <React.Fragment>
+                <div class="search-bar">
+                    <form onSubmit={this.handleSubmit}>
+                        <label> 
+                            Job Title:
+                            <input 
+                                type="text" 
+                                name="title" 
+                                value={this.state.title} 
+                                onChange={this.handleInputChange} 
+                            />
+                        </label>
+                        <br />
+                        <label>
+                            Location:
+                            <input 
+                                type="text" 
+                                name="location" 
+                                value={this.state.location} 
+                                onChange={this.handleInputChange} 
+                            />
+                        </label>
+                        <br />
+                        <input type="submit" value="Search" />
+                    </form> 
+                </div>
+
+                <Results props={null}/>
+            </React.Fragment>
         );
     }
 }
