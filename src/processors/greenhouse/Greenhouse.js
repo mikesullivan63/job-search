@@ -8,19 +8,22 @@ const GreenhouseRoot = "https://boards.greenhouse.io/"
         <span class="location">Remote</span>
     </div>
 */
-const processGreenhouse = (url) => {
+const processGreenhouse = (board, title, location, caller) => {
 
-    alert('Fetching: ' + GreenhouseRoot + url);
+    alert('Fetching: ' + GreenhouseRoot + board.url);
 
-    fetch(GreenhouseRoot + url)
+    fetch(GreenhouseRoot + board.url)
       .then(res => res.text)
       .then(html => {
           alert('Found HTML: ' + html);
-          parse(html)
+          return parse(html)
         })
       .then(component => {
           alert('Found job: ' + component);
+          return null
       })
+
+      caller.updateBoardResults({company: board.company, jobs: [{ title: title, location: location, url: 'fff'}]});
 
 }
 

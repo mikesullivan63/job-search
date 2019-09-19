@@ -37,7 +37,7 @@ class SearchBar extends React.Component {
     }
 
     updateResults(data) {
-        alert(data[0].company)
+        //alert(data[0].company)
         this.setState({
           results: data
         });
@@ -67,11 +67,25 @@ class SearchBar extends React.Component {
                     url: "URL-to-posting-3"
             }]
         }];
-        //data = data.concat(processGreenhouse('https://boards.greenhouse.io/invision/'));
 
-        this.updateResults(data);
+        GreenhouseBoards.forEach(board => processGreenhouse(board, this.state.title, this.state.location, this));
+
+        //this.updateResults(data);
     }
 
+    updateBoardResults(result) {
+        let newResults = this.state.results.splice();        
+        const index = newResults.findIndex((element) => element.company === result.company);
+        if(index === -1) {
+            newResults.concat(result);
+        } else {
+            alert('replacing item at ' + index); 
+            newResults[index] = result;
+        }
+        this.setState({
+            results: newResults
+          });
+    }
 
     render() {
         return (

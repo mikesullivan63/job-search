@@ -52,7 +52,7 @@ function ResultsCompany(props) {
         <div class="search-results">
             {props && props.data? 
                 props.data.map(function(company, index){
-                    alert('index: ' + index + ' company:' + company)
+                    //alert('index: ' + index + ' company:' + company)
                     return (
                         <ResultsCompany key={company.company} company={company} />
                     );
