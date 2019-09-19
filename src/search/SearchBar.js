@@ -8,6 +8,7 @@ class SearchBar extends React.Component {
         this.state = {
             title: null,
             location: null,
+            results: null,
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -24,9 +25,37 @@ class SearchBar extends React.Component {
         });
     }
 
+    updateResults(data) {
+        alert(data[0].company)
+        this.setState({
+          results: data
+        });
+    }
+
     handleSubmit(event) {
         alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
         event.preventDefault();
+
+        this.updateResults([{
+            company: "Company Name #1",
+            jobs: [{
+                title: "Job Title #1",
+                location: "Job Location #1",
+                url: "URL-to-posting-1"
+            }]
+        },{
+            company: "Company Name #2",
+            jobs: [{
+                    title: "Job Title #2",
+                    location: "Job Location #2",
+                    url: "URL-to-posting-2"
+                },
+                {
+                    title: "Job Title #3",
+                    location: "Job Location #3",
+                    url: "URL-to-posting-3"
+            }]
+        }]);
     }
 
 
@@ -59,7 +88,7 @@ class SearchBar extends React.Component {
                     </form> 
                 </div>
 
-                <Results props={null}/>
+                <Results data={this.state.results}/>
             </React.Fragment>
         );
     }

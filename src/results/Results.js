@@ -13,11 +13,11 @@ import './Results.css';
         }]
     }
 */
-function ResultsCompany() {
+function ResultsCompany(props) {
     return (
       <div className="Company">
-          <h2>{this.props.company}</h2>
-          {this.props.jobs.map(function(job, index){
+          <h2>{props.company.company}</h2>
+          {props.company.jobs.map(function(job, index){
                     return (
                         <div className="Job">
                             <div className="JobTitle">{job.title}</div>
@@ -43,12 +43,17 @@ function ResultsCompany() {
     ]
 */
   function Results(props) {
+      if(props.results) {
+        alert('Props: ' + props)
+        alert('Props.results: ' + props.data)
+        alert('Props.results[0].company: ' + props.data[0].company)  
+      }
     return (
         <div class="search-results">
-            {props && props.results? 
-                props.results.map(function(company, index){
+            {props && props.data? 
+                props.data.map(function(company, index){
                     return (
-                        <ResultsCompany props={company} />
+                        <ResultsCompany company={company} />
                     );
                 })
             : ( <div class="no-results">No Results</div> )
