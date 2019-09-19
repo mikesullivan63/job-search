@@ -1,6 +1,7 @@
 import React from 'react';
 import './SearchBar.css';
 import Results from '../results/Results';
+import processGreenhouse from '../processors/greenhouse/Greenhouse';
 
 class SearchBar extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class SearchBar extends React.Component {
         alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
         event.preventDefault();
 
-        this.updateResults([{
+        let data = [{
             company: "Company Name #1",
             jobs: [{
                 title: "Job Title #1",
@@ -55,7 +56,10 @@ class SearchBar extends React.Component {
                     location: "Job Location #3",
                     url: "URL-to-posting-3"
             }]
-        }]);
+        }];
+        data = data.concat(processGreenhouse('https://boards.greenhouse.io/invision/'));
+
+        this.updateResults(data);
     }
 
 
