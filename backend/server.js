@@ -38,6 +38,7 @@ routes.route('/:company/:title/:location').get(function(req, res) {
     switch(board.type) {
         case "Greenhouse": processGreenhouse(board, title, location, res); break;
         case "GreenhouseEmbed": processGreenhouseEmbed(board, title, location, res); break;
+        case "Lever": processLever(board, title, location, res); break;
 
         default: console.log("Error with board type: " + board.type);
     }
@@ -98,6 +99,58 @@ function processGreenhouseCore(board, title, location, url, linkurl,res) {
     });
 };
 
+
+function processLever(board, title, location, res) {
+
+    const url = "https://jobs.lever.co/" + board.url;
+    console.log('Fetching: ' + url);
+
+    var options = {
+        uri: url,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+
+    /*
+    <div class="posting" data-qa-posting-id="">
+        <div class="posting-apply" data-qa="btn-apply">
+            <a href="" class="posting-btn-submit template-btn-submit cerulean">Apply</a>
+        </div>
+        <a class="posting-title" href="">
+            <h5 data-qa="posting-name">Core Platform Engineer</h5>
+            <div class="posting-categories">
+                <span href="#" class="sort-by-location posting-category small-category-label">San Francisco, NY or Remote w/in U.S.</span>
+                <span href="#" class="sort-by-team posting-category small-category-label">Engineering</span>
+                <span href="#" class="sort-by-commitment posting-category small-category-label">Full-time</span>
+            </div>
+        </a>
+    </div>
+    */
+
+    request.get(options)
+        .then(($) => {
+            let jobs = [];
+            $('div.posting')
+                .filter((i,el) => matchTitle(title, $(el).find('[data-qa=posting-name]').text()))
+                .filter((i,el) => matchLocation(location, $(el).find('span.sort-by-location').text()))
+                .each((i,el) => {
+                    jobs = jobs.concat({
+                        title:      $(el).find('[data-qa=posting-name]').text(), 
+                        location:   $(el).find('span.sort-by-location').text(), 
+                        url:        $(el).find('a.posting-title').attr('href')
+                    });
+                });
+            console.log("Done parsing: " + jobs.length);
+            res.json({company: board.name, jobs: jobs});
+    }).catch((error) => {
+        if(error) {
+            console.log('Error loading board: ' + board.name + ' - ' + error);
+            res.json({company: board.name, error: 'Error: ' + error});
+        }
+    });
+};
+
 const Boards = [
     {name: "InVision", url:"invision", type: "Greenhouse", notes: "Design tool"},
     {name: "Abstract", url:"abstract", type: "Greenhouse", notes: "Sketch platform"},
@@ -112,6 +165,16 @@ const Boards = [
     {name: "Doximity", url:"doximity", type: "GreenhouseEmbed", notes: ""},
     {name: "BetterUp", url:"betterup", type: "GreenhouseEmbed", notes: ""},
     
+    {name: "Medium", url:"medium", type: "Lever", notes: ""},
+    {name: "Sonatype", url:"sonatype", type: "Lever", notes: ""},
+    {name: "Help Scout", url:"helpscout", type: "Lever", notes: ""},
+    {name: "Dribbble", url:"dribbble", type: "Lever", notes: ""},
+    {name: "Close.io", url:"close.io", type: "Lever", notes: ""},
+    {name: "Chef", url:"chef", type: "Lever", notes: ""},
+    {name: "Auth0", url:"auth0", type: "Lever", notes: ""},
+    {name: "Articulate", url:"articulate", type: "Lever", notes: ""},
+    {name: "Imperfect Produce", url:"imperfectproduce", type: "Lever", notes: ""},
+    {name: "15 Five", url:"15five", type: "Lever", notes: ""},
 
 
 ]
@@ -153,16 +216,7 @@ const Boards = [
     https://hire.withgoogle.com/public/jobs/get10upcom
     https://hire.withgoogle.com/public/jobs/rstudiocom
 
-    https://jobs.lever.co/medium
-    https://jobs.lever.co/sonatype
-    https://jobs.lever.co/helpscout/
-    https://jobs.lever.co/dribbble/
-    https://jobs.lever.co/close.io/
-    https://jobs.lever.co/chef/
-    https://jobs.lever.co/auth0
-    https://jobs.lever.co/articulate/
-    https://jobs.lever.co/imperfectproduce
-    https://jobs.lever.co/15five
+
 
     https://retail-zipline.breezy.hr/
     https://nearform.breezy.hr/
