@@ -46,7 +46,7 @@ function ResultsCompany(props) {
 
     return (
       <StyledResultsCompany >
-            <StyledResultsCompanyName>{props.company.company}</StyledResultsCompanyName>
+            <a href={props.company.url} target="_blank" rel="noopener noreferrer"><StyledResultsCompanyName>{props.company.company} </StyledResultsCompanyName></a>
             {props.company.state === 'PENDING' && 
                         <StyledResultsCompanyJob>Pending Lookup</StyledResultsCompanyJob>
             }

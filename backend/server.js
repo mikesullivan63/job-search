@@ -40,6 +40,7 @@ routes.route('/:company/:title/:location').get(function(req, res) {
         case "GreenhouseEmbed": processGreenhouseEmbed(board, title, location, res); break;
         case "Lever": processLever(board, title, location, res); break;
         case "Google": processGoogle(board, title, location, res); break;
+        case "Breezy": processBreezy(board, title, location, res); break;
 
         default: console.log("Error with board type: " + board.type);
     }
@@ -50,6 +51,7 @@ function matchTitle(needle, haystack) {
 }
 
 function matchLocation(needle, haystack) {
+    console.log('Looking for ' + needle + ' in ' + haystack);
     return haystack.toLowerCase().indexOf(needle) !== -1
 }
 function processGreenhouse(board, title, location, res) {
@@ -91,7 +93,7 @@ function processGreenhouseCore(board, title, location, url, linkurl,res) {
                     });
                 });
             console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, jobs: jobs});
+            res.json({company: board.name, url: url, jobs: jobs});
     }).catch((error) => {
         if(error) {
             console.log('Error loading board: ' + board.name + ' - ' + error);
@@ -143,7 +145,7 @@ function processLever(board, title, location, res) {
                     });
                 });
             console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, jobs: jobs});
+            res.json({company: board.name, url: url, jobs: jobs});
     }).catch((error) => {
         if(error) {
             console.log('Error loading board: ' + board.name + ' - ' + error);
@@ -187,7 +189,69 @@ function processGoogle(board, title, location, res) {
                     });
                 });
             console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, jobs: jobs});
+            res.json({company: board.name, url: url, jobs: jobs});
+    }).catch((error) => {
+        if(error) {
+            console.log('Error loading board: ' + board.name + ' - ' + error);
+            res.json({company: board.name, error: 'Error: ' + error});
+        }
+    });
+};
+
+function processBreezy(board, title, location, res) {
+
+    const url = "https://" +  board.url + ".breezy.hr/";
+    console.log('Fetching: ' + url);
+
+    var options = {
+        uri: url,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+
+    /*
+    <li class="position transition">
+        <a href="/p/1e0254b886db-business-development-representative">
+            <button class="button apply polygot button-right bzyButtonColor">Apply</button>
+            <h2>Business Development Representative</h2>
+            <ul class="meta">
+                <li class="location">
+                    <i class="fa fa-map-marker"></i>
+                    <span>Canada</span>
+                    <span class="spacer"> - </span>
+                    <i class="fa fa-wifi"></i>
+                    <span class="polygot">Remote OK</span>
+                </li>
+                <li class="type">
+                    <i class="fa fa-building"></i>
+                    <span class="polygot">Full-Time</span>
+                </li>
+                <li class="department">
+                    <i class="fa fa-building"></i>
+                    <span>Sales</span>
+                </li>
+            </ul>
+            <button class="button apply polygot button-full bzyButtonColor">Apply</button>
+        </a>
+    </li>
+    */
+
+    request.get(options)
+        .then(($) => {
+            let jobs = [];
+            $('li.position.transition a')
+                .filter((i,el) => matchTitle(title, $(el).find('h2').text()))
+                .filter((i,el) => matchLocation(location, $(el).find('li').map((i, el) => $(el).text()).get().join(' ')))
+                .each((i,el) => {
+                    jobs = jobs.concat({
+                        title:      $(el).find('h2').text(), 
+                        location:   $(el).find('li').map((i, el) => $(el).text()).get().join(' '), 
+                        url:        url + $(el).attr('href')
+                    });
+                });
+            console.log("Done parsing: " + jobs.length);
+            res.json({company: board.name, url: url, jobs: jobs});
     }).catch((error) => {
         if(error) {
             console.log('Error loading board: ' + board.name + ' - ' + error);
@@ -225,7 +289,9 @@ const Boards = [
     {name: "10up", url:"get10upcom", type: "Google", notes: ""},
     {name: "RStudio", url:"rstudiocom", type: "Google", notes: ""},
 
-
+    {name: "Zipline", url:"retail-zipline", type: "Breezy", notes: ""},
+    {name: "Nearform", url:"nearform", type: "Breezy", notes: ""},
+    {name: "Piggy", url:"piggy-llc", type: "Breezy", notes: ""},
 ]
 
 
