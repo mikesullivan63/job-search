@@ -39,6 +39,7 @@ routes.route('/:company/:title/:location').get(function(req, res) {
         case "Greenhouse": processGreenhouse(board, title, location, res); break;
         case "GreenhouseEmbed": processGreenhouseEmbed(board, title, location, res); break;
         case "Lever": processLever(board, title, location, res); break;
+        case "Google": processGoogle(board, title, location, res); break;
 
         default: console.log("Error with board type: " + board.type);
     }
@@ -151,6 +152,50 @@ function processLever(board, title, location, res) {
     });
 };
 
+function processGoogle(board, title, location, res) {
+
+    const url = "https://hire.withgoogle.com/public/jobs/" + board.url;
+    console.log('Fetching: ' + url);
+
+    var options = {
+        uri: url,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
+
+    /*
+    <li data-positionid="P_AAAAAACAAJZHZE3lvPT2nK" class="bb-public-jobs-list__job-item ptor-jobs-list__item">
+        <a href="https://hire.withgoogle.com" target="_blank" class="bb-public-jobs-list__item-link">
+            <span class="bb-public-jobs-list__job-item-title ptor-jobs-list__item-job-title">Senior Software Engineer, Build Automation - Ursa Labs</span>
+            <span class="bb-public-jobs-list__job-item-location ptor-jobs-list__item-location">USA</span>
+        </a>
+    </li>
+    */
+
+    request.get(options)
+        .then(($) => {
+            let jobs = [];
+            $('a.bb-public-jobs-list__item-link')
+                .filter((i,el) => matchTitle(title, $(el).find('span.bb-public-jobs-list__job-item-title').text()))
+                .filter((i,el) => matchLocation(location, $(el).find('span.bb-public-jobs-list__job-item-location').text()))
+                .each((i,el) => {
+                    jobs = jobs.concat({
+                        title:      $(el).find('span.bb-public-jobs-list__job-item-title').text(), 
+                        location:   $(el).find('span.bb-public-jobs-list__job-item-location').text(), 
+                        url:        $(el).attr('href')
+                    });
+                });
+            console.log("Done parsing: " + jobs.length);
+            res.json({company: board.name, jobs: jobs});
+    }).catch((error) => {
+        if(error) {
+            console.log('Error loading board: ' + board.name + ' - ' + error);
+            res.json({company: board.name, error: 'Error: ' + error});
+        }
+    });
+};
+
 const Boards = [
     {name: "InVision", url:"invision", type: "Greenhouse", notes: "Design tool"},
     {name: "Abstract", url:"abstract", type: "Greenhouse", notes: "Sketch platform"},
@@ -175,6 +220,10 @@ const Boards = [
     {name: "Articulate", url:"articulate", type: "Lever", notes: ""},
     {name: "Imperfect Produce", url:"imperfectproduce", type: "Lever", notes: ""},
     {name: "15 Five", url:"15five", type: "Lever", notes: ""},
+
+    {name: "Tackle.io", url:"tackleio", type: "Google", notes: ""},
+    {name: "10up", url:"get10upcom", type: "Google", notes: ""},
+    {name: "RStudio", url:"rstudiocom", type: "Google", notes: ""},
 
 
 ]
@@ -212,9 +261,6 @@ const Boards = [
     https://stripe.com/jobs
 
 
-    https://hire.withgoogle.com/public/jobs/tackleio
-    https://hire.withgoogle.com/public/jobs/get10upcom
-    https://hire.withgoogle.com/public/jobs/rstudiocom
 
 
 
