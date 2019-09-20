@@ -65,11 +65,11 @@ function processGreenhouse(board, title, location, res) {
                     });
                 });
             console.log("Done parsing: " + jobs.length);
-            res.json({company: board.company, jobs: jobs});
+            res.json({company: board.name, jobs: jobs});
     }).catch((err) => {
         if(error) {
             console.log('Error loading board: ' + board + ' - ' + error);
-            res.json({company: board.company, error: 'Error: ' + error});
+            res.json({company: board.name, error: 'Error: ' + error});
         }
     });
 };
