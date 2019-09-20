@@ -42,44 +42,22 @@ class SearchBar extends React.Component {
     }
 
     processBoard(board, title, location, caller) {
-        console.log('Calling to process board: ' + board.company);
+        //console.log('Calling to process board: ' + board.company);
         fetch("http://localhost:4000/api/" + board.company + "/" + title + "/" + location)
           .then(res => res.json())
           .then(result => this.updateBoardResults(result,  caller));
-          console.log('Calling to process board: ' + board.company + ' - Done');
+          //console.log('Calling to process board: ' + board.company + ' - Done');
     }
 
     updateBoardResults(result,  caller) {
+        let newResults = caller.state.results.slice(); 
+        const index = newResults.findIndex((element) => element.company === result.company);
 
-        console.log('Processsing result for ' + result.company + ': ' + result);
-        console.log('this.state.results: ' +  caller.state.results); 
-
-        let newResults = this.state.results.splice(); 
-        console.log('newResults: ' + newResults); 
-        
-        const index = newResults.findIndex((element) => {
-            console.log('comparing : ' + element.company + ' to ' + result.company); 
-            return element.company === result.company
-        } );
-
-        console.log('Processsing result for ' + result.company + ': index: ' + index);
-
-        if(index === -1) {
-            newResults.concat(result);
-        } else {
-            alert('replacing item at ' + index); 
-            newResults[index] = result;
-        }
-
-        console.log('newResults: ' + newResults); 
-        console.log('newResults length: ' + newResults.length); 
+        (index === -1) ? newResults.concat(result) : newResults[index] = result;
 
         this.setState({
             results: newResults
-          });
-
-        console.log('Processsing result for ' + result.company + ': Done');
-
+        });
     }
 
     componentDidMount() {
