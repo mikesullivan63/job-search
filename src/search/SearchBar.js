@@ -1,25 +1,15 @@
 import React from 'react';
 import './SearchBar.css';
 import Results from '../results/Results';
-import processGreenhouse from '../processors/greenhouse/Greenhouse';
-
-
-const GreenhouseBoards = [
-    {name: "InVision", url:"invision", notes: "Design tool"},
-    {name: "Abstract", url:"abstract", notes: "Sketch platform"},
-]
 
 class SearchBar extends React.Component {
     constructor(props) {
         super(props);
 
-        let results = [];
-        results = results.concat(GreenhouseBoards.map(board => ({company: board.name})));
-
         this.state = {
             title: null,
             location: null,
-            results: results,
+            results: [],
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -37,7 +27,6 @@ class SearchBar extends React.Component {
     }
 
     updateResults(data) {
-        //alert(data[0].company)
         this.setState({
           results: data
         });
@@ -47,33 +36,23 @@ class SearchBar extends React.Component {
         alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
         event.preventDefault();
 
-        let data = [{
-            company: "Company Name #1",
-            jobs: [{
-                title: "Job Title #1",
-                location: "Job Location #1",
-                url: "URL-to-posting-1"
-            }]
-        },{
-            company: "Company Name #2",
-            jobs: [{
-                    title: "Job Title #2",
-                    location: "Job Location #2",
-                    url: "URL-to-posting-2"
-                },
-                {
-                    title: "Job Title #3",
-                    location: "Job Location #3",
-                    url: "URL-to-posting-3"
-            }]
-        }];
-
-        GreenhouseBoards.forEach(board => processGreenhouse(board, this.state.title, this.state.location, this));
+        this.state.results.forEach(board => this.processBoard(board, this.state.title, this.state.location));
 
         //this.updateResults(data);
     }
 
+    processBoard(board, title, location) {
+        console.log('Calling to process board: ' + board.company);
+        fetch("http://localhost:4000/api/" + board.company + "/" + title + "/" + location)
+          .then(res => res.json)
+          .then(result => this.updateBoardResults(result));
+          console.log('Calling to process board: ' + board.company + ' - Done');
+    }
+
     updateBoardResults(result) {
+
+        console.log('Processsing result for ' + result.company + ': ' + result);
+
         let newResults = this.state.results.splice();        
         const index = newResults.findIndex((element) => element.company === result.company);
         if(index === -1) {
@@ -85,6 +64,19 @@ class SearchBar extends React.Component {
         this.setState({
             results: newResults
           });
+
+        console.log('Processsing result for ' + result.company + ': Done');
+
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:4000/api/companies")
+        .then(res => res.json())
+        .then(data => this.setState({
+                results: data.companies.map(company => ({
+                    company: company.name, jobs: []
+                }))
+        }));
     }
 
     render() {

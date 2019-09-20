@@ -19,10 +19,10 @@ const routes = express.Router();
 app.use('/api', routes);
 
 routes.route('/companies').get(function(req, res) {
-    res.json(Boards);
+    res.json({companies: Boards});
 });
 
-routes.route('/fetch/:company/:title/:location').get(function(req, res) {
+routes.route('/:company/:title/:location').get(function(req, res) {
     let company = req.params.company;
     let title = req.params.title;
     let location = req.params.location;
