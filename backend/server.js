@@ -24,8 +24,8 @@ routes.route('/companies').get(function(req, res) {
 
 routes.route('/:company/:title/:location').get(function(req, res) {
     let company = req.params.company;
-    let title = req.params.title;
-    let location = req.params.location;
+    let title = req.params.title.toLowerCase();
+    let location = req.params.location.toLowerCase();
     let board = Boards.find((el) => el.name === company);
 
     if(!board) { return null; } 

@@ -27,8 +27,8 @@ class SearchBar extends React.Component {
         super(props);
 
         this.state = {
-            title: null,
-            location: null,
+            title: 'Engineering Manager',
+            location: 'Remote',
             results: [],
         };
 
@@ -53,15 +53,23 @@ class SearchBar extends React.Component {
     }
 
     handleSubmit(event) {
-        alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
+        //alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
         event.preventDefault();
-
         this.state.results.forEach(board => this.processBoard(board, this.state.title, this.state.location, this));
-
         //this.updateResults(data);
     }
 
     processBoard(board, title, location, caller) {
+        let newResults = caller.state.results.slice(); 
+        const index = newResults.findIndex((element) => element.company === board.company);
+
+        if(index !== -1){
+            newResults[index].state = 'PENDING';
+            this.setState({
+                results: newResults
+            });
+        } 
+
         //console.log('Calling to process board: ' + board.company);
         fetch("http://localhost:4000/api/" + board.company + "/" + title + "/" + location)
           .then(res => res.json())
@@ -73,6 +81,7 @@ class SearchBar extends React.Component {
         let newResults = caller.state.results.slice(); 
         const index = newResults.findIndex((element) => element.company === result.company);
 
+        result.state = 'COMPLETED';
         (index === -1) ? newResults.concat(result) : newResults[index] = result;
 
         this.setState({

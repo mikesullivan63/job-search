@@ -41,16 +41,27 @@ vertical-align: top;
     }
 */
 function ResultsCompany(props) {
+
+    console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
+
     return (
       <StyledResultsCompany >
-          <StyledResultsCompanyName>{props.company.company}</StyledResultsCompanyName>
-          {props.company.jobs && props.company.jobs.map(function(job, index){
-                    return (
-                        <StyledResultsCompanyJob>
-                            <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
-                            <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
-                        </StyledResultsCompanyJob>
-          )})}          
+            <StyledResultsCompanyName>{props.company.company}</StyledResultsCompanyName>
+            {props.company.state === 'PENDING' && 
+                        <StyledResultsCompanyJob>Pending Lookup</StyledResultsCompanyJob>
+            }
+
+            {props.company.state !== 'PENDING' &&  (!(props.company.jobs)||props.company.jobs.length===0) &&
+                        <StyledResultsCompanyJob>No Matching Jobs</StyledResultsCompanyJob>
+            } 
+
+            {props.company.state !== 'PENDING' &&  props.company.jobs && props.company.jobs.map(function(job, index){
+                return (
+                    <StyledResultsCompanyJob>
+                        <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
+                        <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
+                    </StyledResultsCompanyJob>
+            )})}          
       </StyledResultsCompany>
     );
   }
@@ -69,16 +80,10 @@ function ResultsCompany(props) {
     ]
 */
   function Results(props) {
-      if(props.results) {
-        alert('Props: ' + props)
-        alert('Props.results: ' + props.data)
-        alert('Props.results[0].company: ' + props.data[0].company)  
-      }
     return (
         <div class="search-results">
             {props && props.data? 
                 props.data.map(function(company, index){
-                    //alert('index: ' + index + ' company:' + company)
                     return (
                         <ResultsCompany key={company.company} company={company} />
                     );
