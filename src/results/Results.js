@@ -1,6 +1,33 @@
 import React from 'react';
-import './Results.css';
+import styled from 'styled-components'
 
+const StyledResultsCompany = styled.div `
+width: 932px;
+padding: 0.1em;
+border: 1px solid black ;
+`
+
+const StyledResultsCompanyName = styled.h4 `
+margin: 0.1em;
+`
+
+const StyledResultsCompanyJob = styled.div `
+width: 900px;
+margin: 0.1em;
+border: 1px black ;
+text-align:top;
+`
+
+const StyledResultsCompanyJobTitle = styled.span `
+width: 400px;
+display:inline-block;
+vertical-align: top;
+`
+const StyledResultsCompanyJobLocation = styled.span `
+width: 400px;
+display:inline-block;
+vertical-align: top;
+`
 
 /*
     Object coming in should look like this:
@@ -15,17 +42,16 @@ import './Results.css';
 */
 function ResultsCompany(props) {
     return (
-      <div className="Company">
-          <h2>{props.company.company}</h2>
+      <StyledResultsCompany >
+          <StyledResultsCompanyName>{props.company.company}</StyledResultsCompanyName>
           {props.company.jobs && props.company.jobs.map(function(job, index){
                     return (
-                        <div className="Job">
-                            <div className="JobTitle">{job.title}</div>
-                            <div className="JobLocation">{job.location}</div>
-                            <div className="JobLink">< a href={job.url}>Link</a></div>
-                        </div>
+                        <StyledResultsCompanyJob>
+                            <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
+                            <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
+                        </StyledResultsCompanyJob>
           )})}          
-      </div>
+      </StyledResultsCompany>
     );
   }
   

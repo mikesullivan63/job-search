@@ -1,6 +1,26 @@
 import React from 'react';
+import styled from 'styled-components'
 import './SearchBar.css';
 import Results from '../results/Results';
+
+const StyledSearchBar = styled.div `
+width: 80%
+padding: 0.5em;
+margin: 0.5em;
+border: 1px black ;
+`
+
+const StyledSearchBarLabel = styled.label `
+width: 200px
+`
+
+const StyledSearchBarInput = styled.input `
+width: 200px
+`
+
+const StyledSearchBarButton = styled.input `
+width: 100px
+`
 
 class SearchBar extends React.Component {
     constructor(props) {
@@ -70,34 +90,36 @@ class SearchBar extends React.Component {
         }));
     }
 
+
+
+
+
     render() {
         return (
             <React.Fragment>
-                <div class="search-bar">
+                <StyledSearchBar >
                     <form onSubmit={this.handleSubmit}>
-                        <label> 
+                        <StyledSearchBarLabel> 
                             Job Title:
-                            <input 
+                            <StyledSearchBarInput 
                                 type="text" 
                                 name="title" 
                                 value={this.state.title} 
                                 onChange={this.handleInputChange} 
                             />
-                        </label>
-                        <br />
-                        <label>
+                        </StyledSearchBarLabel>
+                        <StyledSearchBarLabel>
                             Location:
-                            <input 
+                            <StyledSearchBarInput 
                                 type="text" 
                                 name="location" 
                                 value={this.state.location} 
                                 onChange={this.handleInputChange} 
                             />
-                        </label>
-                        <br />
-                        <input type="submit" value="Search" />
+                        </StyledSearchBarLabel>
+                        <StyledSearchBarButton type="submit" value="Search" />
                     </form> 
-                </div>
+                </StyledSearchBar>
 
                 <Results data={this.state.results}/>
             </React.Fragment>
