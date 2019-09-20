@@ -51,14 +51,14 @@ function matchTitle(needle, haystack) {
 }
 
 function matchLocation(needle, haystack) {
-    console.log('Looking for ' + needle + ' in ' + haystack);
+    //console.log('Looking for ' + needle + ' in ' + haystack);
     return haystack.toLowerCase().indexOf(needle) !== -1
 }
 function processGreenhouse(board, title, location, res) {
     processGreenhouseCore(
         board, title, location,
         "https://boards.greenhouse.io/"+board.url,
-        "https://boards.greenhouse.io/"+board.url,
+        "https://boards.greenhouse.io/",
          res);
 }
 function processGreenhouseEmbed(board, title, location, res) {
@@ -69,52 +69,16 @@ function processGreenhouseEmbed(board, title, location, res) {
 }
 
 function processGreenhouseCore(board, title, location, url, linkurl,res) {
-
-    console.log('Fetching: ' + url);
-
-    var options = {
-        uri: url,
-        transform: function (body) {
-            return cheerio.load(body);
-        }
-    };
-
-    request.get(options)
-        .then(($) => {
-            let jobs = [];
-            $('div.opening')
-                .filter((i,el) => matchTitle(title, $(el).find('a').text()))
-                .filter((i,el) => matchLocation(location, $(el).find('span.location').text()))
-                .each((i,el) => {
-                    jobs = jobs.concat({
-                        title:      $(el).find('a').text(), 
-                        location:   $(el).find('span.location').text(), 
-                        url:        linkurl + $(el).find('a').attr('href')
-                    });
-                });
-            console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, url: url, jobs: jobs});
-    }).catch((error) => {
-        if(error) {
-            console.log('Error loading board: ' + board.name + ' - ' + error);
-            res.json({company: board.name, error: 'Error: ' + error});
-        }
-    });
+    processBoardPage(board, url, title, location, 
+        'div.opening',
+        (el) => el.find('a').text(), 
+        (el) => el.find('span.location').text(), 
+        (el) => linkurl + el.find('a').attr('href'),
+        res);
 };
 
 
 function processLever(board, title, location, res) {
-
-    const url = "https://jobs.lever.co/" + board.url;
-    console.log('Fetching: ' + url);
-
-    var options = {
-        uri: url,
-        transform: function (body) {
-            return cheerio.load(body);
-        }
-    };
-
     /*
     <div class="posting" data-qa-posting-id="">
         <div class="posting-apply" data-qa="btn-apply">
@@ -130,42 +94,15 @@ function processLever(board, title, location, res) {
         </a>
     </div>
     */
-
-    request.get(options)
-        .then(($) => {
-            let jobs = [];
-            $('div.posting')
-                .filter((i,el) => matchTitle(title, $(el).find('[data-qa=posting-name]').text()))
-                .filter((i,el) => matchLocation(location, $(el).find('span.sort-by-location').text()))
-                .each((i,el) => {
-                    jobs = jobs.concat({
-                        title:      $(el).find('[data-qa=posting-name]').text(), 
-                        location:   $(el).find('span.sort-by-location').text(), 
-                        url:        $(el).find('a.posting-title').attr('href')
-                    });
-                });
-            console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, url: url, jobs: jobs});
-    }).catch((error) => {
-        if(error) {
-            console.log('Error loading board: ' + board.name + ' - ' + error);
-            res.json({company: board.name, error: 'Error: ' + error});
-        }
-    });
+    processBoardPage(board, "https://jobs.lever.co/" + board.url, title, location, 
+        'div.posting',
+        (el) => el.find('[data-qa=posting-name]').text(), 
+        (el) => el.find('span.sort-by-location').text(), 
+        (el) => el.find('a.posting-title').attr('href'),
+        res);
 };
 
 function processGoogle(board, title, location, res) {
-
-    const url = "https://hire.withgoogle.com/public/jobs/" + board.url;
-    console.log('Fetching: ' + url);
-
-    var options = {
-        uri: url,
-        transform: function (body) {
-            return cheerio.load(body);
-        }
-    };
-
     /*
     <li data-positionid="P_AAAAAACAAJZHZE3lvPT2nK" class="bb-public-jobs-list__job-item ptor-jobs-list__item">
         <a href="https://hire.withgoogle.com" target="_blank" class="bb-public-jobs-list__item-link">
@@ -174,42 +111,16 @@ function processGoogle(board, title, location, res) {
         </a>
     </li>
     */
-
-    request.get(options)
-        .then(($) => {
-            let jobs = [];
-            $('a.bb-public-jobs-list__item-link')
-                .filter((i,el) => matchTitle(title, $(el).find('span.bb-public-jobs-list__job-item-title').text()))
-                .filter((i,el) => matchLocation(location, $(el).find('span.bb-public-jobs-list__job-item-location').text()))
-                .each((i,el) => {
-                    jobs = jobs.concat({
-                        title:      $(el).find('span.bb-public-jobs-list__job-item-title').text(), 
-                        location:   $(el).find('span.bb-public-jobs-list__job-item-location').text(), 
-                        url:        $(el).attr('href')
-                    });
-                });
-            console.log("Done parsing: " + jobs.length);
-            res.json({company: board.name, url: url, jobs: jobs});
-    }).catch((error) => {
-        if(error) {
-            console.log('Error loading board: ' + board.name + ' - ' + error);
-            res.json({company: board.name, error: 'Error: ' + error});
-        }
-    });
+    
+    processBoardPage(board, "https://hire.withgoogle.com/public/jobs/" + board.url, title, location, 
+        'a.bb-public-jobs-list__item-link',
+        (el) => el.find('span.bb-public-jobs-list__job-item-title').text(), 
+        (el) => el.find('span.bb-public-jobs-list__job-item-location').text(), 
+        (el) => el.attr('href'),
+        res);
 };
 
 function processBreezy(board, title, location, res) {
-
-    const url = "https://" +  board.url + ".breezy.hr/";
-    console.log('Fetching: ' + url);
-
-    var options = {
-        uri: url,
-        transform: function (body) {
-            return cheerio.load(body);
-        }
-    };
-
     /*
     <li class="position transition">
         <a href="/p/1e0254b886db-business-development-representative">
@@ -236,29 +147,44 @@ function processBreezy(board, title, location, res) {
         </a>
     </li>
     */
+   processBoardPage(board, "https://" +  board.url + ".breezy.hr/", title, location, 
+   'li.position.transition a',
+   (el) => el.find('h2').text(), 
+   (el,$) => el.find('li').map((i, el) => $(el).text()).get().join(' '), 
+   (el) => "https://" +  board.url + ".breezy.hr" + el.attr('href'),
+   res);
+};
 
+
+function processBoardPage(board, url, title, location, jobSelector, titleExtractor, locationExtractor, linkExtractor, res) {
+    var options = {
+        uri: url,
+        transform: function (body) {
+            return cheerio.load(body);
+        }
+    };
     request.get(options)
         .then(($) => {
             let jobs = [];
-            $('li.position.transition a')
-                .filter((i,el) => matchTitle(title, $(el).find('h2').text()))
-                .filter((i,el) => matchLocation(location, $(el).find('li').map((i, el) => $(el).text()).get().join(' ')))
+            $(jobSelector)
+                .filter((i,el) => matchTitle(title, titleExtractor($(el),$)))
+                .filter((i,el) => matchLocation(location, locationExtractor($(el),$)))
                 .each((i,el) => {
                     jobs = jobs.concat({
-                        title:      $(el).find('h2').text(), 
-                        location:   $(el).find('li').map((i, el) => $(el).text()).get().join(' '), 
-                        url:        url + $(el).attr('href')
+                        title:      titleExtractor($(el),$), 
+                        location:   locationExtractor($(el),$), 
+                        url:        linkExtractor($(el),$)
                     });
                 });
             console.log("Done parsing: " + jobs.length);
             res.json({company: board.name, url: url, jobs: jobs});
-    }).catch((error) => {
-        if(error) {
-            console.log('Error loading board: ' + board.name + ' - ' + error);
-            res.json({company: board.name, error: 'Error: ' + error});
-        }
-    });
-};
+        }).catch((error) => {
+            if(error) {
+                console.log('Error loading board: ' + board.name + ' - ' + error);
+                res.json({company: board.name, error: 'Error: ' + error.message});
+            }
+        });
+}
 
 const Boards = [
     {name: "InVision", url:"invision", type: "Greenhouse", notes: "Design tool"},
@@ -325,14 +251,6 @@ const Boards = [
     https://automattic.com/work-with-us/
     https://www.aha.io/company/careers/current-openings
     https://stripe.com/jobs
-
-
-
-
-
-    https://retail-zipline.breezy.hr/
-    https://nearform.breezy.hr/
-    https://piggy-llc.breezy.hr/
 
     https://madewithlove.recruitee.com/
 
