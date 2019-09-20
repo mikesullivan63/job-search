@@ -19,7 +19,12 @@ const routes = express.Router();
 app.use('/api', routes);
 
 routes.route('/companies').get(function(req, res) {
-    res.json({companies: Boards});
+    let sorted = Boards.slice().sort((l,r) => {
+            if (l.name > r.name) return 1;
+            if (l.name < r.name) return -1;
+            return 0;
+    });
+    res.json({companies: sorted});
 });
 
 routes.route('/:company/:title/:location').get(function(req, res) {
@@ -30,22 +35,41 @@ routes.route('/:company/:title/:location').get(function(req, res) {
 
     if(!board) { return null; } 
 
-    if(board.type === "Greenhouse") {
-        console.log('Before call...');
-        const data = processGreenhouse(board, title, location, res);
-        console.log('After call...');
-        //res.json(data);
+    switch(board.type) {
+        case "Greenhouse": processGreenhouse(board, title, location, res); break;
+        case "GreenhouseEmbed": processGreenhouseEmbed(board, title, location, res); break;
+
+        default: console.log("Error with board type: " + board.type);
     }
-    return
 });
 
-function processGreenhouse(board, title, location, res) {
-    const GreenhouseRoot = "https://boards.greenhouse.io/"
+function matchTitle(needle, haystack) {
+    return haystack.toLowerCase().indexOf(needle) !== -1
+}
 
-    console.log('Fetching: ' + GreenhouseRoot + board.url);
+function matchLocation(needle, haystack) {
+    return haystack.toLowerCase().indexOf(needle) !== -1
+}
+function processGreenhouse(board, title, location, res) {
+    processGreenhouseCore(
+        board, title, location,
+        "https://boards.greenhouse.io/"+board.url,
+        "https://boards.greenhouse.io/"+board.url,
+         res);
+}
+function processGreenhouseEmbed(board, title, location, res) {
+    processGreenhouseCore(board, title, location, 
+        "https://boards.greenhouse.io/embed/job_board?for="+board.url,
+        "",
+        res);
+}
+
+function processGreenhouseCore(board, title, location, url, linkurl,res) {
+
+    console.log('Fetching: ' + url);
 
     var options = {
-        uri: GreenhouseRoot + board.url,
+        uri: url,
         transform: function (body) {
             return cheerio.load(body);
         }
@@ -55,20 +79,20 @@ function processGreenhouse(board, title, location, res) {
         .then(($) => {
             let jobs = [];
             $('div.opening')
-                .filter((i,el) => $(el).find('a').text().toLowerCase().indexOf(title) !== -1)
-                .filter((i,el) => $(el).find('span.location').text().toLowerCase().indexOf(location) !== -1 )
+                .filter((i,el) => matchTitle(title, $(el).find('a').text()))
+                .filter((i,el) => matchLocation(location, $(el).find('span.location').text()))
                 .each((i,el) => {
                     jobs = jobs.concat({
                         title:      $(el).find('a').text(), 
                         location:   $(el).find('span.location').text(), 
-                        url:        GreenhouseRoot + $(el).find('a').attr('href')
+                        url:        linkurl + $(el).find('a').attr('href')
                     });
                 });
             console.log("Done parsing: " + jobs.length);
             res.json({company: board.name, jobs: jobs});
-    }).catch((err) => {
+    }).catch((error) => {
         if(error) {
-            console.log('Error loading board: ' + board + ' - ' + error);
+            console.log('Error loading board: ' + board.name + ' - ' + error);
             res.json({company: board.name, error: 'Error: ' + error});
         }
     });
@@ -83,6 +107,11 @@ const Boards = [
     {name: "Canonical", url:"canonical", type: "Greenhouse", notes: "Unix"},
     {name: "Collage.com", url:"collagecom", type: "Greenhouse", notes: "Online Printing"},
     //    https://boards.greenhouse.getrake.io/digitalocean98/
+
+    {name: "Platform.sh", url:"platformsh", type: "GreenhouseEmbed", notes: ""},
+    {name: "Doximity", url:"doximity", type: "GreenhouseEmbed", notes: ""},
+    {name: "BetterUp", url:"betterup", type: "GreenhouseEmbed", notes: ""},
+    
 
 
 ]
@@ -119,9 +148,6 @@ const Boards = [
     https://www.aha.io/company/careers/current-openings
     https://stripe.com/jobs
 
-    https://boards.greenhouse.io/embed/job_board?for=platformsh
-    https://boards.greenhouse.io/embed/job_board?for=doximity
-    https://boards.greenhouse.io/embed/job_board?for=betterup
 
     https://hire.withgoogle.com/public/jobs/tackleio
     https://hire.withgoogle.com/public/jobs/get10upcom
