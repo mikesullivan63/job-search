@@ -1,25 +1,11 @@
 import React from 'react';
-import styled from 'styled-components'
-import './SearchBar.css';
+import styled  from 'styled-components'
+import {Button, Colors} from 'react-foundation'
 import Results from '../results/Results';
 
+
 const StyledSearchBar = styled.div `
-width: 80%
-padding: 0.5em;
-margin: 0.5em;
-border: 1px black ;
-`
-
-const StyledSearchBarLabel = styled.label `
-width: 200px
-`
-
-const StyledSearchBarInput = styled.input `
-width: 200px
-`
-
-const StyledSearchBarButton = styled.input `
-width: 100px
+margin: 10px;
 `
 
 class SearchBar extends React.Component {
@@ -105,33 +91,38 @@ class SearchBar extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
-                <StyledSearchBar >
-                    <form onSubmit={this.handleSubmit}>
-                        <StyledSearchBarLabel> 
-                            Job Title:
-                            <StyledSearchBarInput 
-                                type="text" 
-                                name="title" 
-                                value={this.state.title} 
-                                onChange={this.handleInputChange} 
-                            />
-                        </StyledSearchBarLabel>
-                        <StyledSearchBarLabel>
-                            Location:
-                            <StyledSearchBarInput 
-                                type="text" 
-                                name="location" 
-                                value={this.state.location} 
-                                onChange={this.handleInputChange} 
-                            />
-                        </StyledSearchBarLabel>
-                        <StyledSearchBarButton type="submit" value="Search" />
-                    </form> 
-                </StyledSearchBar>
+            <StyledSearchBar>
+                <form onSubmit={this.handleSubmit}>
+                    <div class="grid-x grid-margin-x">
+                        <label className="cell small-1">Job Title:</label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            className="cell small-3"
+                            value={this.state.title} 
+                            onChange={this.handleInputChange} 
+                        />
+                        <label className="cell small-1">Location:</label>
+                        <input 
+                            type="text" 
+                            name="location" 
+                            className="cell small-3"
+                            value={this.state.location} 
+                            onChange={this.handleInputChange} 
+                        />
+                        <Button 
+                            type="submit" 
+                            value="Search"
+                            color={Colors.PRIMARY} 
+                            className="cell small-2"
+                        >
+                            Search
+                        </Button>
+                    </div>
+                </form> 
 
                 <Results data={this.state.results}/>
-            </React.Fragment>
+            </StyledSearchBar>
         );
     }
 }
