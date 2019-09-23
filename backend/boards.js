@@ -13,11 +13,14 @@ exports.Boards = [
     {name: "Github", url:"github", processor: processGreenhouse, notes: "Git repo"},
     {name: "Canonical", url:"canonical", processor: processGreenhouse, notes: "Unix"},
     {name: "Collage.com", url:"collagecom", processor: processGreenhouse, notes: "Online Printing"},
+    {name: "CB Insights", url:"cbinsights", processor: processGreenhouse, notes: ""},
+
     //    https://boards.greenhouse.getrake.io/digitalocean98/
 
     {name: "Platform.sh", url:"platformsh", processor: processGreenhouseEmbed, notes: ""},
     {name: "Doximity", url:"doximity", processor: processGreenhouseEmbed, notes: ""},
     {name: "BetterUp", url:"betterup", processor: processGreenhouseEmbed, notes: ""},
+    {name: "Accruent (New Orleans)", url:"accruenthq", processor: processGreenhouseEmbed, notes: ""},
     
     {name: "Medium", url:"medium", processor: processLever, notes: ""},
     {name: "Sonatype", url:"sonatype", processor: processLever, notes: ""},
