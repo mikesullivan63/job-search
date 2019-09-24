@@ -12,8 +12,8 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
         .then(($) => {
             let jobs = [];
             $(jobSelector)
-                .filter((i,el) => matchTitle(title, titleExtractor($(el),$)))
-                .filter((i,el) => matchLocation(location, locationExtractor($(el),$)))
+                .filter((i,el) => match(title, titleExtractor($(el),$)))
+                .filter((i,el) => match(location, locationExtractor($(el),$)))
                 .each((i,el) => {
                     jobs = jobs.concat({
                         title:      titleExtractor($(el),$), 
@@ -31,11 +31,13 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
         });
 }
 
-function matchTitle(needle, haystack) {
-    return haystack.toLowerCase().indexOf(needle) !== -1
-}
 
-function matchLocation(needle, haystack) {
-    //console.log('Looking for ' + needle + ' in ' + haystack);
-    return haystack.toLowerCase().indexOf(needle) !== -1
+function match(needles, haystack) {
+    lowerStack = haystack.toLowerCase()
+    if(needles === "") { return true; }
+
+    return needles
+        .toLowerCase()
+        .split(" or ")
+        .some((needle) => lowerStack.indexOf(needle) !== -1);
 }

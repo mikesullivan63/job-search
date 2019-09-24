@@ -13,8 +13,8 @@ class SearchBar extends React.Component {
         super(props);
 
         this.state = {
-            title: 'Engineering Manager',
-            location: 'Remote',
+            title: 'Engineering Manager or director or vp or Engineer Manager',
+            location: 'Remote or us or nation or baton or orleans or home',
             results: [],
         };
 
@@ -94,19 +94,19 @@ class SearchBar extends React.Component {
             <StyledSearchBar>
                 <form onSubmit={this.handleSubmit}>
                     <div class="grid-x grid-margin-x">
-                        <label className="cell small-1">Job Title:</label>
-                        <input 
-                            type="text" 
+                        <label className="cell small-1  middle">Job Title:</label>
+                        <textarea 
                             name="title" 
                             className="cell small-3"
+                            rows={4}
                             value={this.state.title} 
                             onChange={this.handleInputChange} 
                         />
-                        <label className="cell small-1">Location:</label>
-                        <input 
-                            type="text" 
+                        <label className="cell small-1  middle">Location:</label>
+                        <textarea 
                             name="location" 
                             className="cell small-3"
+                            rows={4}
                             value={this.state.location} 
                             onChange={this.handleInputChange} 
                         />
