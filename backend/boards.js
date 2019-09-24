@@ -14,7 +14,7 @@ exports.Boards = [
     {name: "Canonical", url:"canonical", processor: processGreenhouse, notes: "Unix"},
     {name: "Collage.com", url:"collagecom", processor: processGreenhouse, notes: "Online Printing"},
     {name: "CB Insights", url:"cbinsights", processor: processGreenhouse, notes: ""},
-
+    {name: "Security Scorecard", url:"securityscorecard", processor: processGreenhouse, notes: ""},
     //    https://boards.greenhouse.getrake.io/digitalocean98/
 
     {name: "Platform.sh", url:"platformsh", processor: processGreenhouseEmbed, notes: ""},

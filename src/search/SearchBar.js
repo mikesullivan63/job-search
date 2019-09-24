@@ -14,7 +14,7 @@ class SearchBar extends React.Component {
 
         this.state = {
             title: 'Engineering Manager or director or vp or Engineer Manager',
-            location: 'Remote or us or nation or baton or orleans or home',
+            location: 'Remote or us or nation or baton or orleans or home or anywhere',
             results: [],
         };
 
