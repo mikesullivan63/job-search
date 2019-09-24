@@ -42,9 +42,9 @@ function ResultsCompany(props) {
     } else if(props.company.state === 'ERROR') {
         displayStyle = "callout alert"
         displayMessage = "Error: " + props.company.error.substring(0,100)     
-    } else if(props.company.state === 'COMPLETED') {
+    } else if(props.company.state === 'COMPLETED') {        
         displayStyle = "callout " + ((!props.company.jobs||props.company.jobs.length===0)?"secondary":"primary")
-        displayMessage = "No Matching Jobs"
+        displayMessage = (!props.company.jobs||props.company.jobs.length===0)?"No Matching Jobs":""
     }    
 
     return (
