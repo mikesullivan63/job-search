@@ -61,7 +61,7 @@ function ResultsCompany(props) {
 
                 {props.company.state !== 'PENDING' &&  props.company.error &&
                     <Cell small={6}>
-                        <div>Error: {props.company.error}</div>
+                        <div>Error: {props.company.error.substring(0,100)}</div>
                     </Cell>
                 } 
 
