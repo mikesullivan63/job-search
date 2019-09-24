@@ -1,31 +1,20 @@
 import React from 'react';
 import styled from 'styled-components'
+import {Grid, Cell} from 'react-foundation'
 
-const StyledResultsCompany = styled.div `
-width: 932px;
-padding: 0.1em;
-border: 1px solid black ;
+
+const StyledResultsArea = styled.div `
+margin: 10px;
 `
 
 const StyledResultsCompanyName = styled.h4 `
 margin: 0.1em;
 `
 
-const StyledResultsCompanyJob = styled.div `
-width: 900px;
-margin: 0.1em;
-border: 1px black ;
-text-align:top;
-`
-
 const StyledResultsCompanyJobTitle = styled.span `
-width: 400px;
-display:inline-block;
 vertical-align: top;
 `
 const StyledResultsCompanyJobLocation = styled.span `
-width: 400px;
-display:inline-block;
 vertical-align: top;
 `
 
@@ -45,24 +34,43 @@ function ResultsCompany(props) {
     console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
 
     return (
-      <StyledResultsCompany >
-            <a href={props.company.url} target="_blank" rel="noopener noreferrer"><StyledResultsCompanyName>{props.company.company} </StyledResultsCompanyName></a>
-            {props.company.state === 'PENDING' && 
-                        <StyledResultsCompanyJob>Pending Lookup</StyledResultsCompanyJob>
-            }
+        <div>
+            <Grid className="display">
+                <Cell small={2}>
+                    <a 
+                        href={props.company.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer">
+                            <StyledResultsCompanyName>
+                                {props.company.company}
+                            </StyledResultsCompanyName>
+                    </a>
+                </Cell>
+            </Grid>
+                {props.company.state === 'PENDING' && 
+                    <Cell small={6}>
+                            <div>Pending Lookup</div>
+                    </Cell>
+                }
 
-            {props.company.state !== 'PENDING' &&  (!(props.company.jobs)||props.company.jobs.length===0) &&
-                        <StyledResultsCompanyJob>No Matching Jobs</StyledResultsCompanyJob>
-            } 
+                {props.company.state !== 'PENDING' &&  (!(props.company.jobs)||props.company.jobs.length===0) &&
+                    <Cell small={6}>
+                        <div>No Matching Jobs</div>
+                    </Cell>
+                } 
 
-            {props.company.state !== 'PENDING' &&  props.company.jobs && props.company.jobs.map(function(job, index){
-                return (
-                    <StyledResultsCompanyJob>
-                        <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
-                        <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
-                    </StyledResultsCompanyJob>
-            )})}          
-      </StyledResultsCompany>
+                {props.company.state !== 'PENDING' &&  props.company.jobs && props.company.jobs.map(function(job, index){
+                    return (
+                        <Grid className="display">
+                            <Cell small={3}>
+                                <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
+                            </Cell>
+                            <Cell small={3}>
+                                <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
+                            </Cell>
+                        </Grid>
+                )})}          
+        </div>
     );
   }
   
@@ -81,7 +89,7 @@ function ResultsCompany(props) {
 */
   function Results(props) {
     return (
-        <div class="search-results">
+        <StyledResultsArea class="search-results grid-x grid-margin-x">
             {props && props.data? 
                 props.data.map(function(company, index){
                     return (
@@ -90,7 +98,7 @@ function ResultsCompany(props) {
                 })
             : ( <div class="no-results">No Results</div> )
             }
-        </div>
+        </StyledResultsArea>
     );
   }
   
