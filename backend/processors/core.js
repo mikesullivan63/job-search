@@ -26,7 +26,7 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
         }).catch((error) => {
             if(error) {
                 console.log('Error loading board: ' + board.name + ' - ' + error);
-                res.json({company: board.name, error: 'Error: ' + error.message});
+                res.json({company: board.name, error: error.stack});
             }
         });
 }

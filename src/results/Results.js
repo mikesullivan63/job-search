@@ -53,9 +53,15 @@ function ResultsCompany(props) {
                     </Cell>
                 }
 
-                {props.company.state !== 'PENDING' &&  (!(props.company.jobs)||props.company.jobs.length===0) &&
+                {props.company.state !== 'PENDING' &&  ! props.company.error && (!(props.company.jobs)||props.company.jobs.length===0) &&
                     <Cell small={6}>
                         <div>No Matching Jobs</div>
+                    </Cell>
+                } 
+
+                {props.company.state !== 'PENDING' &&  props.company.error &&
+                    <Cell small={6}>
+                        <div>Error: {props.company.error}</div>
                     </Cell>
                 } 
 
