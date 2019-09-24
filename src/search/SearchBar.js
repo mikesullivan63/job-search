@@ -39,10 +39,8 @@ class SearchBar extends React.Component {
     }
 
     handleSubmit(event) {
-        //alert("A name was submitted: '" + this.state.title + "' and '" + this.state.location + "'");
         event.preventDefault();
         this.state.results.forEach(board => this.processBoard(board, this.state.title, this.state.location, this));
-        //this.updateResults(data);
     }
 
     processBoard(board, title, location, caller) {
@@ -56,18 +54,16 @@ class SearchBar extends React.Component {
             });
         } 
 
-        //console.log('Calling to process board: ' + board.company);
         fetch("http://localhost:4000/api/" + board.company + "/" + title + "/" + location)
           .then(res => res.json())
           .then(result => this.updateBoardResults(result,  caller));
-          //console.log('Calling to process board: ' + board.company + ' - Done');
     }
 
     updateBoardResults(result,  caller) {
         let newResults = caller.state.results.slice(); 
         const index = newResults.findIndex((element) => element.company === result.company);
 
-        result.state = 'COMPLETED';
+        result.state = result.error?'ERROR':'COMPLETED';
         (index === -1) ? newResults.concat(result) : newResults[index] = result;
 
         this.setState({
@@ -85,44 +81,43 @@ class SearchBar extends React.Component {
         }));
     }
 
-
-
-
-
     render() {
         return (
-            <StyledSearchBar>
-                <form onSubmit={this.handleSubmit}>
-                    <div class="grid-x grid-margin-x">
-                        <label className="cell small-1  middle">Job Title:</label>
-                        <textarea 
-                            name="title" 
-                            className="cell small-3"
-                            rows={4}
-                            value={this.state.title} 
-                            onChange={this.handleInputChange} 
-                        />
-                        <label className="cell small-1  middle">Location:</label>
-                        <textarea 
-                            name="location" 
-                            className="cell small-3"
-                            rows={4}
-                            value={this.state.location} 
-                            onChange={this.handleInputChange} 
-                        />
-                        <Button 
-                            type="submit" 
-                            value="Search"
-                            color={Colors.PRIMARY} 
-                            className="cell small-2"
-                        >
-                            Search
-                        </Button>
-                    </div>
-                </form> 
+            <React.Fragment>
+                <StyledSearchBar>
+                    <form onSubmit={this.handleSubmit}>
+                        <div class="grid-x grid-margin-x">
+                            <label className="cell small-1  middle">Job Title:</label>
+                            <textarea 
+                                name="title" 
+                                className="cell small-3"
+                                rows={4}
+                                value={this.state.title} 
+                                onChange={this.handleInputChange} 
+                            />
+                            <label className="cell small-1  middle">Location:</label>
+                            <textarea 
+                                name="location" 
+                                className="cell small-3"
+                                rows={4}
+                                value={this.state.location} 
+                                onChange={this.handleInputChange} 
+                            />
+                            <Button 
+                                type="submit" 
+                                value="Search"
+                                color={Colors.PRIMARY} 
+                                className="cell small-2"
+                            >
+                                Search
+                            </Button>
+                        </div>
+                    </form> 
 
+                </StyledSearchBar>
                 <Results data={this.state.results}/>
-            </StyledSearchBar>
+            </React.Fragment>
+
         );
     }
 }

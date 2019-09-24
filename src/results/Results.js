@@ -33,10 +33,24 @@ function ResultsCompany(props) {
 
     console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
 
+    let displayStyle = "callout"
+    let displayMessage = ""
+
+    if(props.company.state === 'PENDING' || props.company.state === '' || !props.company.state) {
+        displayStyle = "callout"
+        displayMessage = "Pending Lookup"
+    } else if(props.company.state === 'ERROR') {
+        displayStyle = "callout alert"
+        displayMessage = "Error: " + props.company.error.substring(0,100)     
+    } else if(props.company.state === 'COMPLETED') {
+        displayStyle = "callout " + ((!props.company.jobs||props.company.jobs.length===0)?"secondary":"primary")
+        displayMessage = "No Matching Jobs"
+    }    
+
     return (
-        <div>
+        <div className={displayStyle}>
             <Grid className="display">
-                <Cell small={2}>
+                <Cell small={4}>
                     <a 
                         href={props.company.url} 
                         target="_blank" 
@@ -46,32 +60,20 @@ function ResultsCompany(props) {
                             </StyledResultsCompanyName>
                     </a>
                 </Cell>
-            </Grid>
-                {props.company.state === 'PENDING' && 
-                    <Cell small={6}>
-                            <div>Pending Lookup</div>
-                    </Cell>
+
+                {displayMessage !== "" && 
+                    <Cell small={6} className="result-message">{displayMessage}</Cell>
                 }
+            </Grid>
 
-                {props.company.state !== 'PENDING' &&  ! props.company.error && (!(props.company.jobs)||props.company.jobs.length===0) &&
-                    <Cell small={6}>
-                        <div>No Matching Jobs</div>
-                    </Cell>
-                } 
 
-                {props.company.state !== 'PENDING' &&  props.company.error &&
-                    <Cell small={6}>
-                        <div>Error: {props.company.error.substring(0,100)}</div>
-                    </Cell>
-                } 
-
-                {props.company.state !== 'PENDING' &&  props.company.jobs && props.company.jobs.map(function(job, index){
+                {props.company.state === 'COMPLETED' &&  props.company.jobs && props.company.jobs.map(function(job, index){
                     return (
                         <Grid className="display">
                             <Cell small={3}>
                                 <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
                             </Cell>
-                            <Cell small={3}>
+                            <Cell small={6}>
                                 <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
                             </Cell>
                         </Grid>
