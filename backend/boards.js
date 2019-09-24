@@ -30,7 +30,7 @@ exports.Boards = [
     {name: "Chef", url:"chef", processor: processLever, notes: ""},
     {name: "Auth0", url:"auth0", processor: processLever, notes: ""},
     {name: "Articulate", url:"articulate", processor: processLever, notes: ""},
-    //{name: "Imperfect Produce", url:"imperfectproduce", processor: processLever, notes: ""},
+    {name: "Imperfect Foods", url:"imperfectfoods", processor: processLever, notes: ""},
     {name: "15 Five", url:"15five", processor: processLever, notes: ""},
 
     {name: "Tackle.io", url:"tackleio", processor: processGoogle, notes: ""},
