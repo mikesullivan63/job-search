@@ -15,6 +15,7 @@ exports.Boards = [
     {name: "Collage.com", url:"collagecom", processor: processGreenhouse, notes: "Online Printing"},
     {name: "CB Insights", url:"cbinsights", processor: processGreenhouse, notes: ""},
     {name: "Security Scorecard", url:"securityscorecard", processor: processGreenhouse, notes: ""},
+    
     //    https://boards.greenhouse.getrake.io/digitalocean98/
 
     {name: "Platform.sh", url:"platformsh", processor: processGreenhouseEmbed, notes: ""},
@@ -33,6 +34,7 @@ exports.Boards = [
     {name: "Imperfect Foods", url:"imperfectfoods", processor: processLever, notes: ""},
     {name: "15 Five", url:"15five", processor: processLever, notes: ""},
     {name: "Blue Mesa", url:"bluemesahealth", processor: processLever, notes: ""},
+    {name: "Spark Fund", url:"sparkfund", processor: processLever, notes: ""},
 
     {name: "Tackle.io", url:"tackleio", processor: processGoogle, notes: ""},
     {name: "10up", url:"get10upcom", processor: processGoogle, notes: ""},
