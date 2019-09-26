@@ -23,6 +23,7 @@ exports.Boards = [
     {name: "Doximity", url:"doximity", processor: processGreenhouseEmbed, notes: ""},
     {name: "BetterUp", url:"betterup", processor: processGreenhouseEmbed, notes: ""},
     {name: "Accruent", url:"accruenthq", processor: processGreenhouseEmbed, notes: ""},
+    {name: "Webflow", url:"webflow", processor: processGreenhouseEmbed, notes: ""},
     
     {name: "Medium", url:"medium", processor: processLever, notes: ""},
     {name: "Sonatype", url:"sonatype", processor: processLever, notes: ""},
