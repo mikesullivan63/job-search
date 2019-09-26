@@ -22,7 +22,7 @@ exports.Boards = [
     {name: "Platform.sh", url:"platformsh", processor: processGreenhouseEmbed, notes: ""},
     {name: "Doximity", url:"doximity", processor: processGreenhouseEmbed, notes: ""},
     {name: "BetterUp", url:"betterup", processor: processGreenhouseEmbed, notes: ""},
-    {name: "Accruent (New Orleans)", url:"accruenthq", processor: processGreenhouseEmbed, notes: ""},
+    {name: "Accruent", url:"accruenthq", processor: processGreenhouseEmbed, notes: ""},
     
     {name: "Medium", url:"medium", processor: processLever, notes: ""},
     {name: "Sonatype", url:"sonatype", processor: processLever, notes: ""},

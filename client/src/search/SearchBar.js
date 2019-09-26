@@ -1,20 +1,21 @@
 import React from 'react';
 import styled  from 'styled-components'
-import {Button, Colors} from 'react-foundation'
+import { Button, Colors } from 'react-foundation'
+import Cookies from 'universal-cookie';
 import Results from '../results/Results';
 
-
+const cookies = new Cookies();
 const StyledSearchBar = styled.div `
 margin: 10px;
 `
-
 class SearchBar extends React.Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
-            title: 'Engineering Manager or director or vp or Engineer Manager',
-            location: 'Remote or us or nation or baton or orleans or home or anywhere',
+            title: cookies.get("job-title"),
+            location: cookies.get("job-location"),
             results: [],
         };
 
@@ -40,6 +41,10 @@ class SearchBar extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        
+        cookies.set("job-title", this.state.title, { path: '/' });
+        cookies.set("job-location", this.state.location, { path: '/' });
+
         this.state.results.forEach(board => this.processBoard(board, this.state.title, this.state.location, this));
     }
 

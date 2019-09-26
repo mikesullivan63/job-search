@@ -50,7 +50,7 @@ function ResultsCompany(props) {
     return (
         <div className={displayStyle}>
             <Grid className="display">
-                <Cell small={4}>
+                <Cell small={6} medium={4} large={2} >
                     <a 
                         href={props.company.url} 
                         target="_blank" 
@@ -62,7 +62,7 @@ function ResultsCompany(props) {
                 </Cell>
 
                 {displayMessage !== "" && 
-                    <Cell small={6} className="result-message">{displayMessage}</Cell>
+                    <Cell small={6} medium={6} large={4} className="result-message">{displayMessage}</Cell>
                 }
             </Grid>
 
@@ -70,10 +70,10 @@ function ResultsCompany(props) {
                 {props.company.state === 'COMPLETED' &&  props.company.jobs && props.company.jobs.map(function(job, index){
                     return (
                         <Grid className="display">
-                            <Cell small={3}>
+                            <Cell small={6} medium={4} large={4}>
                                 <StyledResultsCompanyJobTitle>< a href={job.url} target="_blank" rel="noopener noreferrer">{job.title}</ a></StyledResultsCompanyJobTitle>
                             </Cell>
-                            <Cell small={6}>
+                            <Cell small={6} medium={4} large={4}>
                                 <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
                             </Cell>
                         </Grid>
