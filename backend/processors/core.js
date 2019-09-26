@@ -39,5 +39,5 @@ function match(needles, haystack) {
     return needles
         .toLowerCase()
         .split(" or ")
-        .some((needle) => lowerStack.indexOf(needle) !== -1);
+        .some((needle) => lowerStack.indexOf(needle.trim()) !== -1);
 }
