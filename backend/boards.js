@@ -4,6 +4,7 @@ const processGreenhouseEmbed = GreenhouseCore.processGreenhouseEmbed
 const processLever = require('./processors/lever').processLever
 const processGoogle = require('./processors/google').processGoogle
 const processBreezy = require('./processors/breezy').processBreezy
+const processWorkable = require('./processors/workable').processWorkable
 
 exports.Boards = [
     {name: "InVision", url:"invision", processor: processGreenhouse, notes: "Design tool"},
@@ -37,6 +38,7 @@ exports.Boards = [
     {name: "15 Five", url:"15five", processor: processLever, notes: ""},
     {name: "Blue Mesa", url:"bluemesahealth", processor: processLever, notes: ""},
     {name: "Spark Fund", url:"sparkfund", processor: processLever, notes: ""},
+    {name: "Respondent", url:"respondent", processor: processLever, notes: ""},
 
     {name: "Tackle.io", url:"tackleio", processor: processGoogle, notes: ""},
     {name: "10up", url:"get10upcom", processor: processGoogle, notes: ""},
@@ -45,6 +47,8 @@ exports.Boards = [
     {name: "Zipline", url:"retail-zipline", processor: processBreezy, notes: ""},
     {name: "Nearform", url:"nearform", processor: processBreezy, notes: ""},
     {name: "Piggy", url:"piggy-llc", processor: processBreezy, notes: ""},
+
+    {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
 ]
 
 
@@ -83,5 +87,5 @@ exports.Boards = [
 
     https://olo.theresumator.com/
 
-    https://harvest.workable.com/
+    
     */

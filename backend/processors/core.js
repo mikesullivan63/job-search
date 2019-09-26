@@ -1,7 +1,7 @@
 const request = require('request-promise-native');
 const cheerio = require('cheerio')
 
-module.exports = (board, url, title, location, jobSelector, titleExtractor, locationExtractor, linkExtractor, res) => {
+module.exports = (board, url, title, location, jobSelector, titleExtractor, locationExtractor, linkExtractor, res, debug) => {
     var options = {
         uri: url,
         transform: function (body) {
@@ -10,8 +10,20 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
     };
     request.get(options)
         .then(($) => {
+            if(debug) {
+                console.log("$(jobSelector): " + $(jobSelector).length);
+            }
+
             let jobs = [];
             $(jobSelector)
+                .each((i,el) => {
+                    if(debug) {
+                        console.log("el: " + el);
+                        console.log("title: " + titleExtractor($(el)));
+                        console.log("loc: " + locationExtractor($(el),$));
+                        console.log("link: " + linkExtractor($(el),$));
+                    }
+                })
                 .filter((i,el) => match(title, titleExtractor($(el),$)))
                 .filter((i,el) => match(location, locationExtractor($(el),$)))
                 .each((i,el) => {
@@ -21,7 +33,10 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
                         url:        linkExtractor($(el),$)
                     });
                 });
-            //console.log("Done parsing: " + jobs.length);
+                if(debug) {
+                    console.log("Done parsing: " + jobs.length);
+                }
+    
             res.json({company: board.name, url: url, jobs: jobs});
         }).catch((error) => {
             if(error) {
