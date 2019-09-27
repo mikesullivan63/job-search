@@ -31,7 +31,15 @@ module.exports = (board, url, title, location, jobSelector, titleExtractor, loca
                         title:      titleExtractor($(el),$), 
                         location:   locationExtractor($(el),$), 
                         url:        linkExtractor($(el),$)
-                    });
+                    }).sort((l,r) => {
+                        if (l.title > r.title) return 1;
+                        if (l.title < r.title) return -1;
+
+                        if (l.url > r.url) return 1;
+                        if (l.url < r.url) return -1;
+
+                        return 0;
+                });
                 });
                 if(debug) {
                     console.log("Done parsing: " + jobs.length);
