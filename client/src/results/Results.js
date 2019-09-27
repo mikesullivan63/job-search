@@ -50,7 +50,7 @@ function ResultsCompany(props) {
     return (
         <div className={displayStyle}>
             <Grid className="display">
-                <Cell small={6} medium={4} large={2} >
+                <Cell small={6} medium={4} large={4} >
                     <a 
                         href={props.company.url} 
                         target="_blank" 
