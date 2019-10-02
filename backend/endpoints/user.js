@@ -55,30 +55,18 @@ routes.route('/login').post(function(req, res) {
 });
 
 routes.route('/profile', auth).get(function(req, res) {
-  // If no user ID exists in the JWT return a 401
-  if (!req.payload._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: private profile"
-    });
-  } else {
-    // Otherwise continue
+  protectedRequest(req, res, (req, res) => {
     User
       .findById(req.payload._id)
       .exec(function(err, user) {
         res.status(200).json(user);
       });
-  }
+  })
 });
 
 routes.route('/search', auth).post(function(req, res) {
-  // If no user ID exists in the JWT return a 401
-  if (!req.payload._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: private profile"
-    });
-  } else {
-    // Otherwise continue
-    UserQueries
+  protectedRequest(req, res, (req, res) => {
+        UserQueries
         .findOne({userId: req.payload._id})
         .exec((err, userQueries) => {
           if(err) {
@@ -103,17 +91,11 @@ routes.route('/search', auth).post(function(req, res) {
             });
           }
         });  
-  }
+  });
 });
 
 routes.route('/last-search', auth).get(function(req, res) {
-  // If no user ID exists in the JWT return a 401
-  if (!req.payload._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: private profile"
-    });
-  } else {
-    // Otherwise continue
+  protectedRequest(req, res, (req, res) => {
     UserQueries
         .findOne({userId: req.payload._id})
         .exec((err, userQueries) => {
@@ -134,7 +116,19 @@ routes.route('/last-search', auth).get(function(req, res) {
             }
           }
         });  
-  }
+  });
 });
+
+module.exports.protectedRequest = function(req, res, body) {
+  // If no user ID exists in the JWT return a 401
+  if (!req.payload._id) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } else {
+    // Otherwise continue
+    body(req, res);
+  }
+}
 
 module.exports = routes
