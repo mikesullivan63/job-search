@@ -13,7 +13,9 @@ app.use(function(req, res, next) {
 });
 app.options("*", cors());
 
-app.use('/api', require('./routes'));
+app.use('/api', require('./endpoints/api'));
+app.use('/user', require('./endpoints/user'));
+
 app.use(express.static(path.join(__dirname, "/../client/build")));
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname + "/../client/build/index.html"));
