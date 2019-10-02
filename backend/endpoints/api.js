@@ -1,7 +1,10 @@
 const routes = require('express').Router();
+var jwt = require('express-jwt');
+var auth = require('./user').auth;
+
 const Boards = require('../boards/boards')
 
-routes.route('/companies').get(function(req, res) {
+routes.route('/companies', auth).get(function(req, res) {
     let sorted = Boards.Boards.slice().sort((l,r) => {
             if (l.name > r.name) return 1;
             if (l.name < r.name) return -1;
@@ -10,7 +13,7 @@ routes.route('/companies').get(function(req, res) {
     res.json({companies: sorted}); 
 });
 
-routes.route('/:company/:title/:location').get(function(req, res) {
+routes.route('/:company/:title/:location', auth).get(function(req, res) {
     let company = req.params.company;
     let title = req.params.title.toLowerCase();
     let location = req.params.location.toLowerCase();
