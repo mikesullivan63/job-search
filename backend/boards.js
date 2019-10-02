@@ -48,8 +48,11 @@ exports.Boards = [
     {name: "Zipline", url:"retail-zipline", processor: processBreezy, notes: ""},
     {name: "Nearform", url:"nearform", processor: processBreezy, notes: ""},
     {name: "Piggy", url:"piggy-llc", processor: processBreezy, notes: ""},
+    {name: "Time Doctor", url:"time-doctor", processor: processBreezy, notes: ""},
+    
 
     {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
+    {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
 ]
 
 
