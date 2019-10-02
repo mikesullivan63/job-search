@@ -27,6 +27,6 @@ const mongoose = require('mongoose');
         required: true
     },
     active: [jobSchema],
-    ignore: [jobSchema],
+    ignored: [jobSchema],
     history: [jobSchema]
   });
