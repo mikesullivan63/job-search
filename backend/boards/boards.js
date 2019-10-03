@@ -54,6 +54,7 @@ exports.Boards = [
     {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
     {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
     {name: "Barrel", url:"barrel", processor: processWorkable, notes: ""},
+    {name: "Grafana", url:"grafana-labs", processor: processWorkable, notes: ""},
 ]
 
 
