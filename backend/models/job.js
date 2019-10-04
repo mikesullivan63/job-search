@@ -22,7 +22,7 @@ const mongoose = require('mongoose');
 
   var userJobsSchema = new mongoose.Schema({
     userId: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
     },

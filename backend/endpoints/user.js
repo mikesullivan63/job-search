@@ -2,6 +2,7 @@ const routes = require('express').Router();
 const passport = require('passport');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Query = mongoose.model('Query');
 var UserQueries = mongoose.model('UserQueries');
 var jwt = require('express-jwt');
 
@@ -64,19 +65,11 @@ routes.route('/profile', auth).get(function(req, res) {
   })
 });
 
-routes.route('/search', auth).post(function(req, res) {
-  console.log("Processing search");
-  console.log("auth: " + auth);
-  console.log("req.payload " + req.payload);
-
+routes.post('/search', auth, function(req, res) {
   protectedRequest(req, res, (req, res) => {
-    console.log("Looking up request");
-
       UserQueries
         .findOne({userId: req.payload._id})
         .exec((err, userQueries) => {
-          console.log("Found: " + JSON.stringify(userQueries));
-
           if(err) {
             res.status(500).json({
               "message" : "Error during lookup: " + err 
@@ -84,14 +77,21 @@ routes.route('/search', auth).post(function(req, res) {
           } else {
             if(!userQueries) {
               userQueries = new UserQueries();
+              userQueries.userId = req.payload._id;
             }
 
-            userQueries.queries = userQueries.queries.slice().unshift({
-              title: req.body.title, 
-              location: req.body.location, 
-              time: new Date});
+            query = new Query();
+            query.title = req.body.title;
+            query.location = req.body.location;
+            query.time = new Date; 
 
-            console.log("Saving: " + JSON.stringify(userQueries));
+            if(userQueries.queries.length > 0) {
+              var temp = userQueries.queries.slice();
+              temp.push(query);
+              userQueries.queries = temp;
+            } else {
+              userQueries.queries = [query];
+            }
 
             userQueries.save(function(err) {
               if(err) {
@@ -108,7 +108,7 @@ routes.route('/search', auth).post(function(req, res) {
   });
 });
 
-routes.route('/last-search', auth).get(function(req, res) {
+routes.get('/last-search', auth, function(req, res) {
   protectedRequest(req, res, (req, res) => {
     UserQueries
         .findOne({userId: req.payload._id})
@@ -120,7 +120,7 @@ routes.route('/last-search', auth).get(function(req, res) {
           } else {
             if(userQueries.queries.length > 0) {
               res.status(200);
-              res.json(userQueries.queries[0]);  
+              res.json(userQueries.queries[userQueries.queries.length - 1]);  
             } else {
               res.status(200);
               res.json({
@@ -134,31 +134,14 @@ routes.route('/last-search', auth).get(function(req, res) {
 });
 
 function protectedRequest(req, res, body) {
-  // If no user ID exists in the JWT return a 401
-  console.log("req " + req);
-  //console.log("req string" + JSON.stringify(req));
-  console.log("req headers" + JSON.stringify(req.headers));
-  console.log("req body" + JSON.stringify(req.body));
-  console.log("req.user " + req.user);
-  console.log("req.payload " + req.payload);
-
-  //console.log("body " + body);
-  
-  //console.log("req.payload " + JSON.stringify(req.payload));
-
-  //console.log("Is logged in? " + req.payload._id);
   if (req && ( !req.payload || !req.payload._id)) {
-    console.log("Is returning 401");
     res.status(401).json({
       "message" : "UnauthorizedError: private profile"
     });
   } else {
-    console.log("Proceeding");
     // Otherwise continue
     body(req, res);
   }
-
-  console.log("Done with protectedRequest ");
 }
 
 module.exports.protectedRequest = protectedRequest

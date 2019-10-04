@@ -19,7 +19,7 @@ var querySchema = new mongoose.Schema({
 
 var userQueriesSchema = new mongoose.Schema({
     userId: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
     },

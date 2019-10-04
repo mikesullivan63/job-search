@@ -43,11 +43,7 @@ class SearchBar extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         
-        cookies.set("job-title", this.state.title, { path: '/' });
-        cookies.set("job-location", this.state.location, { path: '/' });
-
         //Post for history
-
         fetch("/user/search", {
             method: 'POST', 
             headers: {
@@ -97,10 +93,20 @@ class SearchBar extends React.Component {
         fetch("/api/companies")
         .then(res => res.json())
         .then(data => this.setState({
-                results: data.companies.map(company => ({
-                    company: company.name, jobs: []
-                }))
+            results: data.companies.map(company => ({
+                company: company.name, jobs: []
+            }))
         }));
+
+        fetch("/user/last-search", {
+            headers: authHeader()
+        })
+        .then(res => res.json())
+        .then(res => this.setState({
+            title: res.title,
+            location: res.location
+        }));
+        
     }
 
     render() {
