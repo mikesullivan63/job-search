@@ -12,7 +12,7 @@ class LoginPage extends React.Component {
 
         // redirect to home if already logged in
         if (authenticationService.currentUserValue) { 
-            this.props.history.push('/');
+            //this.props.history.push('/');
         }
     }
 
@@ -22,8 +22,8 @@ class LoginPage extends React.Component {
                 <h2>Login</h2>
                 <Formik
                     initialValues={{
-                        email: '',
-                        password: ''
+                        email: 'test-email@email.com',
+                        password: '123456Password'
                     }}
                     validationSchema={Yup.object().shape({
                         email: Yup.string().required('Email is required'),
@@ -34,8 +34,9 @@ class LoginPage extends React.Component {
                         authenticationService.login(email, password)
                             .then(
                                 user => {
-                                    const { from } = this.props.location.state || { from: { pathname: "/" } };
-                                    this.props.history.push(from);
+                                    this.props.loginCallback();
+                                    //const { from } = this.props.location.state || { from: { pathname: "/" } };
+                                    //this.props.history.push(from);
                                 },
                                 error => {
                                     setSubmitting(false);
