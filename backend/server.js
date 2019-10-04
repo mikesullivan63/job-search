@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 
@@ -22,6 +23,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+app.use(bodyParser.json())
 app.options("*", cors());
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);

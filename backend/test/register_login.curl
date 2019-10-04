@@ -1,0 +1,10 @@
+
+//Register user
+curl -d '{"email":"test-email@email.com", "first_name":"Test", "last_name": "User", "password":"123456Password"}' -H "Content-Type: application/json" -X POST http://localhost:4000/user/register
+//Returns token...
+
+//Bad Login
+curl -d '{"email":"test-email@email.com", "password":"123456Password!!!"}' -H "Content-Type: application/json" -X POST http://localhost:4000/user/login
+
+//Good Login
+curl -d '{"email":"test-email@email.com", "password":"123456Password"}' -H "Content-Type: application/json" -X POST http://localhost:4000/user/login

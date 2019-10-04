@@ -14,13 +14,13 @@ module.exports.auth = jwt({
 //Routes
 routes.route('/register').post(function(req, res) {
     var user = new User();
-  
+
     user.email = req.body.email;
     user.first_name = req.body.first_name;
     user.last_name = req.body.last_name;
   
     user.setPassword(req.body.password);
-  
+
     user.save(function(err) {
       var token;
       token = user.generateJwt();
