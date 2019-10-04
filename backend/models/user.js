@@ -1,5 +1,5 @@
 //Pulled largely from https://www.sitepoint.com/user-authentication-mean-stack/
-//var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
@@ -42,3 +42,5 @@ var userSchema = new mongoose.Schema({
       exp: parseInt(expiry.getTime() / 1000),
     }, "MY_SECRET"); // DO NOT KEEP YOUR SECRET IN THE CODE!
   };
+
+  mongoose.model('User', userSchema);

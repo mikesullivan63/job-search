@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var UserQueries = mongoose.model('UserQueries');
 var jwt = require('express-jwt');
+var auth = require('./user').auth;
 
 module.exports.auth = jwt({
   secret: 'MY_SECRET',

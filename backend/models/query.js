@@ -17,11 +17,14 @@ var querySchema = new mongoose.Schema({
     }
   });
 
-  var userQueriesSchema = new mongoose.Schema({
+var userQueriesSchema = new mongoose.Schema({
     userId: {
         type: Number,
         unique: true,
         required: true
     },
-    queries: [searchQuery]
+    queries: [querySchema]
   });
+
+  mongoose.model('Query', querySchema);
+  mongoose.model('UserQueries', userQueriesSchema);

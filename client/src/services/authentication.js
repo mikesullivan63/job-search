@@ -1,3 +1,5 @@
+import { handleResponse } from './handleResponse'
+
 export const authenticationService = {
     login,
     logout

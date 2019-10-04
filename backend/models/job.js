@@ -30,3 +30,6 @@ const mongoose = require('mongoose');
     ignored: [jobSchema],
     history: [jobSchema]
   });
+
+  mongoose.model('Job', jobSchema);
+  mongoose.model('UserJobs', userJobsSchema);
