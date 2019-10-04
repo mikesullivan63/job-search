@@ -10,14 +10,18 @@ function Header(props) {
             <TopBarLeft className='my-top-bar-right'>
                 <Menu>
                     <MenuText>Common Platform Job Search Tool</MenuText>
+                    <MenuItem>{props.firstName}</MenuItem>
                 </Menu>
             </TopBarLeft>
             <TopBarRight className='my-top-bar-right'>
-                <Menu>
                     {authenticationService.getCurrentUser() && 
-                        <MenuItem><a href="#" onClick={() => {props.logoutCallback();}}>Logout</a></MenuItem>                
+                        <Menu>
+                            <MenuItem><a href="#" >Profile</a></MenuItem>
+                            <MenuItem><a href="#" >Search History</a></MenuItem>
+                            <MenuItem><a href="#" >Watched Jobs</a></MenuItem>
+                            <MenuItem><a href="#" onClick={() => {props.logoutCallback();}}>Logout</a></MenuItem>                
+                        </Menu>
                     }
-                </Menu>
             </TopBarRight>
         </TopBar>
     )
