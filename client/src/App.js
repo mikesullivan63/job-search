@@ -8,6 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.processLogin = this.processLogin.bind(this)
+    this.logout = this.logout.bind(this)
     this.state = {
         currentUser: null
     };
@@ -29,6 +30,7 @@ class App extends React.Component {
 
   logout() {
     authenticationService.logout();
+    this.setState({ currentUser: null });
     //history.push('/login');
   }
 
@@ -37,7 +39,7 @@ class App extends React.Component {
     console.log("rendering: : "  + JSON.stringify(currentUser));
     return (
     <React.Fragment>
-      <Header />
+      <Header logoutCallback={this.logout}/>
       {!currentUser && <LoginPage loginCallback={this.processLogin}/> }
       {currentUser && <SearchBar /> }
     </React.Fragment>

@@ -17,5 +17,5 @@ exports.processWorkable = (board, title, location, res) => {
    (el) => el.find('h2 a').text(), 
    (el,$) => el.find('p.meta').text() + " " + el.find('p.meta').children().map((i, el) => $(el).text()).get().join(' '), 
    (el) => "https://" +  board.url + ".workable.com" + el.attr('href'),
-   res, true);
+   res);
 };
