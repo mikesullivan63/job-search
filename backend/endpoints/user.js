@@ -34,7 +34,7 @@ routes.route('/register').post(function(req, res) {
 routes.route('/login').post(function(req, res) {
     passport.authenticate('local', function(err, user, info){
         var token;
-    
+
         // If Passport throws/catches an error
         if (err) {
           res.status(404).json(err);
