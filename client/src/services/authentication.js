@@ -38,10 +38,12 @@ function getCurrentUser() {
 
 export function authHeader() {
     // return authorization header with jwt token
-    const currentUser = authenticationService.localStorage.getItem('currentUser');
+    const currentUser = JSON.parse(authenticationService.getCurrentUser());
     if (currentUser && currentUser.token) {
+        console.log("Returning authorization header: " + currentUser.token);
         return { Authorization: `Bearer ${currentUser.token}` };
     } else {
+        console.log("Returning blank authorization header");
         return {};
     }
 }

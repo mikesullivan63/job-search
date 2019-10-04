@@ -44,9 +44,14 @@ app.get("*", (req, res) => {
 //Global Errors
 // Catch unauthorised errors
 app.use(function (err, req, res, next) {
+    console.log("Error function: " + JSON.stringify(req.headers));
+    console.log("Error function: err: " + err);
     if (err.name === 'UnauthorizedError') {
       res.status(401);
       res.json({"message" : err.name + ": " + err.message});
+    } else if(err) {
+        res.status(500);
+        res.json({"message" : err.name + ": " + err.message});  
     }
 });
 

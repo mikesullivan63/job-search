@@ -3,6 +3,7 @@ import styled  from 'styled-components'
 import { Button, Colors } from 'react-foundation'
 import Cookies from 'universal-cookie';
 import Results from './Results';
+import { authenticationService, authHeader } from '../../services/authentication';
 
 const cookies = new Cookies();
 const StyledSearchBar = styled.div `
@@ -44,6 +45,22 @@ class SearchBar extends React.Component {
         
         cookies.set("job-title", this.state.title, { path: '/' });
         cookies.set("job-location", this.state.location, { path: '/' });
+
+        //Post for history
+
+        fetch("/user/search", {
+            method: 'POST', 
+            headers: {
+                    ...authHeader(),
+                    ...{'Content-Type': 'application/json'}
+                },
+                body: JSON.stringify({
+                    title: this.state.title,
+                    location: this.state.location
+                })
+            })
+          .then(res => res.json())
+          //Error handling??
 
         this.state.results.forEach(board => this.processBoard(board, this.state.title, this.state.location, this));
     }
