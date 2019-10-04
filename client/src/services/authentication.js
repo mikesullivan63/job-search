@@ -2,7 +2,8 @@ import { handleResponse } from './handleResponse'
 
 export const authenticationService = {
     login,
-    logout
+    logout,
+    getCurrentUser
 };
 
 function login(username, password) {
@@ -25,6 +26,11 @@ function logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
 }
+
+function getCurrentUser() {
+    localStorage.getItem('currentUser');
+}
+
 
 export function authHeader() {
     // return authorization header with jwt token
