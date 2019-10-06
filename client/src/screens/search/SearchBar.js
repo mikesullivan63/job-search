@@ -24,6 +24,9 @@ class SearchBar extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.archiveLink = this.archiveLink.bind(this);
+        this.watchLink = this.watchLink.bind(this);
+        this.ignoreLink = this.ignoreLink.bind(this);
     }
 
     handleInputChange(event) {
@@ -116,7 +119,7 @@ class SearchBar extends React.Component {
         });
     }
 
-    archiveLink(board, url, title, location) {
+    ignoreLink(board, url, title, location) {
           fetch("/job/ignore-job", {
             method: 'POST', 
             headers: {
@@ -233,7 +236,7 @@ class SearchBar extends React.Component {
                     ignoredJobs={this.state.ignoredJobs}
                     archiveCallback={this.archiveLink}
                     watchCallback={this.watchLink}
-                    ignoreCallback={this.ignoreCallback}                    
+                    ignoreCallback={this.ignoreLink}    
                     />
             </React.Fragment>
         );

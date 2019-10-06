@@ -129,7 +129,13 @@ function ResultsCompany(props) {
             {props && props.data? 
                 props.data.map(function(company, index){
                     return (
-                        <ResultsCompany key={company.company} company={company} />
+                        <ResultsCompany 
+                            key={company.company} 
+                            company={company} 
+                            archiveCallback={props.archiveCallback}
+                            watchCallback={props.watchCallback}
+                            ignoreCallback={props.ignoreCallback}    
+                        />
                     );
                 })
             : ( <div class="no-results">No Results</div> )

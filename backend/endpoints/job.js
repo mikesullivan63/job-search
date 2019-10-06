@@ -15,21 +15,17 @@ var auth = jwt({
 
 
 routes.get('/active-jobs', auth, function(req, res) { 
-  console.log("In active jobs call");
   protectedRequest(req, res, (req, res) => {
-    console.log("In active jobs protectedRequest");
     UserJobs
         .findOne({userId: req.payload._id})
         .exec((err, userJobs) => {
           if(err) {
-            console.log("Error: " + err);
             res.status(500).json({
               "message" : "Error during lookup: " + err 
             })
           } else {
             res.status(200);
             if(userJobs) {
-              console.log("Result: " + JSON.stringify(userJobs.active));
               res.json(userJobs.active);    
             } else {
               res.json([]);    
@@ -51,7 +47,6 @@ routes.get('/ignored-jobs', auth, function(req, res) {
               } else {
                 res.status(200);
                 if(userJobs) {
-                  console.log("Result: " + JSON.stringify(userJobs.active));
                   res.json(userJobs.ignored);    
                 } else {
                   res.json([]);    
@@ -120,7 +115,7 @@ routes.post('/ignore-job', auth, function(req, res) {
                 job.title = req.body.title;
                 job.location = req.body.location;
 
-                userJobs.active = userJobs.ignored.slice().concat(job);
+                userJobs.ignored = userJobs.ignored.slice().concat(job);
       
                 userJobs.save(function(err) {
                     if(err) {
