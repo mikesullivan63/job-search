@@ -1,26 +1,31 @@
 const routes = require('express').Router();
 var jwt = require('express-jwt');
-var auth = require('./user').auth;
 var protectedRequest = require('./user').protectedRequest;
 
-routes.route('/active-jobs', auth).get(function(req, res) {
-    protectedRequest(req, res, (req, res) => {
-        UserJobs
-            .findOne({userId: req.payload._id})
-            .exec((err, userJobs) => {
-              if(err) {
-                res.status(500).json({
-                  "message" : "Error during lookup: " + err 
-                })
-              } else {
-                  res.status(200);
-                  res.json(userJobs.active);  
-              }
-            });  
-      });
+var auth = jwt({
+  secret: 'MY_SECRET',
+  userProperty: 'payload'
 });
 
-routes.route('/ignored-jobs', auth).get(function(req, res) {
+
+routes.get('/active-jobs', auth, function(req, res) { 
+  protectedRequest(req, res, (req, res) => {
+    UserJobs
+        .findOne({userId: req.payload._id})
+        .exec((err, userJobs) => {
+          if(err) {
+            res.status(500).json({
+              "message" : "Error during lookup: " + err 
+            })
+          } else {
+              res.status(200);
+              res.json(userJobs.active);  
+          }
+        });  
+  });
+});
+
+routes.get('/ignored-jobs', auth, function(req, res) {
     protectedRequest(req, res, (req, res) => {
         UserJobs
             .findOne({userId: req.payload._id})
@@ -37,7 +42,7 @@ routes.route('/ignored-jobs', auth).get(function(req, res) {
       });
 });
 
-routes.route('/add-job', auth).post(function(req, res) {
+routes.post('/add-job', auth, function(req, res) {
     protectedRequest(req, res, (req, res) => {
         UserJobs
             .findOne({userId: req.payload._id})
@@ -68,7 +73,7 @@ routes.route('/add-job', auth).post(function(req, res) {
     });
 });
 
-routes.route('/ignore-job', auth).post(function(req, res) {
+routes.post('/ignore-job', auth, function(req, res) {
     protectedRequest(req, res, (req, res) => {
         UserJobs
             .findOne({userId: req.payload._id})
@@ -99,7 +104,7 @@ routes.route('/ignore-job', auth).post(function(req, res) {
     });
 });
 
-routes.route('/archive-job', auth).post(function(req, res) {
+routes.post('/archive-job', auth, function(req, res) {
     protectedRequest(req, res, (req, res) => {
         UserJobs
             .findOne({userId: req.payload._id})

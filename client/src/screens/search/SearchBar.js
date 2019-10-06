@@ -18,6 +18,8 @@ class SearchBar extends React.Component {
             title: cookies.get("job-title"),
             location: cookies.get("job-location"),
             results: [],
+            activeJobs: [],
+            ignoredJobs:[]
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -40,9 +42,32 @@ class SearchBar extends React.Component {
         });
     }
 
+    getActiveJobs() {
+        fetch("/jobs/active-jobs", {
+            headers: authHeader()
+        })
+        .then(res => res.json())
+        .then(res => { return res });
+
+    }
+
+    getIgnoredJobs() {
+        fetch("/jobs/ignored-jobs", {
+            headers: authHeader()
+        })
+        .then(res => res.json())
+        .then(res => { return res });
+
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         
+        this.setState({
+            activeJobs: this.getActiveJobs(),
+            ignoredJobs: this.getIgnoredJobs()
+        });
+
         //Post for history
         fetch("/user/search", {
             method: 'POST', 
@@ -89,6 +114,68 @@ class SearchBar extends React.Component {
         });
     }
 
+    archiveLink(board, url, title, location) {
+          fetch("/job/ignore-job", {
+            method: 'POST', 
+            headers: {
+                    ...authHeader(),
+                    ...{'Content-Type': 'application/json'}
+                },
+                body: JSON.stringify({
+                    board: board, 
+                    url: url, 
+                    title: title,
+                    location: location
+                })
+            })
+          .then(res => res.json())
+          .then(res => this.setState({
+            ignoredJobs: this.getIgnoredJobs()
+          }))
+          .catch(reason => console.log("Error: " + reason))    }
+    
+    watchLink(board, url, title, location) {
+        fetch("/job/add-job", {
+            method: 'POST', 
+            headers: {
+                    ...authHeader(),
+                    ...{'Content-Type': 'application/json'}
+                },
+                body: JSON.stringify({
+                    board: board, 
+                    url: url, 
+                    title: title,
+                    location: location
+                })
+            })
+          .then(res => res.json())
+          .then(res => this.setState({
+            activeJobs: this.getActiveJobs(),
+          }))
+          .catch(reason => console.log("Error: " + reason))
+          //Error handling??        
+    }
+
+    archiveLink(jobId) {
+        fetch("/job/archive-job", {
+            method: 'POST', 
+            headers: {
+                    ...authHeader(),
+                    ...{'Content-Type': 'application/json'}
+                },
+                body: JSON.stringify({
+                    jobId: jobId
+                })
+            })
+          .then(res => res.json())
+          .then(res => this.setState({
+            activeJobs: this.getActiveJobs(),
+            ignoredJobs: this.getIgnoredJobs()
+          }))
+          .catch(reason => console.log("Error: " + reason))
+          //Error handling??        
+    }
+
     componentDidMount() {
         fetch("/api/companies")
         .then(res => res.json())
@@ -105,8 +192,7 @@ class SearchBar extends React.Component {
         .then(res => this.setState({
             title: res.title,
             location: res.location
-        }));
-        
+        }));        
     }
 
     render() {
@@ -143,9 +229,15 @@ class SearchBar extends React.Component {
                     </form> 
 
                 </StyledSearchBar>
-                <Results data={this.state.results}/>
+                <Results 
+                    data={this.state.results} 
+                    activeJobs={this.state.activeJobs} 
+                    ignoredJobs={this.state.ignoredJobs}
+                    archiveCallback={this.archiveLink}
+                    watchCallback={this.watchLink}
+                    ignoreCallback={this.ignoreCallback}                    
+                    />
             </React.Fragment>
-
         );
     }
 }
