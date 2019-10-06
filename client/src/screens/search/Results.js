@@ -66,16 +66,11 @@ function ResultsCompany(props) {
                     <Cell small={6} medium={6} large={4} className="result-message">{displayMessage}</Cell>
                 }
             </Grid>
-
-{console.log("props.activeJobs: " + JSON.stringify(props.activeJobs))}
-{console.log("props.ignoredJobs: " + JSON.stringify(props.ignoredJobs))}
                 {props.company.state === 'COMPLETED' &&  
                     props.company.jobs && 
                     props.company.jobs.filter((job, index) => {
                         if(props.ignoredJobs && props.ignoredJobs.length > 0) {
                             return !props.ignoredJobs.some((el, index) => { 
-                                console.log("el: " + JSON.stringify(job.url));
-
                                 return el.board === props.company.company && el.url === job.url;
                             })    
                         }
@@ -84,14 +79,10 @@ function ResultsCompany(props) {
                         var matchedJob = null;
                         if(props.activeJobs && props.activeJobs.length > 0) {
                             matchedJob = props.activeJobs.find((el, index) => { 
-                                console.log("el: " + JSON.stringify(job.url));
                                 return el.board === props.company.company && el.url === job.url;
                             });
                         }
-                        
-                        console.log("matchedJob: " + matchedJob);
-                        var isActive = (matchedJob !== null && matchedJob !== undefined);    
-                        
+                        var isActive = (matchedJob !== null && matchedJob !== undefined);                            
                     return (
                         <Grid className="display">
                             <Cell small={4} medium={3} large={4}>
