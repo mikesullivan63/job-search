@@ -51,7 +51,7 @@ class SearchBar extends React.Component {
         })
         .then(res => res.json())
         .then(res => this.setState({
-            activeJobs: res
+                activeJobs: res
         }));
 
     }
@@ -197,6 +197,8 @@ class SearchBar extends React.Component {
     }
 
     render() {
+        console.log("Render top level: activeJobs: " + JSON.stringify(this.state.activeJobs))
+        console.log("Render top level: ignoredJobs: " + JSON.stringify(this.state.ignoredJobs))
         return (
             <React.Fragment>
                 <StyledSearchBar>

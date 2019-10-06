@@ -71,17 +71,22 @@ function ResultsCompany(props) {
                 {props.company.state === 'COMPLETED' &&  
                     props.company.jobs && 
                     props.company.jobs.filter((job, index) => {
+                        console.log("props.ignoredJobs: " + JSON.stringify(props.ignoredJobs));
                         if(props.ignoredJobs && props.ignoredJobs.length > 0) {
                             return !props.ignoredJobs.some((el, index) => { 
+                                console.log("el: " + JSON.stringify(el));
+
                                 return el.board === props.company.company && el.url === job.url;
                             })    
                         }
                         return true;
                     }).map((job, index) => {
                         var matchedJob = null;
+                        console.log("props.activeJobs: " + JSON.stringify(props.activeJobs));
 
                         if(props.activeJobs && props.activeJobs.length > 0) {
                             matchedJob = props.activeJobs.find((el, index) => { 
+                                console.log("el: " + JSON.stringify(el));
                                 return el.board === props.company.company && el.url === job.url;
                             });
                         }
@@ -124,6 +129,9 @@ function ResultsCompany(props) {
     ]
 */
   function Results(props) {
+
+    console.log("Results: props.activeJobs: " + JSON.stringify(props.activeJobs));
+    console.log("Results: props.ignoredJobs: " + JSON.stringify(props.ignoredJobs));    
     return (
         <StyledResultsArea class="search-results grid-x grid-margin-x">
             {props && props.data? 
@@ -132,6 +140,8 @@ function ResultsCompany(props) {
                         <ResultsCompany 
                             key={company.company} 
                             company={company} 
+                            activeJobs={props.activeJobs} 
+                            ignoredJobs={props.ignoredJobs} 
                             archiveCallback={props.archiveCallback}
                             watchCallback={props.watchCallback}
                             ignoreCallback={props.ignoreCallback}    
