@@ -67,14 +67,14 @@ function ResultsCompany(props) {
                 }
             </Grid>
 
-
+{console.log("props.activeJobs: " + JSON.stringify(props.activeJobs))}
+{console.log("props.ignoredJobs: " + JSON.stringify(props.ignoredJobs))}
                 {props.company.state === 'COMPLETED' &&  
                     props.company.jobs && 
                     props.company.jobs.filter((job, index) => {
-                        console.log("props.ignoredJobs: " + JSON.stringify(props.ignoredJobs));
                         if(props.ignoredJobs && props.ignoredJobs.length > 0) {
                             return !props.ignoredJobs.some((el, index) => { 
-                                console.log("el: " + JSON.stringify(el));
+                                console.log("el: " + JSON.stringify(job.url));
 
                                 return el.board === props.company.company && el.url === job.url;
                             })    
@@ -82,15 +82,15 @@ function ResultsCompany(props) {
                         return true;
                     }).map((job, index) => {
                         var matchedJob = null;
-                        console.log("props.activeJobs: " + JSON.stringify(props.activeJobs));
-
                         if(props.activeJobs && props.activeJobs.length > 0) {
                             matchedJob = props.activeJobs.find((el, index) => { 
-                                console.log("el: " + JSON.stringify(el));
+                                console.log("el: " + JSON.stringify(job.url));
                                 return el.board === props.company.company && el.url === job.url;
                             });
                         }
-                        var isActive = (matchedJob !== null);    
+                        
+                        console.log("matchedJob: " + matchedJob);
+                        var isActive = (matchedJob !== null && matchedJob !== undefined);    
                         
                     return (
                         <Grid className="display">
