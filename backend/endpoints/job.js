@@ -1,6 +1,12 @@
 const routes = require('express').Router();
+const passport = require('passport');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var Job = mongoose.model('Job');
+var UserJobs = mongoose.model('UserJobs');
+
+
 var jwt = require('express-jwt');
-var protectedRequest = require('./user').protectedRequest;
 
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -9,17 +15,25 @@ var auth = jwt({
 
 
 routes.get('/active-jobs', auth, function(req, res) { 
+  console.log("In active jobs call");
   protectedRequest(req, res, (req, res) => {
+    console.log("In active jobs protectedRequest");
     UserJobs
         .findOne({userId: req.payload._id})
         .exec((err, userJobs) => {
           if(err) {
+            console.log("Error: " + err);
             res.status(500).json({
               "message" : "Error during lookup: " + err 
             })
           } else {
-              res.status(200);
-              res.json(userJobs.active);  
+            res.status(200);
+            if(userJobs) {
+              console.log("Result: " + JSON.stringify(userJobs.active));
+              res.json(userJobs.active);    
+            } else {
+              res.json([]);    
+            }
           }
         });  
   });
@@ -35,8 +49,13 @@ routes.get('/ignored-jobs', auth, function(req, res) {
                   "message" : "Error during lookup: " + err 
                 })
               } else {
-                  res.status(200);
-                  res.json(userJobs.ignored);  
+                res.status(200);
+                if(userJobs) {
+                  console.log("Result: " + JSON.stringify(userJobs.active));
+                  res.json(userJobs.ignored);    
+                } else {
+                  res.json([]);    
+                }
               }
             });  
       });
@@ -52,11 +71,18 @@ routes.post('/add-job', auth, function(req, res) {
                   "message" : "Error during lookup: " + err 
                 })
               } else {
-                userJobs.active = userJobs.active.slice().concat({
-                    board: req.body.board, 
-                    url: req.body.url, 
-                    title: req.body.title,
-                    location: req.body.location});
+                if(!userJobs) {
+                  userJobs = new UserJobs();
+                  userJobs.userId = req.payload._id;
+                }
+
+                var job = new Job();
+                job.board = req.body.board;
+                job.url = req.body.url;
+                job.title = req.body.title;
+                job.location = req.body.location;
+
+                userJobs.active = userJobs.active.slice().concat(job);
       
                 userJobs.save(function(err) {
                     if(err) {
@@ -83,11 +109,18 @@ routes.post('/ignore-job', auth, function(req, res) {
                   "message" : "Error during lookup: " + err 
                 })
               } else {
-                userJobs.ignored = userJobs.ignored.slice().concat({
-                    board: req.body.board, 
-                    url: req.body.url, 
-                    title: req.body.title,
-                    location: req.body.location});
+                if(!userJobs) {
+                  userJobs = new UserJobs();
+                  userJobs.userId = req.payload._id;
+                }
+
+                var job = new Job();
+                job.board = req.body.board;
+                job.url = req.body.url;
+                job.title = req.body.title;
+                job.location = req.body.location;
+
+                userJobs.active = userJobs.ignored.slice().concat(job);
       
                 userJobs.save(function(err) {
                     if(err) {
@@ -134,5 +167,16 @@ routes.post('/archive-job', auth, function(req, res) {
       });
     });
 });
+
+function protectedRequest(req, res, body) {
+  if (req && ( !req.payload || !req.payload._id)) {
+    res.status(401).json({
+      "message" : "UnauthorizedError: private profile"
+    });
+  } else {
+    // Otherwise continue
+    body(req, res);
+  }
+}
 
 module.exports = routes

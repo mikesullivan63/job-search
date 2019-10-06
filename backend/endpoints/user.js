@@ -144,7 +144,4 @@ function protectedRequest(req, res, body) {
   }
 }
 
-module.exports.protectedRequest = protectedRequest
-module.exports.auth = auth
-
 module.exports = routes

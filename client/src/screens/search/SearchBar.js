@@ -43,7 +43,7 @@ class SearchBar extends React.Component {
     }
 
     setActiveJobs() {
-        fetch("/jobs/active-jobs", {
+        fetch("/job/active-jobs", {
             headers: authHeader()
         })
         .then(res => res.json())
@@ -54,7 +54,7 @@ class SearchBar extends React.Component {
     }
 
     setIgnoredJobs() {
-        fetch("/jobs/ignored-jobs", {
+        fetch("/job/ignored-jobs", {
             headers: authHeader()
         })
         .then(res => res.json())
