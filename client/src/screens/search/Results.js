@@ -32,7 +32,7 @@ vertical-align: top;
 
 function ResultsCompany(props) {
 
-    console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
+    //console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
 
     let displayStyle = "callout"
     let displayMessage = ""
@@ -71,15 +71,21 @@ function ResultsCompany(props) {
                 {props.company.state === 'COMPLETED' &&  
                     props.company.jobs && 
                     props.company.jobs.filter((job, index) => {
-                        return !this.props.ignoredJobs.some((el, index) => { 
-                            return el.board === props.company.company && el.url === job.url;
-                        })
+                        if(props.ignoredJobs && props.ignoredJobs.length > 0) {
+                            return !props.ignoredJobs.some((el, index) => { 
+                                return el.board === props.company.company && el.url === job.url;
+                            })    
+                        }
+                        return true;
                     }).map((job, index) => {
-                        
-                        var matchedJob = this.props.activeJobs.find((el, index) => { 
-                            return el.board === props.company.company && el.url === job.url;
-                        });
-                        var isActive = (matchedJob !== null);
+                        var matchedJob = null;
+
+                        if(props.activeJobs && props.activeJobs.length > 0) {
+                            matchedJob = props.activeJobs.find((el, index) => { 
+                                return el.board === props.company.company && el.url === job.url;
+                            });
+                        }
+                        var isActive = (matchedJob !== null);    
                         
                     return (
                         <Grid className="display">
@@ -92,11 +98,11 @@ function ResultsCompany(props) {
                                 <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
                             </Cell>
                             <Cell small={2} medium={1} large={1}>
-                                {isActive && < a href="#" onClick={() => {props.archiveCallback(matchedJob._id, this);}}>Archive</ a>}
-                                {!isActive && < a href="#" onClick={() => {props.watchCallback(props.company.company, job.url, job.title, job.job.title);}}>Watch</ a>}
+                                {isActive && < a href="#" onClick={() => {props.archiveCallback(matchedJob._id);}}>Archive</ a>}
+                                {!isActive && < a href="#" onClick={() => {props.watchCallback(props.company.company, job.url, job.title, job.location);}}>Watch</ a>}
                             </Cell>
                             <Cell small={2} medium={1} large={1}>
-                                {!isActive && < a href="#" onClick={() => {props.ignoreCallback(props.company.company, job.url, job.title, job.job.title);}}>Ignore</ a>}
+                                {!isActive && < a href="#" onClick={() => {props.ignoreCallback(props.company.company, job.url, job.title, job.location);}}>Ignore</ a>}
                             </Cell>
                         </Grid>
                 )})}          

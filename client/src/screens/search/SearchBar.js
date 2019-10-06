@@ -42,31 +42,33 @@ class SearchBar extends React.Component {
         });
     }
 
-    getActiveJobs() {
+    setActiveJobs() {
         fetch("/jobs/active-jobs", {
             headers: authHeader()
         })
         .then(res => res.json())
-        .then(res => { return res });
+        .then(res => this.setState({
+            activeJobs: res
+        }));
 
     }
 
-    getIgnoredJobs() {
+    setIgnoredJobs() {
         fetch("/jobs/ignored-jobs", {
             headers: authHeader()
         })
         .then(res => res.json())
-        .then(res => { return res });
+        .then(res => this.setState({
+            ignoredJobs: res
+          }));
 
     }
 
     handleSubmit(event) {
         event.preventDefault();
         
-        this.setState({
-            activeJobs: this.getActiveJobs(),
-            ignoredJobs: this.getIgnoredJobs()
-        });
+        this.setActiveJobs();
+        this.setIgnoredJobs();
 
         //Post for history
         fetch("/user/search", {
@@ -129,9 +131,7 @@ class SearchBar extends React.Component {
                 })
             })
           .then(res => res.json())
-          .then(res => this.setState({
-            ignoredJobs: this.getIgnoredJobs()
-          }))
+          .then(this.setIgnoredJobs())
           .catch(reason => console.log("Error: " + reason))    }
     
     watchLink(board, url, title, location) {
@@ -149,9 +149,7 @@ class SearchBar extends React.Component {
                 })
             })
           .then(res => res.json())
-          .then(res => this.setState({
-            activeJobs: this.getActiveJobs(),
-          }))
+          .then(this.setActiveJobs())
           .catch(reason => console.log("Error: " + reason))
           //Error handling??        
     }
@@ -168,10 +166,10 @@ class SearchBar extends React.Component {
                 })
             })
           .then(res => res.json())
-          .then(res => this.setState({
-            activeJobs: this.getActiveJobs(),
-            ignoredJobs: this.getIgnoredJobs()
-          }))
+          .then(res => {
+              this.setActiveJobs(); 
+              this.setIgnoredJobs();
+          })
           .catch(reason => console.log("Error: " + reason))
           //Error handling??        
     }
