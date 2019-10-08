@@ -128,7 +128,11 @@ class SearchBar extends React.Component {
     ignoreLink = (event, board, url, title, location) => this.addJobToList( event, 
                                                                             {board: board, url: url, title: title,location: location},
                                                                             "/job/ignore-job", 
-                                                                            (result) => this.setState({ignoredJobs: result}));
+                                                                            (result) => {
+                                                                                console.log("result: " + JSON.stringify(result));
+                                                                                this.setState({ignoredJobs: result})
+                                                                            });
+
     watchLink = (event, board, url, title, location) => this.addJobToList(  event, 
                                                                             {board: board, url: url, title: title,location: location}, 
                                                                             "/job/add-job", 
@@ -162,8 +166,6 @@ class SearchBar extends React.Component {
     }
 
     render() {
-        console.log("Render top level: activeJobs: " + JSON.stringify(this.state.activeJobs))
-        console.log("Render top level: ignoredJobs: " + JSON.stringify(this.state.ignoredJobs))
         return (
             <React.Fragment>
                 <StyledSearchBar>

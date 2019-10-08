@@ -56,92 +56,56 @@ routes.get('/ignored-jobs', auth, function(req, res) {
       });
 });
 
-routes.post('/add-job', auth, function(req, res) {
-    protectedRequest(req, res, (req, res) => {
-        UserJobs
-            .findOne({userId: req.payload._id})
-            .exec((err, userJobs) => {
-              if(err) {
-                res.status(500).json({
-                  "message" : "Error during lookup: " + err 
-                })
-              } else {
-                if(!userJobs) {
-                  userJobs = new UserJobs();
-                  userJobs.userId = req.payload._id;
-                }
 
-                var job = new Job();
-                job.board = req.body.board;
-                job.url = req.body.url;
-                job.title = req.body.title;
-                job.location = req.body.location;
 
-                userJobs.active = userJobs.active.slice().concat(job);
-      
-                userJobs.save(function(err, updatedUserJobs) {
-                    if(err) {
-                      res.status(500).json({
-                        "message" : "Error during save: " + err 
-                      })
-                    } else {
-                      console.log("Saved job: " + JSON.stringify(updatedUserJobs.active)); 
-                        console.log("Saved job contains added job: " + updatedUserJobs.active.some(newJob => newJob.board === job.board && 
-                        newJob.url === job.url && 
-                        newJob.title === job.title && 
-                        newJob.location === job.location  ));
-                      res.status(200);
-                      res.json(updatedUserJobs.active);  
-                    }
-                });
-            }  
-      });
+function processJobAdditions(req, res, update, returnData)  {
+   protectedRequest(req, res, (req, res) => {
+      UserJobs
+          .findOne({userId: req.payload._id})
+          .exec((err, userJobs) => {
+            if(err) {
+              res.status(500).json({
+                "message" : "Error during lookup: " + err 
+              })
+            } else {
+              if(!userJobs) {
+                userJobs = new UserJobs();
+                userJobs.userId = req.payload._id;
+              }
+
+              var job = new Job();
+              job.board = req.body.board;
+              job.url = req.body.url;
+              job.title = req.body.title;
+              job.location = req.body.location;
+
+              update(userJobs, job);
+
+              userJobs.save(function(err, updatedUserJobs) {
+                  if(err) {
+                    res.status(500).json({
+                      "message" : "Error during save: " + err 
+                    })
+                  } else {
+                    res.status(200);
+                    res.json(returnData(updatedUserJobs));  
+                  }
+              });
+          }  
     });
+  });
+}
+
+routes.post('/add-job', auth, function(req, res) {
+  processJobAdditions(req, res, 
+                      (userJobs, job) => userJobs.active = userJobs.active.slice().concat(job),
+                      (userJobs) => {return userJobs.active});
 });
 
 routes.post('/ignore-job', auth, function(req, res) {
-    protectedRequest(req, res, (req, res) => {
-        UserJobs
-            .findOne({userId: req.payload._id})
-            .exec((err, userJobs) => {
-              if(err) {
-                res.status(500).json({
-                  "message" : "Error during lookup: " + err 
-                })
-              } else {
-                if(!userJobs) {
-                  userJobs = new UserJobs();
-                  userJobs.userId = req.payload._id;
-                }
-
-                var job = new Job();
-                job.board = req.body.board;
-                job.url = req.body.url;
-                job.title = req.body.title;
-                job.location = req.body.location;
-
-                userJobs.ignored = userJobs.ignored.slice().concat(job);
-      
-                userJobs.save(/*{
-                  w: true
-                },
-                */
-                function(err, userJobsSaved) {
-                    if(err) {
-                      res.status(500).json({
-                        "message" : "Error during save: " + err 
-                      })
-                    } else {
-                      console.log("Saved job contains added job: " )
-                      res.status(200);
-                      res.json("OK");  
-                    }
-                });
-
-
-            }  
-      });
-    });
+  processJobAdditions(req, res, 
+                      (userJobs, job) => userJobs.ignored = userJobs.ignored.slice().concat(job),
+                      (userJobs) => {return userJobs.ignored});
 });
 
 routes.post('/archive-job', auth, function(req, res) {
