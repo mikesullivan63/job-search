@@ -31,9 +31,6 @@ vertical-align: top;
 */
 
 function ResultsCompany(props) {
-
-    //console.log(props.company.company + ' ' + props.company.state + ' ' + props.company.jobs);
-
     let displayStyle = "callout"
     let displayMessage = ""
 
@@ -120,9 +117,6 @@ function ResultsCompany(props) {
     ]
 */
   function Results(props) {
-
-    console.log("Results: props.activeJobs: " + JSON.stringify(props.activeJobs));
-    console.log("Results: props.ignoredJobs: " + JSON.stringify(props.ignoredJobs));    
     return (
         <StyledResultsArea class="search-results grid-x grid-margin-x">
             {props && props.data? 
