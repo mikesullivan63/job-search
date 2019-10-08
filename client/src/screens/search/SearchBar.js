@@ -45,28 +45,18 @@ class SearchBar extends React.Component {
         });
     }
 
-    setActiveJobs() {
-        fetch("/job/active-jobs", {
+    setFieldFromUrl(url, field) {
+        fetch(url, {
             headers: authHeader()
         })
         .then(res => res.json())
         .then(res => this.setState({
-                activeJobs: res
+                [field]: res
         }));
-
     }
-
-    setIgnoredJobs() {
-        fetch("/job/ignored-jobs", {
-            headers: authHeader()
-        })
-        .then(res => res.json())
-        .then(res => this.setState({
-            ignoredJobs: res
-          }));
-
-    }
-
+    setActiveJobs = () => this.setFieldFromUrl("/job/active-jobs","activeJobs");
+    setIgnoredJobs = () => this.setFieldFromUrl("/job/ignored-jobs","ignoredJobs");
+ 
     handleSubmit(event) {
         event.preventDefault();
         
@@ -119,63 +109,25 @@ class SearchBar extends React.Component {
         });
     }
 
-    ignoreLink(board, url, title, location) {
-          fetch("/job/ignore-job", {
-            method: 'POST', 
-            headers: {
-                    ...authHeader(),
-                    ...{'Content-Type': 'application/json'}
-                },
-                body: JSON.stringify({
-                    board: board, 
-                    url: url, 
-                    title: title,
-                    location: location
-                })
-            })
-          .then(res => res.json())
-          .then(this.setIgnoredJobs())
-          .catch(reason => console.log("Error: " + reason))    }
-    
-    watchLink(board, url, title, location) {
-        fetch("/job/add-job", {
-            method: 'POST', 
-            headers: {
-                    ...authHeader(),
-                    ...{'Content-Type': 'application/json'}
-                },
-                body: JSON.stringify({
-                    board: board, 
-                    url: url, 
-                    title: title,
-                    location: location
-                })
-            })
-          .then(res => res.json())
-          .then(this.setActiveJobs())
-          .catch(reason => console.log("Error: " + reason))
-          //Error handling??        
-    }
 
-    archiveLink(jobId) {
-        fetch("/job/archive-job", {
+    addJobToList(event, data, url, updateCallback) {
+        event.preventDefault();
+
+        fetch(url, {
             method: 'POST', 
             headers: {
-                    ...authHeader(),
-                    ...{'Content-Type': 'application/json'}
-                },
-                body: JSON.stringify({
-                    jobId: jobId
-                })
-            })
-          .then(res => res.json())
-          .then(res => {
-              this.setActiveJobs(); 
-              this.setIgnoredJobs();
-          })
-          .catch(reason => console.log("Error: " + reason))
-          //Error handling??        
+                ...authHeader(),
+                ...{'Content-Type': 'application/json'}
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(updateCallback())
+        .catch(reason => console.log("Error: " + reason));
     }
+    ignoreLink = (event, board, url, title, location) => this.addJobToList(event, {board: board, url: url, title: title,location: location}, "/job/ignore-job", () => {this.setIgnoredJobs()});
+    watchLink = (event, board, url, title, location) => this.addJobToList(event, {board: board, url: url, title: title,location: location}, "/job/add-job", () => {this.setActiveJobs()});
+    archiveLink = (event, jobId) => this.addJobToList(event, {jobId: jobId}, "/job/archive-job", () => {this.setActiveJobs(); this.setIgnoredJobs();})
 
     componentDidMount() {
         fetch("/api/companies")

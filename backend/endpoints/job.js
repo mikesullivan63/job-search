@@ -79,12 +79,16 @@ routes.post('/add-job', auth, function(req, res) {
 
                 userJobs.active = userJobs.active.slice().concat(job);
       
-                userJobs.save(function(err) {
+                userJobs.save(function(err, updatedUserJobs) {
                     if(err) {
                       res.status(500).json({
                         "message" : "Error during save: " + err 
                       })
                     } else {
+                      console.log("Saved job contains added job: " + updatedUserJobs.active.some(newJob => newJob.board === job.board && 
+                        newJob.url === job.url && 
+                        newJob.title === job.title && 
+                        newJob.location === job.location  ));
                       res.status(200);
                       res.json("OK");  
                     }
@@ -117,16 +121,23 @@ routes.post('/ignore-job', auth, function(req, res) {
 
                 userJobs.ignored = userJobs.ignored.slice().concat(job);
       
-                userJobs.save(function(err) {
+                userJobs.save(/*{
+                  w: true
+                },
+                */
+                function(err, userJobsSaved) {
                     if(err) {
                       res.status(500).json({
                         "message" : "Error during save: " + err 
                       })
                     } else {
+                      console.log("Saved job contains added job: " )
                       res.status(200);
                       res.json("OK");  
                     }
                 });
+
+
             }  
       });
     });

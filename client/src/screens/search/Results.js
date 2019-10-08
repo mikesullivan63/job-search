@@ -94,11 +94,11 @@ function ResultsCompany(props) {
                                 <StyledResultsCompanyJobLocation>{job.location}</StyledResultsCompanyJobLocation>
                             </Cell>
                             <Cell small={2} medium={1} large={1}>
-                                {isActive && < a href="#" onClick={() => {props.archiveCallback(matchedJob._id);}}>Archive</ a>}
-                                {!isActive && < a href="#" onClick={() => {props.watchCallback(props.company.company, job.url, job.title, job.location);}}>Watch</ a>}
+                                {isActive && < a href="" onClick={(event) => {props.archiveCallback(event, matchedJob._id);}}>Archive</ a>}
+                                {!isActive && < a href="" onClick={(event) => {props.watchCallback(event, props.company.company, job.url, job.title, job.location);}}>Watch</ a>}
                             </Cell>
                             <Cell small={2} medium={1} large={1}>
-                                {!isActive && < a href="#" onClick={() => {props.ignoreCallback(props.company.company, job.url, job.title, job.location);}}>Ignore</ a>}
+                                {!isActive && < a href="" onClick={(event) => {props.ignoreCallback(event, props.company.company, job.url, job.title, job.location);}}>Ignore</ a>}
                             </Cell>
                         </Grid>
                 )})}          
