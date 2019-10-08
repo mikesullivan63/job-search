@@ -85,12 +85,13 @@ routes.post('/add-job', auth, function(req, res) {
                         "message" : "Error during save: " + err 
                       })
                     } else {
-                      console.log("Saved job contains added job: " + updatedUserJobs.active.some(newJob => newJob.board === job.board && 
+                      console.log("Saved job: " + JSON.stringify(updatedUserJobs.active)); 
+                        console.log("Saved job contains added job: " + updatedUserJobs.active.some(newJob => newJob.board === job.board && 
                         newJob.url === job.url && 
                         newJob.title === job.title && 
                         newJob.location === job.location  ));
                       res.status(200);
-                      res.json("OK");  
+                      res.json(updatedUserJobs.active);  
                     }
                 });
             }  

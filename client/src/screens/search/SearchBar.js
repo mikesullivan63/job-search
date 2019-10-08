@@ -122,12 +122,25 @@ class SearchBar extends React.Component {
             body: JSON.stringify(data)
         })
         .then(res => res.json())
-        .then(updateCallback())
+        .then(res => updateCallback(res))
         .catch(reason => console.log("Error: " + reason));
     }
-    ignoreLink = (event, board, url, title, location) => this.addJobToList(event, {board: board, url: url, title: title,location: location}, "/job/ignore-job", () => {this.setIgnoredJobs()});
-    watchLink = (event, board, url, title, location) => this.addJobToList(event, {board: board, url: url, title: title,location: location}, "/job/add-job", () => {this.setActiveJobs()});
-    archiveLink = (event, jobId) => this.addJobToList(event, {jobId: jobId}, "/job/archive-job", () => {this.setActiveJobs(); this.setIgnoredJobs();})
+    ignoreLink = (event, board, url, title, location) => this.addJobToList( event, 
+                                                                            {board: board, url: url, title: title,location: location},
+                                                                            "/job/ignore-job", 
+                                                                            (result) => this.setState({ignoredJobs: result}));
+    watchLink = (event, board, url, title, location) => this.addJobToList(  event, 
+                                                                            {board: board, url: url, title: title,location: location}, 
+                                                                            "/job/add-job", 
+                                                                            (result) => {
+                                                                                console.log("result: " + JSON.stringify(result));
+                                                                                this.setState({activeJobs: result})
+                                                                            });
+
+    archiveLink = (event, jobId) => this.addJobToList(  event, 
+                                                        {jobId: jobId}, 
+                                                        "/job/archive-job", 
+                                                        (result) => this.setState({activeJobs: result.active, ignoredJobs: result.ignored}))
 
     componentDidMount() {
         fetch("/api/companies")
