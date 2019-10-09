@@ -1,8 +1,8 @@
 //Pulled from https://www.sitepoint.com/user-authentication-mean-stack/
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
+var mongoose = require("mongoose");
+var User = mongoose.model("User");
 /*
 var Query = mongoose.model('Query');
 var UserQueries = mongoose.model('UserQueries');
@@ -10,27 +10,31 @@ var Job = mongoose.model('Job');
 var UserJobs = mongoose.model('UserJobs');
 */
 
-
-passport.use(new LocalStrategy({
-    usernameField: 'email'
-  },
-  function(username, password, done) {
-    User.findOne({ email: username }, function (err, user) {
-      if (err) { return done(err); }
-      // Return if user not found in database
-      if (!user) {
-        return done(null, false, {
-          message: 'Invalid Credentials'
-        });
-      }
-      // Return if password is wrong
-      if (!user.validPassword(password)) {
-        return done(null, false, {
-          message: 'Invalid Credentials'
-        });
-      }
-      // If credentials are correct, return the user object
-      return done(null, user);
-    });
-  }
-));
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email"
+    },
+    function(username, password, done) {
+      User.findOne({ email: username }, function(err, user) {
+        if (err) {
+          return done(err);
+        }
+        // Return if user not found in database
+        if (!user) {
+          return done(null, false, {
+            message: "Invalid Credentials"
+          });
+        }
+        // Return if password is wrong
+        if (!user.validPassword(password)) {
+          return done(null, false, {
+            message: "Invalid Credentials"
+          });
+        }
+        // If credentials are correct, return the user object
+        return done(null, user);
+      });
+    }
+  )
+);

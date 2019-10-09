@@ -1,4 +1,4 @@
-const processBoardPage = require('./core')
+const processBoardPage = require("./core");
 
 /*
 <div class="posting" data-qa-posting-id="">
@@ -17,11 +17,15 @@ const processBoardPage = require('./core')
 */
 
 exports.processLever = (board, title, location, res) => {
-
-    processBoardPage(board, "https://jobs.lever.co/" + board.url, title, location, 
-        'div.posting',
-        (el) => el.find('[data-qa=posting-name]').text(), 
-        (el) => el.find('span.sort-by-location').text(), 
-        (el) => el.find('a.posting-title').attr('href'),
-        res);
+  processBoardPage(
+    board,
+    "https://jobs.lever.co/" + board.url,
+    title,
+    location,
+    "div.posting",
+    el => el.find("[data-qa=posting-name]").text(),
+    el => el.find("span.sort-by-location").text(),
+    el => el.find("a.posting-title").attr("href"),
+    res
+  );
 };
