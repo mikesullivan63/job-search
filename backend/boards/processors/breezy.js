@@ -1,4 +1,4 @@
-const processBoardPage = require('./core')
+const processBoardPage = require("./core");
 
 /*
 <li class="position transition">
@@ -28,10 +28,20 @@ const processBoardPage = require('./core')
 */
 
 exports.processBreezy = (board, title, location, res) => {
-   processBoardPage(board, "https://" +  board.url + ".breezy.hr/", title, location, 
-   'li.position.transition a',
-   (el) => el.find('h2').text(), 
-   (el,$) => el.find('li').map((i, el) => $(el).text()).get().join(' '), 
-   (el) => "https://" +  board.url + ".breezy.hr" + el.attr('href'),
-   res);
+  processBoardPage(
+    board,
+    "https://" + board.url + ".breezy.hr/",
+    title,
+    location,
+    "li.position.transition a",
+    el => el.find("h2").text(),
+    (el, $) =>
+      el
+        .find("li")
+        .map((i, el) => $(el).text())
+        .get()
+        .join(" "),
+    el => "https://" + board.url + ".breezy.hr" + el.attr("href"),
+    res
+  );
 };
