@@ -115,7 +115,7 @@ routes.get("/last-search", auth, function(req, res) {
             message: "Error during lookup: " + err
           });
         } else {
-          if (userQueries.queries.length > 0) {
+          if (userQueries && userQueries.queries && userQueries.queries.length > 0) {
             res.status(200);
             res.json(userQueries.queries[userQueries.queries.length - 1]);
           } else {
