@@ -1,19 +1,11 @@
 import React from "react";
+import { Redirect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-import { authenticationService } from "../../services/authentication";
+import { registrationService } from "../../services/registration";
 
-class RegisterPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // redirect to home if already logged in
-    if (authenticationService.currentUserValue) {
-      this.props.history.push("/");
-    }
-  }
-
+class RegisterPage extends React.Component {  
   render() {
     return (
       <div>
@@ -21,22 +13,23 @@ class RegisterPage extends React.Component {
         <Formik
           initialValues={{
             username: "",
-            password: ""
+            first_name: "",
+            last_name: "",
+            password: "",
+            confirm: ""
           }}
           validationSchema={Yup.object().shape({
             username: Yup.string().required("Username is required"),
-            password: Yup.string().required("Password is required")
+            first_name: Yup.string().required("First Name is required"),
+            last_name: Yup.string().required("Last Name is required"),
+            password: Yup.string().required("Password is required"),
+            confirm: Yup.string().required("Password Confirmation is required")
           })}
-          onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
+          onSubmit={({ username, first_name, last_name, password, confirm }, { setStatus, setSubmitting }) => {
             setStatus();
-            authenticationService.login(username, password).then(
-              user => {
-                const { from } = this.props.location.state || {
-                  from: { pathname: "/" }
-                };
-                this.props.history.push(from);
-              },
-              error => {
+            registrationService.register(username, first_name, last_name, password, confirm)
+              .then(<Redirect to="/home" />)
+              .catch(error => {
                 setSubmitting(false);
                 setStatus(error);
               }
@@ -45,7 +38,7 @@ class RegisterPage extends React.Component {
           render={({ errors, status, touched, isSubmitting }) => (
             <Form>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">Username / Email Address</label>
                 <Field
                   name="username"
                   type="text"
@@ -56,6 +49,38 @@ class RegisterPage extends React.Component {
                 />
                 <ErrorMessage
                   name="username"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="first_name">First name</label>
+                <Field
+                  name="first_name"
+                  type="text"
+                  className={
+                    "form-control" +
+                    (errors.first_name && touched.first_name ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="first_name"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="last_name">Last name</label>
+                <Field
+                  name="last_name"
+                  type="text"
+                  className={
+                    "form-control" +
+                    (errors.last_name && touched.last_name ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="last_name"
                   component="div"
                   className="invalid-feedback"
                 />
@@ -72,6 +97,22 @@ class RegisterPage extends React.Component {
                 />
                 <ErrorMessage
                   name="password"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirm">Confirm Password</label>
+                <Field
+                  name="confirm"
+                  type="password"
+                  className={
+                    "form-control" +
+                    (errors.confirm && touched.confirm ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="confirm"
                   component="div"
                   className="invalid-feedback"
                 />

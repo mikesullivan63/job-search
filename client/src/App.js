@@ -38,7 +38,7 @@ class App extends React.Component {
           <Switch>
             <Route 
               exact path="/register" 
-              render={(props) => <RegisterPage {...props} loginCallback={this.processLogin} />} 
+              render={(props) => <RegisterPage {...props}  />} 
               />
             <Route 
               path="*" 
