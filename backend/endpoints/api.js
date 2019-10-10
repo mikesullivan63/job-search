@@ -23,7 +23,7 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
     return null;
   }
 
-  board.processor(board, title, location, res);
+  res.json(board.processor(board, title, location));
 });
 
 module.exports = routes;

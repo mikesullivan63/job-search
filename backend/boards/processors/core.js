@@ -1,6 +1,8 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
 
+
+
 module.exports = (
   board,
   url,
@@ -10,17 +12,15 @@ module.exports = (
   titleExtractor,
   locationExtractor,
   linkExtractor,
-  res,
   debug
 ) => {
-  var options = {
-    uri: url,
-    transform: function(body) {
-      return cheerio.load(body);
-    }
-  };
-  request
-    .get(options)
+    request
+    .get({
+      uri: url,
+      transform: function(body) {
+        return cheerio.load(body);
+      }
+    })
     .then($ => {
       if (debug) {
         console.log("$(jobSelector): " + $(jobSelector).length);
@@ -59,12 +59,12 @@ module.exports = (
         console.log("Done parsing: " + jobs.length);
       }
 
-      res.json({ company: board.name, url: url, jobs: jobs });
+      return { company: board.name, url: url, jobs: jobs };
     })
     .catch(error => {
       if (error) {
         console.log("Error loading board: " + board.name + " - " + error);
-        res.json({ company: board.name, error: error.message });
+        return{ company: board.name, error: error.message };
       }
     });
 };

@@ -16,7 +16,7 @@ const processBoardPage = require("./core");
 </div>
 */
 
-exports.processLever = (board, title, location, res) => {
+exports.processLever = (board, title, location, debug) => {
   processBoardPage(
     board,
     "https://jobs.lever.co/" + board.url,
@@ -26,6 +26,6 @@ exports.processLever = (board, title, location, res) => {
     el => el.find("[data-qa=posting-name]").text(),
     el => el.find("span.sort-by-location").text(),
     el => el.find("a.posting-title").attr("href"),
-    res
+    debug
   );
 };

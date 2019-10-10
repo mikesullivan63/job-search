@@ -5,8 +5,8 @@ const processGreenhouseCore = function(
   title,
   location,
   url,
-  linkurl,
-  res
+  linkurl, 
+  debug
 ) {
   processBoardPage(
     board,
@@ -17,27 +17,27 @@ const processGreenhouseCore = function(
     el => el.find("a").text(),
     el => el.find("span.location").text(),
     el => linkurl + el.find("a").attr("href"),
-    res
+    debug
   );
 };
 
-exports.processGreenhouse = (board, title, location, res) => {
+exports.processGreenhouse = (board, title, location, debug) => {
   processGreenhouseCore(
     board,
     title,
     location,
     "https://boards.greenhouse.io/" + board.url,
-    "https://boards.greenhouse.io/",
-    res
+    "https://boards.greenhouse.io/", 
+    debug
   );
 };
-exports.processGreenhouseEmbed = (board, title, location, res) => {
+exports.processGreenhouseEmbed = (board, title, location, debug) => {
   processGreenhouseCore(
     board,
     title,
     location,
     "https://boards.greenhouse.io/embed/job_board?for=" + board.url,
     "",
-    res
+    debug
   );
 };

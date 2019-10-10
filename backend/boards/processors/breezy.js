@@ -27,7 +27,7 @@ const processBoardPage = require("./core");
 </li>
 */
 
-exports.processBreezy = (board, title, location, res) => {
+exports.processBreezy = (board, title, location, debug) => {
   processBoardPage(
     board,
     "https://" + board.url + ".breezy.hr/",
@@ -42,6 +42,6 @@ exports.processBreezy = (board, title, location, res) => {
         .get()
         .join(" "),
     el => "https://" + board.url + ".breezy.hr" + el.attr("href"),
-    res
+    debug
   );
 };

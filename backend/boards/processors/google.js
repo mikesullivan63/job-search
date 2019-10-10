@@ -9,7 +9,7 @@ const processBoardPage = require("./core");
 </li>
 */
 
-exports.processGoogle = (board, title, location, res) => {
+exports.processGoogle = (board, title, location, debug) => {
   processBoardPage(
     board,
     "https://hire.withgoogle.com/public/jobs/" + board.url,
@@ -18,7 +18,7 @@ exports.processGoogle = (board, title, location, res) => {
     "a.bb-public-jobs-list__item-link",
     el => el.find("span.bb-public-jobs-list__job-item-title").text(),
     el => el.find("span.bb-public-jobs-list__job-item-location").text(),
-    el => el.attr("href"),
-    res
+    el => el.attr("href"), 
+    debug
   );
 };

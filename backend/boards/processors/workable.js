@@ -11,7 +11,7 @@ const processBoardPage = require("./core");
 </li>
 */
 
-exports.processWorkable = (board, title, location, res) => {
+exports.processWorkable = (board, title, location, debug) => {
   processBoardPage(
     board,
     "https://" + board.url + ".workable.com/",
@@ -29,6 +29,6 @@ exports.processWorkable = (board, title, location, res) => {
         .get()
         .join(" "),
     el => "https://" + board.url + ".workable.com" + el.attr("href"),
-    res
+    debug
   );
 };
