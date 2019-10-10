@@ -10,7 +10,7 @@ const processBoardPage = require("./core");
 */
 
 exports.processGoogle = (board, title, location, debug) => {
-  processBoardPage(
+  return processBoardPage(
     board,
     "https://hire.withgoogle.com/public/jobs/" + board.url,
     title,

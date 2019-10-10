@@ -12,7 +12,7 @@ const processBoardPage = require("./core");
 */
 
 exports.processWorkable = (board, title, location, debug) => {
-  processBoardPage(
+  return processBoardPage(
     board,
     "https://" + board.url + ".workable.com/",
     title,

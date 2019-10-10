@@ -28,7 +28,7 @@ const processBoardPage = require("./core");
 */
 
 exports.processBreezy = (board, title, location, debug) => {
-  processBoardPage(
+    return processBoardPage(
     board,
     "https://" + board.url + ".breezy.hr/",
     title,

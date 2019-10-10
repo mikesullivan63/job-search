@@ -8,7 +8,7 @@ const processGreenhouseCore = function(
   linkurl, 
   debug
 ) {
-  processBoardPage(
+  return processBoardPage(
     board,
     url,
     title,
@@ -22,7 +22,7 @@ const processGreenhouseCore = function(
 };
 
 exports.processGreenhouse = (board, title, location, debug) => {
-  processGreenhouseCore(
+  return processGreenhouseCore(
     board,
     title,
     location,
@@ -32,7 +32,7 @@ exports.processGreenhouse = (board, title, location, debug) => {
   );
 };
 exports.processGreenhouseEmbed = (board, title, location, debug) => {
-  processGreenhouseCore(
+  return processGreenhouseCore(
     board,
     title,
     location,
