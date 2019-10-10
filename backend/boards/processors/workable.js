@@ -18,17 +18,17 @@ exports.processWorkable = (board, title, location, debug) => {
     title,
     location,
     "li.job",
-    el => el.find("h2 a").text(),
+    el => el.find("h2 a").text().trim(),
     (el, $) =>
-      el.find("p.meta").text() +
+      el.find("p.meta").text().trim() +
       " " +
-      el
-        .find("p.meta")
+      el.find("p.meta")
         .children()
-        .map((i, el) => $(el).text())
+        .map((i, el) => $(el).text().trim())
         .get()
-        .join(" "),
-    el => "https://" + board.url + ".workable.com" + el.attr("href"),
+        .join(" ")
+        .trim(),
+    el => "https://" + board.url + ".workable.com" + el.find("h2 a").attr("href"),
     debug
   );
 };
