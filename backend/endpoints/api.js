@@ -23,7 +23,10 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
     return null;
   }
 
-  res.json(board.processor(board, title, location));
+  board.processor(board, title, location)
+    .then(result => res.json(result))
+    .catch(error => res.json({ company: board.name, url: url, error: error}))
+    .finally(() => res.end());
 });
 
 module.exports = routes;
