@@ -3,10 +3,7 @@ import styled from "styled-components";
 import { Button, Colors } from "react-foundation";
 import Cookies from "universal-cookie";
 import Results from "./Results";
-import {
-  authenticationService,
-  authHeader
-} from "../../services/authentication";
+import { authHeader } from "../../services/authentication";
 
 const cookies = new Cookies();
 const StyledSearchBar = styled.div`

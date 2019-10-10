@@ -16,23 +16,30 @@ function Header(props) {
         {authenticationService.getCurrentUser() && (
           <Menu>
             <MenuItem>
-              <a href="#">Profile</a>
+              Profile
             </MenuItem>
             <MenuItem>
-              <a href="#">Search History</a>
+              Search History
             </MenuItem>
             <MenuItem>
-              <a href="#">Watched Jobs</a>
+              Watched Jobs
             </MenuItem>
             <MenuItem>
-              <a
-                href="#"
-                onClick={() => {
-                  props.logoutCallback();
-                }}
-              >
+              <button
+                className="jobToggleButton"
+                onClick={event => props.logoutCallback()}>
                 Logout
-              </a>
+              </button>
+            </MenuItem>
+          </Menu>
+        )}
+        {!authenticationService.getCurrentUser() && (
+          <Menu>
+            <MenuItem>
+              <a href="/login">Login</a>
+            </MenuItem>
+            <MenuItem>
+              <a href="/register">Register</a>
             </MenuItem>
           </Menu>
         )}

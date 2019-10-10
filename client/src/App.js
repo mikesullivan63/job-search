@@ -1,7 +1,9 @@
 import React from "react";
+import { Route, Switch } from 'react-router-dom'
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
+import { RegisterPage } from "./screens/register";
 import { authenticationService } from "./services/authentication";
 
 class App extends React.Component {
@@ -14,8 +16,7 @@ class App extends React.Component {
     };
   }
 
-  processLogin() {
-    var user = authenticationService.getCurrentUser();
+  processLogin(event) {
     this.setState({ currentUser: authenticationService.getCurrentUser() });
   }
 
@@ -33,7 +34,18 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <Header logoutCallback={this.logout} />
-        {!currentUser && <LoginPage loginCallback={this.processLogin} />}
+        {!currentUser && 
+          <Switch>
+            <Route 
+              exact path="/register" 
+              render={(props) => <RegisterPage {...props} loginCallback={this.processLogin} />} 
+              />
+            <Route 
+              path="*" 
+              render={(props) => <LoginPage {...props} loginCallback={this.processLogin} />} 
+              />
+          </Switch>
+        }
         {currentUser && <SearchBar />}
       </React.Fragment>
     );

@@ -107,18 +107,15 @@ function ResultsCompany(props) {
                 </Cell>
                 <Cell small={2} medium={1} large={1}>
                   {isActive && (
-                    <a
-                      href=""
-                      onClick={event => {
-                        props.archiveCallback(event, matchedJob._id);
-                      }}
-                    >
+                    <button
+                      className="jobToggleButton"
+                      onClick={event => { props.archiveCallback(event, matchedJob._id); }}>
                       Archive
-                    </a>
+                    </button>
                   )}
                   {!isActive && (
-                    <a
-                      href=""
+                    <button
+                      className="jobToggleButton"
                       onClick={event => {
                         props.watchCallback(
                           event,
@@ -127,28 +124,26 @@ function ResultsCompany(props) {
                           job.title,
                           job.location
                         );
-                      }}
-                    >
+                      }}>
                       Watch
-                    </a>
+                    </button>
                   )}
                 </Cell>
                 <Cell small={2} medium={1} large={1}>
                   {!isActive && (
-                    <a
-                      href=""
-                      onClick={event => {
-                        props.ignoreCallback(
-                          event,
-                          props.company.company,
-                          job.url,
-                          job.title,
-                          job.location
-                        );
-                      }}
-                    >
-                      Ignore
-                    </a>
+                    <button
+                    className="jobToggleButton"
+                    onClick={event => {
+                      props.ignoreCallback(
+                        event,
+                        props.company.company,
+                        job.url,
+                        job.title,
+                        job.location
+                      );
+                    }}>
+                    Ignore
+                  </button>
                   )}
                 </Cell>
               </Grid>
