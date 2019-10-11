@@ -86,12 +86,18 @@ class SearchBar extends React.Component {
 
   processBoard(board, title, location, caller) {
     let newResults = caller.state.results.slice();
-    const index = newResults.findIndex(
+    let newResult = newResults.find(
       element => element.company === board.company
     );
 
-    if (index !== -1) {
-      newResults[index].state = "PENDING";
+    //Remove matching element
+    newResults = newResults.filter(
+      element => element.company !== board.company
+    );
+
+    if (newResult) {
+      newResult.state = "PENDING";
+      newResults.push(newResult);
       this.setState({
         results: newResults
       });
