@@ -5,7 +5,7 @@ const processGreenhouseCore = function(
   title,
   location,
   url,
-  linkurl, 
+  linkurl,
   debug
 ) {
   return processBoardPage(
@@ -27,7 +27,7 @@ exports.processGreenhouse = (board, title, location, debug) => {
     title,
     location,
     "https://boards.greenhouse.io/" + board.url,
-    "https://boards.greenhouse.io/", 
+    "https://boards.greenhouse.io/",
     debug
   );
 };

@@ -1,10 +1,10 @@
-const GreenhouseCore = require('./processors/greenhouse')
+const GreenhouseCore = require("./processors/greenhouse")
 const processGreenhouse = GreenhouseCore.processGreenhouse
 const processGreenhouseEmbed = GreenhouseCore.processGreenhouseEmbed
-const processLever = require('./processors/lever').processLever
-const processGoogle = require('./processors/google').processGoogle
-const processBreezy = require('./processors/breezy').processBreezy
-const processWorkable = require('./processors/workable').processWorkable
+const processLever = require("./processors/lever").processLever
+const processGoogle = require("./processors/google").processGoogle
+const processBreezy = require("./processors/breezy").processBreezy
+const processWorkable = require("./processors/workable").processWorkable
 
 exports.Boards = [
     {name: "InVision", url:"invision", processor: processGreenhouse, notes: "Design tool"},

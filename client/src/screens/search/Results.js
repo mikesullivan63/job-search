@@ -109,7 +109,10 @@ function ResultsCompany(props) {
                   {isActive && (
                     <button
                       className="jobToggleButton"
-                      onClick={event => { props.archiveCallback(event, matchedJob._id); }}>
+                      onClick={event => {
+                        props.archiveCallback(event, matchedJob._id);
+                      }}
+                    >
                       Archive
                     </button>
                   )}
@@ -124,7 +127,8 @@ function ResultsCompany(props) {
                           job.title,
                           job.location
                         );
-                      }}>
+                      }}
+                    >
                       Watch
                     </button>
                   )}
@@ -132,18 +136,19 @@ function ResultsCompany(props) {
                 <Cell small={2} medium={1} large={1}>
                   {!isActive && (
                     <button
-                    className="jobToggleButton"
-                    onClick={event => {
-                      props.ignoreCallback(
-                        event,
-                        props.company.company,
-                        job.url,
-                        job.title,
-                        job.location
-                      );
-                    }}>
-                    Ignore
-                  </button>
+                      className="jobToggleButton"
+                      onClick={event => {
+                        props.ignoreCallback(
+                          event,
+                          props.company.company,
+                          job.url,
+                          job.title,
+                          job.location
+                        );
+                      }}
+                    >
+                      Ignore
+                    </button>
                   )}
                 </Cell>
               </Grid>

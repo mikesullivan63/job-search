@@ -15,19 +15,14 @@ function Header(props) {
       <TopBarRight className="my-top-bar-right">
         {authenticationService.getCurrentUser() && (
           <Menu>
-            <MenuItem>
-              Profile
-            </MenuItem>
-            <MenuItem>
-              Search History
-            </MenuItem>
-            <MenuItem>
-              Watched Jobs
-            </MenuItem>
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>Search History</MenuItem>
+            <MenuItem>Watched Jobs</MenuItem>
             <MenuItem>
               <button
                 className="jobToggleButton"
-                onClick={event => props.logoutCallback()}>
+                onClick={event => props.logoutCallback()}
+              >
                 Logout
               </button>
             </MenuItem>

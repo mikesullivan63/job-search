@@ -17,7 +17,7 @@ const processBoardPage = require("./core");
 */
 
 exports.processLever = (board, title, location, debug) => {
-  return  processBoardPage(
+  return processBoardPage(
     board,
     "https://jobs.lever.co/" + board.url,
     title,

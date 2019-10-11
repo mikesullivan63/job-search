@@ -1,8 +1,6 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
 
-
-
 module.exports = (
   board,
   url,
@@ -14,8 +12,8 @@ module.exports = (
   linkExtractor,
   debug
 ) => {
-    return new Promise(function(resolve, reject) {
-      request
+  return new Promise(function(resolve, reject) {
+    request
       .get({
         uri: url,
         transform: function(body) {
@@ -26,7 +24,7 @@ module.exports = (
         if (debug) {
           console.log("$(jobSelector): " + $(jobSelector).length);
         }
-  
+
         let jobs = [];
         $(jobSelector)
           .each((i, el) => {
@@ -49,24 +47,24 @@ module.exports = (
               .sort((l, r) => {
                 if (l.title > r.title) return 1;
                 if (l.title < r.title) return -1;
-  
+
                 if (l.url > r.url) return 1;
                 if (l.url < r.url) return -1;
-  
+
                 return 0;
               });
           });
         if (debug) {
           console.log("Done parsing: " + jobs.length);
         }
-  
+
         resolve({ company: board.name, url: url, jobs: jobs });
       })
       .catch(error => {
-          console.log("Error loading board: " + board.name + " - " + error);
-          reject(error.message);
+        console.log("Error loading board: " + board.name + " - " + error);
+        reject(error.message);
       });
-    });
+  });
 };
 
 function match(needles, haystack) {

@@ -18,7 +18,7 @@ exports.processGoogle = (board, title, location, debug) => {
     "a.bb-public-jobs-list__item-link",
     el => el.find("span.bb-public-jobs-list__job-item-title").text(),
     el => el.find("span.bb-public-jobs-list__job-item-location").text(),
-    el => el.attr("href"), 
+    el => el.attr("href"),
     debug
   );
 };
