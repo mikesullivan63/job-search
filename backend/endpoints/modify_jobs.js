@@ -74,13 +74,13 @@ routes.post("/ignore-job", auth, function(req, res) {
 
 routes.post("/archive-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
-    jobToIgnore = userJobs.active.find(job => {
-      return job._id == req.body.jobId;
-    });
+    jobToIgnore = userJobs.active.find(
+      job => job._id.toString() === req.body.jobId
+    );
 
     if (jobToIgnore) {
       userJobs.active = userJobs.active.filter(
-        job => job._id != req.body.jobId
+        job => job._id.toString() !== req.body.jobId
       );
       userJobs.ignored = userJobs.ignored.slice().concat(jobToIgnore);
       userJobs.save(function(err, updatedUserJobs) {
