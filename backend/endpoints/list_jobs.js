@@ -4,17 +4,19 @@ const UserJobs = mongoose.model("UserJobs");
 const auth = require("../config/jwt").auth;
 const jwt = require("../config/jwt");
 
-routes.get("/active-jobs", auth, (req, res) => {
-  returnListFromUserJobs(req, res, userJobs => {
-    return userJobs ? userJobs.active || [] : [];
-  });
-});
+//Utility functions
 
-routes.get("/ignored-jobs", auth, (req, res) => {
-  returnListFromUserJobs(req, res, userJobs => {
-    return userJobs ? userJobs.ignored || [] : [];
+function findUserJobs(userId) {
+  return new Promise(function(resolve, reject) {
+    UserJobs.findOne({ userId: userId }).exec((err, userJobs) => {
+      if (err) {
+        return reject(err);
+      } else {
+        return resolve(userJobs);
+      }
+    });
   });
-});
+}
 
 function returnListFromUserJobs(req, res, listExtractor) {
   jwt.protectedRequest(req, res, (req, res) => {
@@ -29,16 +31,18 @@ function returnListFromUserJobs(req, res, listExtractor) {
   });
 }
 
-function findUserJobs(userId) {
-  return new Promise(function(resolve, reject) {
-    UserJobs.findOne({ userId: userId }).exec((err, userJobs) => {
-      if (err) {
-        return reject(err);
-      } else {
-        return resolve(userJobs);
-      }
-    });
+//Routes
+
+routes.get("/active-jobs", auth, (req, res) => {
+  returnListFromUserJobs(req, res, userJobs => {
+    return userJobs ? userJobs.active || [] : [];
   });
-}
+});
+
+routes.get("/ignored-jobs", auth, (req, res) => {
+  returnListFromUserJobs(req, res, userJobs => {
+    return userJobs ? userJobs.ignored || [] : [];
+  });
+});
 
 module.exports = routes;

@@ -1,9 +1,5 @@
 import { authHeader } from "./services/authentication";
 
-export const profileService = {
-  getProfile
-};
-
 function getProfile() {
   const requestOptions = {
     method: "GET",
@@ -23,3 +19,7 @@ function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem("currentUser");
 }
+
+export const profileService = {
+  getProfile
+};

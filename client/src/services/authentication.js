@@ -1,11 +1,5 @@
 import { handleResponse } from "./handleResponse";
 
-export const authenticationService = {
-  login,
-  logout,
-  getCurrentUser
-};
-
 function login(email, password) {
   const requestOptions = {
     method: "POST",
@@ -41,3 +35,9 @@ export function authHeader() {
     return {};
   }
 }
+
+export const authenticationService = {
+  login,
+  logout,
+  getCurrentUser
+};

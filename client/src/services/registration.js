@@ -1,7 +1,3 @@
-export const registrationService = {
-  register
-};
-
 function register(email, first_name, last_name, password, confirm) {
   return new Promise(function(resolve, reject) {
     const requestOptions = {
@@ -58,3 +54,7 @@ function handleRegistrationResponse(response) {
     return text && JSON.parse(text);
   });
 }
+
+export const registrationService = {
+  register
+};

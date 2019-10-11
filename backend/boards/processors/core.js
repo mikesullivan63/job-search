@@ -1,6 +1,18 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
 
+function match(needles, haystack) {
+  lowerStack = haystack.toLowerCase();
+  if (needles === "") {
+    return true;
+  }
+
+  return needles
+    .toLowerCase()
+    .split(" or ")
+    .some(needle => lowerStack.indexOf(needle.trim()) !== -1);
+}
+
 module.exports = (
   board,
   url,
@@ -66,15 +78,3 @@ module.exports = (
       });
   });
 };
-
-function match(needles, haystack) {
-  lowerStack = haystack.toLowerCase();
-  if (needles === "") {
-    return true;
-  }
-
-  return needles
-    .toLowerCase()
-    .split(" or ")
-    .some(needle => lowerStack.indexOf(needle.trim()) !== -1);
-}
