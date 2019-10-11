@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "formik": "^1.5.8",
     "foundation-sites": "^6.5.3",
     "html-react-parser": "^0.9.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-foundation": "^0.9.6",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.1.1",
     "styled-components": "^4.3.2",
-    "universal-cookie": "^4.0.2"
+    "universal-cookie": "^4.0.2",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-scripts start",

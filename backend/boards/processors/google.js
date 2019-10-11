@@ -1,4 +1,4 @@
-const processBoardPage = require('./core')
+const processBoardPage = require("./core");
 
 /*
 <li data-positionid="P_AAAAAACAAJZHZE3lvPT2nK" class="bb-public-jobs-list__job-item ptor-jobs-list__item">
@@ -9,11 +9,16 @@ const processBoardPage = require('./core')
 </li>
 */
 
-exports.processGoogle = (board, title, location, res) => {    
-    processBoardPage(board, "https://hire.withgoogle.com/public/jobs/" + board.url, title, location, 
-        'a.bb-public-jobs-list__item-link',
-        (el) => el.find('span.bb-public-jobs-list__job-item-title').text(), 
-        (el) => el.find('span.bb-public-jobs-list__job-item-location').text(), 
-        (el) => el.attr('href'),
-        res);
+exports.processGoogle = (board, title, location, debug) => {
+  return processBoardPage(
+    board,
+    "https://hire.withgoogle.com/public/jobs/" + board.url,
+    title,
+    location,
+    "a.bb-public-jobs-list__item-link",
+    el => el.find("span.bb-public-jobs-list__job-item-title").text(),
+    el => el.find("span.bb-public-jobs-list__job-item-location").text(),
+    el => el.attr("href"), 
+    debug
+  );
 };

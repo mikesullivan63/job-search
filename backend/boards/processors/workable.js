@@ -1,0 +1,34 @@
+const processBoardPage = require("./core");
+
+/*
+<li class="job" id="job_1109478">
+    <h2>
+        <a href="/j/7A4037BD6C?viewed=true">QA Engineer</a>
+    </h2>
+    <p class="meta">
+        <strong class="telecommute">Remote</strong> · New York, United States
+    </p>
+</li>
+*/
+
+exports.processWorkable = (board, title, location, debug) => {
+  return processBoardPage(
+    board,
+    "https://" + board.url + ".workable.com/",
+    title,
+    location,
+    "li.job",
+    el => el.find("h2 a").text().trim(),
+    (el, $) =>
+      el.find("p.meta").text().trim() +
+      " " +
+      el.find("p.meta")
+        .children()
+        .map((i, el) => $(el).text().trim())
+        .get()
+        .join(" ")
+        .trim(),
+    el => "https://" + board.url + ".workable.com" + el.find("h2 a").attr("href"),
+    debug
+  );
+};
