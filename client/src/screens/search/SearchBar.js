@@ -5,6 +5,12 @@ import Cookies from "universal-cookie";
 import Results from "./Results";
 import { authHeader } from "../../services/authentication";
 
+function boardSort(l, r) {
+  if (l.company > r.company) return 1;
+  if (l.company < r.company) return -1;
+  return 0;
+}
+
 const cookies = new Cookies();
 const StyledSearchBar = styled.div`
   margin: 10px;
@@ -40,7 +46,7 @@ class SearchBar extends React.Component {
 
   updateResults(data) {
     this.setState({
-      results: data
+      results: data.sort(boardSort)
     });
   }
 
@@ -99,7 +105,7 @@ class SearchBar extends React.Component {
       newResult.state = "PENDING";
       newResults.push(newResult);
       this.setState({
-        results: newResults
+        results: newResults.sort(boardSort)
       });
     }
 
@@ -109,16 +115,15 @@ class SearchBar extends React.Component {
   }
 
   updateBoardResults(result, caller) {
-    let newResults = caller.state.results.slice();
-    const index = newResults.findIndex(
-      element => element.company === result.company
-    );
-
     result.state = result.error ? "ERROR" : "COMPLETED";
-    index === -1 ? newResults.concat(result) : (newResults[index] = result);
+
+    let newResults = caller.state.results
+      .slice()
+      .filter(element => element.company !== result.company)
+      .concat(result);
 
     this.setState({
-      results: newResults
+      results: newResults.sort(boardSort)
     });
   }
 
