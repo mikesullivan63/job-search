@@ -1,5 +1,5 @@
 const routes = require("express").Router();
-var auth = require("../config/jwt").auth;
+const auth = require("../config/jwt").auth;
 
 const Boards = require("../boards/boards");
 
@@ -22,9 +22,10 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
     return null;
   }
 
-  board.processor(board, title, location)
+  board
+    .processor(board, title, location)
     .then(result => res.json(result))
-    .catch(error => res.json({ company: board.name, url: url, error: error}))
+    .catch(error => res.json({ company: board.name, url: url, error: error }))
     .finally(() => res.end());
 });
 

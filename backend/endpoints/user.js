@@ -52,7 +52,7 @@ routes.route("/login").post(function(req, res) {
 });
 
 routes.route("/profile", auth).get(function(req, res) {
-  protectedRequest(req, res, (req, res) => {
+  jwt.protectedRequest(req, res, (req, res) => {
     User.findById(req.payload._id).exec(function(err, user) {
       res.status(200).json(user);
     });
@@ -60,7 +60,7 @@ routes.route("/profile", auth).get(function(req, res) {
 });
 
 routes.post("/search", auth, function(req, res) {
-  protectedRequest(req, res, (req, res) => {
+  jwt.protectedRequest(req, res, (req, res) => {
     UserQueries.findOne({ userId: req.payload._id }).exec(
       (err, userQueries) => {
         if (err) {
@@ -103,7 +103,7 @@ routes.post("/search", auth, function(req, res) {
 });
 
 routes.get("/last-search", auth, function(req, res) {
-  protectedRequest(req, res, (req, res) => {
+  jwt.protectedRequest(req, res, (req, res) => {
     UserQueries.findOne({ userId: req.payload._id }).exec(
       (err, userQueries) => {
         if (err) {
@@ -111,7 +111,11 @@ routes.get("/last-search", auth, function(req, res) {
             message: "Error during lookup: " + err
           });
         } else {
-          if (userQueries && userQueries.queries && userQueries.queries.length > 0) {
+          if (
+            userQueries &&
+            userQueries.queries &&
+            userQueries.queries.length > 0
+          ) {
             res.status(200);
             res.json(userQueries.queries[userQueries.queries.length - 1]);
           } else {
@@ -127,16 +131,5 @@ routes.get("/last-search", auth, function(req, res) {
     );
   });
 });
-
-function protectedRequest(req, res, body) {
-  if (req && (!req.payload || !req.payload._id)) {
-    res.status(401).json({
-      message: "UnauthorizedError: private profile"
-    });
-  } else {
-    // Otherwise continue
-    body(req, res);
-  }
-}
 
 module.exports = routes;

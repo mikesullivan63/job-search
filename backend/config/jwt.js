@@ -21,3 +21,14 @@ module.exports.generateJwt = function(user) {
     ENCRYPTION_KEY
   );
 };
+
+module.exports.protectedRequest = function(req, res, body) {
+  if (req && (!req.payload || !req.payload._id)) {
+    res.status(401).json({
+      message: "UnauthorizedError: private profile"
+    });
+  } else {
+    // Otherwise continue
+    body(req, res);
+  }
+};
