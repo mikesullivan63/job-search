@@ -1,9 +1,9 @@
-function register(email, first_name, last_name, password, confirm) {
+function register(email, firstName, lastName, password, confirm) {
   return new Promise(function(resolve, reject) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, first_name, last_name, password })
+      body: JSON.stringify({ email, firstName, lastName, password })
     };
 
     let errors = [];
@@ -13,7 +13,9 @@ function register(email, first_name, last_name, password, confirm) {
     }
 
     if (!isValidPassword(password)) {
-      //errors.push("Passwords must contain a lower case letter, an upper case letter, a number and a symbol");
+      errors.push(
+        "Passwords must contain a lower case letter, an upper case letter, a number and a symbol"
+      );
     }
 
     if (errors.length > 0) {

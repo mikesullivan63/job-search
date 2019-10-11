@@ -12,8 +12,8 @@ routes.route("/register").post(function(req, res) {
   var user = new User();
 
   user.email = req.body.email;
-  user.first_name = req.body.first_name;
-  user.last_name = req.body.last_name;
+  user.firstName = req.body.firstName;
+  user.lastName = req.body.lastName;
 
   user.setPassword(req.body.password);
 

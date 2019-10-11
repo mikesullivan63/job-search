@@ -12,25 +12,25 @@ class RegisterPage extends React.Component {
         <Formik
           initialValues={{
             username: "",
-            first_name: "",
-            last_name: "",
+            firstName: "",
+            lastName: "",
             password: "",
             confirm: ""
           }}
           validationSchema={Yup.object().shape({
             username: Yup.string().required("Username is required"),
-            first_name: Yup.string().required("First Name is required"),
-            last_name: Yup.string().required("Last Name is required"),
+            firstName: Yup.string().required("First Name is required"),
+            lastName: Yup.string().required("Last Name is required"),
             password: Yup.string().required("Password is required"),
             confirm: Yup.string().required("Password Confirmation is required")
           })}
           onSubmit={(
-            { username, first_name, last_name, password, confirm },
+            { username, firstName, lastName, password, confirm },
             { setStatus, setSubmitting }
           ) => {
             setStatus();
             registrationService
-              .register(username, first_name, last_name, password, confirm)
+              .register(username, firstName, lastName, password, confirm)
               .then(res => {
                 console.log("Returned from registration: ", res);
                 this.props.registrationCallback();
@@ -62,35 +62,33 @@ class RegisterPage extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="first_name">First name</label>
+                <label htmlFor="firstName">First name</label>
                 <Field
-                  name="first_name"
+                  name="firstName"
                   type="text"
                   className={
                     "form-control" +
-                    (errors.first_name && touched.first_name
-                      ? " is-invalid"
-                      : "")
+                    (errors.firstName && touched.firstName ? " is-invalid" : "")
                   }
                 />
                 <ErrorMessage
-                  name="first_name"
+                  name="firstName"
                   component="div"
                   className="invalid-feedback"
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="last_name">Last name</label>
+                <label htmlFor="lastName">Last name</label>
                 <Field
-                  name="last_name"
+                  name="lastName"
                   type="text"
                   className={
                     "form-control" +
-                    (errors.last_name && touched.last_name ? " is-invalid" : "")
+                    (errors.lastName && touched.lastName ? " is-invalid" : "")
                   }
                 />
                 <ErrorMessage
-                  name="last_name"
+                  name="lastName"
                   component="div"
                   className="invalid-feedback"
                 />
