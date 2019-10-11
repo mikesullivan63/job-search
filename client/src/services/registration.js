@@ -8,7 +8,7 @@ function register(email, firstName, lastName, password, confirm) {
 
     let errors = [];
 
-    if (password !== confirm) {
+    if (confirm !== password) {
       errors.push("Passwords do not match");
     }
 
