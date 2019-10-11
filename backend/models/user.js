@@ -1,8 +1,6 @@
 //Pulled largely from https://www.sitepoint.com/user-authentication-mean-stack/
-var mongoose = require("mongoose");
-var crypto = require("crypto");
-var jwt = require("jsonwebtoken");
-const ENCRYPTION_KEY = require("./db").ENCRYPTION_KEY;
+const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 var userSchema = new mongoose.Schema({
   email: {
@@ -34,21 +32,6 @@ userSchema.methods.validPassword = function(password) {
     .pbkdf2Sync(password, this.salt, 1000, 64, "sha512")
     .toString("hex");
   return this.hash === hash;
-};
-
-userSchema.methods.generateJwt = function() {
-  var expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
-
-  return jwt.sign(
-    {
-      _id: this._id,
-      email: this.email,
-      name: this.name,
-      exp: parseInt(expiry.getTime() / 1000)
-    },
-    ENCRYPTION_KEY
-  );
 };
 
 mongoose.model("User", userSchema);

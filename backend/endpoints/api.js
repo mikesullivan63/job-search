@@ -1,6 +1,5 @@
 const routes = require("express").Router();
-var jwt = require("express-jwt");
-var auth = require("./user").auth;
+var auth = require("../config/jwt").auth;
 
 const Boards = require("../boards/boards");
 

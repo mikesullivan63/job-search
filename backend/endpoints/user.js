@@ -1,16 +1,11 @@
 const routes = require("express").Router();
 const passport = require("passport");
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
-var Query = mongoose.model("Query");
-var UserQueries = mongoose.model("UserQueries");
-var jwt = require("express-jwt");
-const ENCRYPTION_KEY = require("../models/db").ENCRYPTION_KEY;
-
-var auth = jwt({
-  secret: ENCRYPTION_KEY,
-  userProperty: "payload"
-});
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
+const Query = mongoose.model("Query");
+const UserQueries = mongoose.model("UserQueries");
+const auth = require("../config/jwt").auth;
+const jwt = require("../config/jwt");
 
 //Routes
 routes.route("/register").post(function(req, res) {
@@ -24,7 +19,7 @@ routes.route("/register").post(function(req, res) {
 
   user.save(function(err) {
     var token;
-    token = user.generateJwt();
+    token = jwt.generateJwt(user);
     res.status(200);
     res.json({
       token: token
@@ -44,7 +39,7 @@ routes.route("/login").post(function(req, res) {
 
     // If a user is found
     if (user) {
-      token = user.generateJwt();
+      token = jwt.generateJwt(user);
       res.status(200);
       res.json({
         token: token

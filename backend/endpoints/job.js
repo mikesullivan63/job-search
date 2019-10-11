@@ -1,17 +1,8 @@
 const routes = require("express").Router();
-const passport = require("passport");
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
-var Job = mongoose.model("Job");
-var UserJobs = mongoose.model("UserJobs");
-const ENCRYPTION_KEY = require("../models/db").ENCRYPTION_KEY;
-
-var jwt = require("express-jwt");
-
-var auth = jwt({
-  secret: ENCRYPTION_KEY,
-  userProperty: "payload"
-});
+const mongoose = require("mongoose");
+const Job = mongoose.model("Job");
+const UserJobs = mongoose.model("UserJobs");
+const auth = require("../config/jwt").auth;
 
 routes.get("/active-jobs", auth, function(req, res) {
   protectedRequest(req, res, (req, res) => {

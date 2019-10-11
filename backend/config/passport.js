@@ -3,12 +3,6 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var mongoose = require("mongoose");
 var User = mongoose.model("User");
-/*
-var Query = mongoose.model('Query');
-var UserQueries = mongoose.model('UserQueries');
-var Job = mongoose.model('Job');
-var UserJobs = mongoose.model('UserJobs');
-*/
 
 passport.use(
   new LocalStrategy(
