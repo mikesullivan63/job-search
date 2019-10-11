@@ -4,11 +4,12 @@ var mongoose = require("mongoose");
 var User = mongoose.model("User");
 var Job = mongoose.model("Job");
 var UserJobs = mongoose.model("UserJobs");
+const ENCRYPTION_KEY = require("../models/db").ENCRYPTION_KEY;
 
 var jwt = require("express-jwt");
 
 var auth = jwt({
-  secret: "MY_SECRET",
+  secret: ENCRYPTION_KEY,
   userProperty: "payload"
 });
 

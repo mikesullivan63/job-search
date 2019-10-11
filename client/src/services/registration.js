@@ -17,7 +17,7 @@ function register(email, first_name, last_name, password, confirm) {
         }
 
         if(!isValidPassword(password)) {
-            errors.push("Passwords must contain a lower case letter, an upper case letter, a number and a symbol");
+            //errors.push("Passwords must contain a lower case letter, an upper case letter, a number and a symbol");
         }
 
         if(errors.length > 0) {
@@ -30,7 +30,10 @@ function register(email, first_name, last_name, password, confirm) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem("currentUser", JSON.stringify(user));
                 return resolve(user);
-            });
+            })
+            .catch(error => {
+                return reject(error);
+            })
         });
     }
 

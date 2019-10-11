@@ -5,9 +5,10 @@ var User = mongoose.model("User");
 var Query = mongoose.model("Query");
 var UserQueries = mongoose.model("UserQueries");
 var jwt = require("express-jwt");
+const ENCRYPTION_KEY = require("../models/db").ENCRYPTION_KEY;
 
 var auth = jwt({
-  secret: "MY_SECRET",
+  secret: ENCRYPTION_KEY,
   userProperty: "payload"
 });
 

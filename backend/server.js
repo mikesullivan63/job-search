@@ -4,7 +4,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-
 const PORT = process.env.PORT || 4000;
 
 //DB related setup

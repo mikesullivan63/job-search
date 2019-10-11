@@ -1,10 +1,12 @@
 import React from "react";
-import { Route, Switch, useHistory } from 'react-router-dom'
+import { Route, Switch /*, useHistory */ } from 'react-router-dom'
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
 import { RegisterPage } from "./screens/register";
+import { createBrowserHistory } from 'history';
 import { authenticationService } from "./services/authentication";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -22,12 +24,13 @@ class App extends React.Component {
   }
 
   processRegistration() {
+    const history = createBrowserHistory();
+
     console.log("In register callback")
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-    let history = useHistory();
-    console.log("Pushing history")
     history.push("/");
     console.log("Pushed history")
+    this.setState({ currentUser: authenticationService.getCurrentUser() });
+    console.log("State set")
   }
 
   logout() {

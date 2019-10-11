@@ -1,5 +1,4 @@
 import React from "react";
-//import { Redirect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -32,8 +31,8 @@ class RegisterPage extends React.Component {
                 console.log("Returned from registration: ", res);
                 this.props.registrationCallback();
                 console.log("Returned from registration: called callback");
-              }, 
-              error => {
+              })
+              .catch(error => {
                 console.log("Returned error registration", error);
                 this.props.registrationCallback();
                 setSubmitting(false);
