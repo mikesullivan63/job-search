@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react";
+//import { Redirect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -28,8 +28,14 @@ class RegisterPage extends React.Component {
           onSubmit={({ username, first_name, last_name, password, confirm }, { setStatus, setSubmitting }) => {
             setStatus();
             registrationService.register(username, first_name, last_name, password, confirm)
-              .then(<Redirect to="/home" />)
-              .catch(error => {
+              .then(res => {
+                console.log("Returned from registration: ", res);
+                this.props.registrationCallback();
+                console.log("Returned from registration: called callback");
+              }, 
+              error => {
+                console.log("Returned error registration", error);
+                this.props.registrationCallback();
                 setSubmitting(false);
                 setStatus(error);
               }

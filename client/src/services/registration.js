@@ -20,7 +20,9 @@ function register(email, first_name, last_name, password, confirm) {
             errors.push("Passwords must contain a lower case letter, an upper case letter, a number and a symbol");
         }
 
-        reject(errors);
+        if(errors.length > 0) {
+            return reject(errors);
+        }
 
         fetch(`/user/register`, requestOptions)
             .then(handleRegistrationResponse)
@@ -41,12 +43,13 @@ function isValidPassword(password) {
 
 function handleRegistrationResponse(response) {
     return response.text().then(text => {
-      const data = text && JSON.parse(text);
+      //const data = text && JSON.parse(text);
       if (!response.ok) {  
-        const error = (data && data.message) || response.statusText;
-        return Promise.reject(error);
+        //const error = (data && data.message) || response.statusText;
+        console.log("Error on registration", response.statusText, text)
+        return Promise.reject(response.statusText);
       }
   
-      return data;
+      return text && JSON.parse(text);
     })
 }

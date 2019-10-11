@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, useHistory } from 'react-router-dom'
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
@@ -10,14 +10,24 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.processLogin = this.processLogin.bind(this);
+    this.processRegistration = this.processRegistration.bind(this);
     this.logout = this.logout.bind(this);
     this.state = {
       currentUser: null
     };
   }
 
-  processLogin(event) {
+  processLogin() {
     this.setState({ currentUser: authenticationService.getCurrentUser() });
+  }
+
+  processRegistration() {
+    console.log("In register callback")
+    this.setState({ currentUser: authenticationService.getCurrentUser() });
+    let history = useHistory();
+    console.log("Pushing history")
+    history.push("/");
+    console.log("Pushed history")
   }
 
   logout() {
@@ -38,10 +48,10 @@ class App extends React.Component {
           <Switch>
             <Route 
               exact path="/register" 
-              render={(props) => <RegisterPage {...props}  />} 
+              render={(props) => <RegisterPage {...props} registrationCallback={this.processRegistration} />} 
               />
             <Route 
-              path="*" 
+              path="/" 
               render={(props) => <LoginPage {...props} loginCallback={this.processLogin} />} 
               />
           </Switch>
