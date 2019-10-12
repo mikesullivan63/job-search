@@ -1,10 +1,12 @@
-import { authHeader } from "./services/authentication";
+import { authenticationService } from "./services/authentication";
 
 function getProfile() {
   const requestOptions = {
     method: "GET",
-    headers: authHeader(),
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      ...authenticationService.authHeader(),
+      ...{ "Content-Type": "application/json" }
+    },
     body: ""
   };
 
