@@ -26,7 +26,7 @@ function returnListFromUserJobs(req, res, listExtractor) {
         res.json(listExtractor(userJobs));
       })
       .catch(error => {
-        res.status(500).json({ message: "Error during lookup: " + err });
+        res.status(500).json({ message: "Error during lookup: " + error });
       });
   });
 }
