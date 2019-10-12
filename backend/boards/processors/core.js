@@ -2,7 +2,7 @@ const request = require("request-promise-native");
 const cheerio = require("cheerio");
 
 function match(needles, haystack) {
-  lowerStack = haystack.toLowerCase();
+  let lowerStack = haystack.toLowerCase();
   if (needles === "") {
     return true;
   }

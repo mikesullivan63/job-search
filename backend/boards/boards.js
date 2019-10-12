@@ -1,10 +1,10 @@
-const GreenhouseCore = require("./processors/greenhouse")
-const processGreenhouse = GreenhouseCore.processGreenhouse
-const processGreenhouseEmbed = GreenhouseCore.processGreenhouseEmbed
-const processLever = require("./processors/lever").processLever
-const processGoogle = require("./processors/google").processGoogle
-const processBreezy = require("./processors/breezy").processBreezy
-const processWorkable = require("./processors/workable").processWorkable
+const GreenhouseCore = require("./processors/greenhouse");
+const processGreenhouse = GreenhouseCore.processGreenhouse;
+const processGreenhouseEmbed = GreenhouseCore.processGreenhouseEmbed;
+const processLever = require("./processors/lever").processLever;
+const processGoogle = require("./processors/google").processGoogle;
+const processBreezy = require("./processors/breezy").processBreezy;
+const processWorkable = require("./processors/workable").processWorkable;
 
 exports.Boards = [
     {name: "InVision", url:"invision", processor: processGreenhouse, notes: "Design tool"},
@@ -58,7 +58,7 @@ exports.Boards = [
     {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
     {name: "Barrel", url:"barrel", processor: processWorkable, notes: ""},
     {name: "Grafana", url:"grafana-labs", processor: processWorkable, notes: ""},
-]
+];
 
 
     /*
