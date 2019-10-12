@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, Colors } from "react-foundation";
 import Cookies from "universal-cookie";
 import Results from "./Results";
-import { authHeader } from "../../services/authentication";
+import { authenticationService } from "../../services/authentication";
 
 function boardSort(l, r) {
   if (l.company > r.company) return 1;
@@ -52,7 +52,7 @@ class SearchBar extends React.Component {
 
   setFieldFromUrl(url, field) {
     fetch(url, {
-      headers: authHeader()
+      headers: authenticationService.authHeader()
     })
       .then(res => res.json())
       .then(res =>
@@ -75,7 +75,7 @@ class SearchBar extends React.Component {
     fetch("/user/search", {
       method: "POST",
       headers: {
-        ...authHeader(),
+        ...authenticationService.authHeader(),
         ...{ "Content-Type": "application/json" }
       },
       body: JSON.stringify({
@@ -133,7 +133,7 @@ class SearchBar extends React.Component {
     fetch(url, {
       method: "POST",
       headers: {
-        ...authHeader(),
+        ...authenticationService.authHeader(),
         ...{ "Content-Type": "application/json" }
       },
       body: JSON.stringify(data)
@@ -182,7 +182,7 @@ class SearchBar extends React.Component {
       );
 
     fetch("/user/last-search", {
-      headers: authHeader()
+      headers: authenticationService.authHeader()
     })
       .then(res => res.json())
       .then(res =>

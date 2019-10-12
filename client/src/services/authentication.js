@@ -26,9 +26,9 @@ function getCurrentUser() {
   return user;
 }
 
-export function authHeader() {
+function authHeader() {
   // return authorization header with jwt token
-  const currentUser = JSON.parse(authenticationService.getCurrentUser());
+  const currentUser = JSON.parse(getCurrentUser());
   if (currentUser && currentUser.token) {
     return { Authorization: `Bearer ${currentUser.token}` };
   } else {
@@ -39,5 +39,6 @@ export function authHeader() {
 export const authenticationService = {
   login,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  authHeader
 };
