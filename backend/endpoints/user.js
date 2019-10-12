@@ -73,7 +73,7 @@ routes.post("/search", auth, function(req, res) {
             userQueries.userId = req.payload._id;
           }
 
-          query = new Query();
+          let query = new Query();
           query.title = req.body.title;
           query.location = req.body.location;
           query.time = new Date();
