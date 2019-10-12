@@ -74,7 +74,7 @@ routes.post("/ignore-job", auth, function(req, res) {
 
 routes.post("/archive-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
-    jobToIgnore = userJobs.active.find(
+    let jobToIgnore = userJobs.active.find(
       job => job._id.toString() === req.body.jobId
     );
 
