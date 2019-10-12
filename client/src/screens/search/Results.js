@@ -84,13 +84,19 @@ function ResultsCompany(props) {
             return true;
           })
           .map((job, index) => {
-            var matchedJob = null;
-            if (props.activeJobs && props.activeJobs.length > 0) {
-              matchedJob = props.activeJobs.find((el, index) => {
-                return el.board === props.company.company && el.url === job.url;
-              });
-            }
-            var isActive = matchedJob !== null && matchedJob !== undefined;
+            var isActive =
+              props.activeJobs &&
+              props.activeJobs.length > 0 &&
+              props.activeJobs.some(
+                el => el.board === props.company.company && el.url === job.url
+              );
+
+            var matchedJob = isActive
+              ? props.activeJobs.find(
+                  el => el.board === props.company.company && el.url === job.url
+                )
+              : null;
+
             return (
               <Grid className="display">
                 <Cell small={4} medium={3} large={4}>

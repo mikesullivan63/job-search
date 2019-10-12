@@ -16,7 +16,7 @@ module.exports.generateJwt = function(user) {
       _id: user._id,
       email: user.email,
       name: user.name,
-      exp: parseInt(expiry.getTime() / 1000)
+      exp: parseInt(expiry.getTime() / 1000, 10)
     },
     ENCRYPTION_KEY
   );

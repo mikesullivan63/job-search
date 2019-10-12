@@ -10,12 +10,14 @@ function getProfile() {
     body: ""
   };
 
+/*
   return fetch(`/user/profile`, requestOptions)
     .then(handleResponse)
     .then(profile => {
       return profile;
     });
 }
+*/
 
 function logout() {
   // remove user from local storage to log user out
