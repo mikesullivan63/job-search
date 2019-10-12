@@ -1,3 +1,25 @@
+function isValidPassword(password) {
+  return (
+    /[a-z]/.exec(password) &&
+    /[A-Z]/.exec(password) &&
+    /[1-9]/.exec(password) &&
+    /[$^!%#@&*()-_]/.exec(password)
+  );
+}
+
+function handleRegistrationResponse(response) {
+  return response.text().then(text => {
+    //const data = text && JSON.parse(text);
+    if (!response.ok) {
+      //const error = (data && data.message) || response.statusText;
+      console.log("Error on registration", response.statusText, text);
+      return Promise.reject(response.statusText);
+    }
+
+    return text && JSON.parse(text);
+  });
+}
+
 function register(email, firstName, lastName, password, confirm) {
   return new Promise(function(resolve, reject) {
     const requestOptions = {
@@ -32,28 +54,6 @@ function register(email, firstName, lastName, password, confirm) {
       .catch(error => {
         return reject(error);
       });
-  });
-}
-
-function isValidPassword(password) {
-  return (
-    /[a-z]/.exec(password) &&
-    /[A-Z]/.exec(password) &&
-    /[1-9]/.exec(password) &&
-    /[$^!%#@&*()-_]/.exec(password)
-  );
-}
-
-function handleRegistrationResponse(response) {
-  return response.text().then(text => {
-    //const data = text && JSON.parse(text);
-    if (!response.ok) {
-      //const error = (data && data.message) || response.statusText;
-      console.log("Error on registration", response.statusText, text);
-      return Promise.reject(response.statusText);
-    }
-
-    return text && JSON.parse(text);
   });
 }
 
