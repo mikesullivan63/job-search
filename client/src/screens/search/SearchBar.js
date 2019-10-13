@@ -19,6 +19,18 @@ const cookies = new Cookies();
 const StyledSearchBar = styled.div`
   margin: 10px;
 `;
+
+const updateStateWithFetch = (url, response) => {
+  fetch(url, {
+    headers: authenticationService.authHeader()
+  })
+    .then(res => res.json())
+    .then(res => response(res))
+    .catch(error =>
+      console.log("Received error updating field from ", url, error)
+    );
+};
+
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
@@ -38,43 +50,27 @@ class SearchBar extends React.Component {
     this.ignoreLink = this.ignoreLink.bind(this);
   }
 
-  updateStateForProperty(field, value) {
-    this.setState({
-      [field]: value
-    });
-  }
-
   handleInputChange(event) {
     let target = event.target;
-    this.updateStateForProperty(target.name, target.value);
+    this.setState({
+      [target.name]: target.value
+    });
   }
 
   updateResults(data) {
     this.updateStateForProperty("results", data.sort(boardSort));
   }
 
-  setFieldFromUrl(url, field) {
-    fetch(url, {
-      headers: authenticationService.authHeader()
-    })
-      .then(res => res.json())
-      .then(res => this.updateStateForProperty(field, res))
-      .catch(error =>
-        console.log("Received error updating field from ", url, error)
-      );
-  }
-
-  setActiveJobs = () => this.setFieldFromUrl("/job/active-jobs", "activeJobs");
+  setActiveJobs = () =>
+    updateStateWithFetch("/job/active-jobs", res =>
+      this.props.store.setActiveJobs(res)
+    );
   setIgnoredJobs = () =>
-    this.setFieldFromUrl("/job/ignored-jobs", "ignoredJobs");
+    updateStateWithFetch("/job/active-jobs", res =>
+      this.props.store.setIgnoredJobs(res)
+    );
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    //Refresh job lists
-    this.setActiveJobs();
-    this.setIgnoredJobs();
-
+  postSearchCall = (title, location) => {
     //Post for history
     fetch("/user/search", {
       method: "POST",
@@ -82,86 +78,40 @@ class SearchBar extends React.Component {
         ...authenticationService.authHeader(),
         ...{ "Content-Type": "application/json" }
       },
-      body: JSON.stringify({
-        title: this.state.title,
-        location: this.state.location
-      })
-    })
-      .then(
-        this.state.results.forEach(board =>
-          this.processBoard(board, this.state.title, this.state.location, this)
-        )
-      )
-      .catch(error => console.log("Error sending search history over"));
-  }
+      body: JSON.stringify({ title, location })
+    }).catch(error => console.log("Error sending search history over"));
+  };
 
-  updateBoardResults(result, caller) {
-    result.state = result.error ? "ERROR" : "COMPLETED";
-
-    let newResults = caller.state.results
-      .slice()
-      .filter(element => element.company !== result.company)
-      .concat(result);
-    this.updateResults(newResults);
-  }
-
-  processBoard(board, title, location, caller) {
-    let newResults = caller.state.results.slice();
-    let newResult = newResults.find(
-      element => element.company === board.company
-    );
-
-    //Remove matching element
-    newResults = newResults.filter(
-      element => element.company !== board.company
-    );
-
-    if (newResult) {
-      newResult.state = "PENDING";
-      newResults.push(newResult);
-      this.updateResults(newResults);
-    }
+  processBoard(board, title, location) {
+    this.props.store.addSearchResult({
+      company: board.company,
+      url: board.url,
+      status: "PENDING",
+      jobs: []
+    });
+    title = title || " ";
+    location = location || " ";
 
     fetch("/api/" + board.company + "/" + title + "/" + location)
       .then(res => res.json())
-      .then(result => this.updateBoardResults(result, caller));
+      .then(result => this.props.store.addSearchResult(result))
+      .catch(error => {
+        console.log("Error processing board", board.company, error);
+      });
   }
 
-  addJobToList(event, data, url, updateCallback) {
+  handleSubmit(event) {
     event.preventDefault();
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(res => updateCallback(res))
-      .catch(reason => console.log("Error: " + reason));
+    //Refresh job lists
+    this.setActiveJobs();
+    this.setIgnoredJobs();
+    this.postSearchCall(this.state.title, this.state.location);
+
+    this.state.results.forEach(board =>
+      this.processBoard(board, this.state.title, this.state.location, this)
+    );
   }
-  ignoreLink = (event, board, url, title, location) =>
-    this.addJobToList(
-      event,
-      { board, url, title, location },
-      "/job/ignore-job",
-      result => this.updateStateForProperty("ignoredJobs", result)
-    );
-
-  watchLink = (event, board, url, title, location) =>
-    this.addJobToList(
-      event,
-      { board, url, title, location },
-      "/job/add-job",
-      result => this.updateStateForProperty("activeJobs", result)
-    );
-
-  archiveLink = (event, jobId) =>
-    this.addJobToList(event, { jobId }, "/job/archive-job", result =>
-      this.setState({ activeJobs: result.active, ignoredJobs: result.ignored })
-    );
 
   componentDidMount() {
     fetch("/api/companies")
@@ -223,12 +173,15 @@ class SearchBar extends React.Component {
           </form>
         </StyledSearchBar>
         <Results
+          store={store}
+          /*
           data={this.state.results}
           activeJobs={this.state.activeJobs}
           ignoredJobs={this.state.ignoredJobs}
           archiveCallback={this.archiveLink}
           watchCallback={this.watchLink}
           ignoreCallback={this.ignoreLink}
+          */
         />
       </React.Fragment>
     );

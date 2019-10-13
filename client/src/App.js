@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
@@ -38,6 +39,7 @@ class App extends React.Component {
   }
 
   render() {
+    const { store } = this.props;
     const { currentUser } = this.state;
     return (
       <React.Fragment>
@@ -62,10 +64,10 @@ class App extends React.Component {
             />
           </Switch>
         )}
-        {currentUser && <SearchBar />}
+        {currentUser && <SearchBar store={store} />}
       </React.Fragment>
     );
   }
 }
 
-export default App;
+export default inject("store")(observer(App));
