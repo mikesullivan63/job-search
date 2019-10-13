@@ -20,31 +20,37 @@ const StyledResultsArea = styled.div`
         },...
     ]
 */
-function Results(props) {
-  return (
-    <StyledResultsArea class="search-results grid-x grid-margin-x">
-      {props.store.getSearchResults() ? (
-        props.store.getSearchResults().map(function(company) {
-          return (
-            <Result
-              store={props.store}
-              key={company.company}
-              company={company}
-              /*
-              activeJobs={props.activeJobs}
-              ignoredJobs={props.ignoredJobs}
-              archiveCallback={props.archiveCallback}
-              watchCallback={props.watchCallback}
-              ignoreCallback={props.ignoreCallback}
-              */
-            />
-          );
-        })
-      ) : (
-        <div class="no-results">No Results</div>
-      )}
-    </StyledResultsArea>
-  );
+class Results extends React.Component {
+  render() {
+    console.log(
+      "Before bulk render: ",
+      this.props.store.getSearchResults().length
+      /*,
+      this.props.store.getSearchResults()[0].company,
+      this.props.store.getSearchResults()[
+        this.props.store.getSearchResults().length - 1
+      ].company
+      */
+    );
+
+    return (
+      <StyledResultsArea class="search-results grid-x grid-margin-x">
+        {this.props.store.getSearchResults() ? (
+          this.props.store.getSearchResults().map(company => {
+            return (
+              <Result
+                store={this.props.store}
+                key={company.company}
+                company={company}
+              />
+            );
+          })
+        ) : (
+          <div class="no-results">No Results</div>
+        )}
+      </StyledResultsArea>
+    );
+  }
 }
 
 export default observer(Results);

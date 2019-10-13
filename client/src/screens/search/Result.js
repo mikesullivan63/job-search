@@ -2,7 +2,8 @@ import React from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Grid, Cell } from "react-foundation";
-import { authenticationService } from "../../services/authentication";
+import WatchLink from "./WatchLink";
+import { commonMethods } from "./common";
 
 const StyledResultsCompanyName = styled.h4`
   margin: 0.1em;
@@ -27,34 +28,19 @@ const StyledResultsCompanyJobLocation = styled.span`
     }
 */
 
-const addJobToList = function(event, data, url, updateCallback) {
-  event.preventDefault();
-
-  fetch(url, {
-    method: "POST",
-    headers: {
-      ...authenticationService.authHeader(),
-      ...{ "Content-Type": "application/json" }
-    },
-    body: JSON.stringify(data)
-  })
-    .then(res => res.json())
-    .then(res => updateCallback(res))
-    .catch(reason => console.log("Error: " + reason));
-};
-
 function ArchiveLink(props) {
   const archiveLink = (event, jobId) =>
-    addJobToList(event, { jobId }, "/job/archive-job", result => {
-      this.props.store.setActiveJobs(result.active);
-      this.props.store.setIgnoredJobs(result.ignored);
+    commonMethods.addJobToList(event, { jobId }, "/job/archive-job", result => {
+      this.props.store.archiveActiveJob(jobId);
+      //this.props.store.setActiveJobs(result.active);
+      //this.props.store.setIgnoredJobs(result.ignored);
     });
 
   return (
     <button
       className="jobToggleButton"
       onClick={event => {
-        props.archiveLink(event, props.job._id);
+        archiveLink(event, props.job._id);
       }}
     >
       Archive
@@ -62,47 +48,21 @@ function ArchiveLink(props) {
   );
 }
 
-function WatchLink(props) {
-  const watchLink = (event, board, url, title, location) =>
-    addJobToList(
-      event,
-      { board, url, title, location },
-      "/job/add-job",
-      result => this.propp.store.setActiveJobs(result)
-    );
-
-  return (
-    <button
-      className="jobToggleButton"
-      onClick={event => {
-        props.watchCallback(
-          event,
-          props.company,
-          props.job.url,
-          props.job.title,
-          props.job.location
-        );
-      }}
-    >
-      Watch
-    </button>
-  );
-}
-
 function IgnoreLink(props) {
   const ignoreLink = (event, board, url, title, location) =>
-    addJobToList(
+    commonMethods.addJobToList(
       event,
       { board, url, title, location },
       "/job/ignore-job",
-      result => this.propp.store.setIgnoredJobs(result)
+      this.props.store.addIgnoredJob({ url, title, location })
+      //result => this.props.store.setIgnoredJobs(result)
     );
 
   return (
     <button
       className="jobToggleButton"
       onClick={event => {
-        props.ignoreCallback(
+        ignoreLink(
           event,
           props.company,
           props.job.url,
@@ -156,69 +116,74 @@ function ResultsCompanyJob(props) {
   );
 }
 
-function Result(props) {
-  let displayStyle = "callout";
-  let displayMessage = "";
+class Result extends React.Component {
+  render() {
+    let displayStyle = "callout";
+    let displayMessage = "";
 
-  if (
-    props.company.state === "PENDING" ||
-    props.company.state === "" ||
-    !props.company.state
-  ) {
-    displayStyle = "callout";
-    displayMessage = "Pending Lookup";
-  } else if (props.company.state === "ERROR") {
-    displayStyle = "callout alert";
-    displayMessage = "Error: " + props.company.error.substring(0, 100);
-  } else if (props.company.state === "COMPLETED") {
-    displayStyle =
-      "callout " +
-      (!props.company.jobs || props.company.jobs.length === 0
-        ? "secondary"
-        : "primary");
-    displayMessage =
-      !props.company.jobs || props.company.jobs.length === 0
-        ? "No Matching Jobs"
-        : "";
-  }
+    if (
+      this.props.company.status === "PENDING" ||
+      this.props.company.status === "" ||
+      !this.props.company.status
+    ) {
+      displayStyle = "callout";
+      displayMessage = "Pending Lookup";
+    } else if (this.props.company.status === "ERROR") {
+      displayStyle = "callout alert";
+      displayMessage = "Error: " + this.props.company.error.substring(0, 100);
+    } else if (this.props.company.status === "COMPLETED") {
+      displayStyle =
+        "callout " +
+        (!this.props.company.jobs || this.props.company.jobs.length === 0
+          ? "secondary"
+          : "primary");
+      displayMessage =
+        !this.props.company.jobs || this.props.company.jobs.length === 0
+          ? "No Matching Jobs"
+          : "";
+    }
 
-  console.log("Displaying list");
+    console.log("Displaying list: ", this.props.company.company);
 
-  let jobsToDisplay = props.company.jobs
-    .filter(el => !props.store.isIgnored(el))
-    .map(el => {
-      el.isActive = props.store.isActive(el);
-      return el;
-    })
-    .sort();
+    let jobsToDisplay = this.props.company.jobs
+      .filter(el => !this.props.store.isIgnored(el))
+      .map(el => {
+        el.isActive = this.props.store.isActive(el);
+        return el;
+      });
 
-  return (
-    <div className={displayStyle}>
-      <Grid className="display">
-        <Cell small={6} medium={4} large={4}>
-          <a href={props.company.url} target="_blank" rel="noopener noreferrer">
-            <StyledResultsCompanyName>
-              {props.company.company}
-            </StyledResultsCompanyName>
-          </a>
-        </Cell>
-        {displayMessage !== "" && (
-          <Cell small={6} medium={6} large={4} className="result-message">
-            {displayMessage}
+    return (
+      <div className={displayStyle}>
+        <Grid className="display">
+          <Cell small={6} medium={4} large={4}>
+            <a
+              href={this.props.company.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <StyledResultsCompanyName>
+                {this.props.company.company}
+              </StyledResultsCompanyName>
+            </a>
           </Cell>
-        )}
-      </Grid>
-      {jobsToDisplay.map(job => {
-        return (
-          <ResultsCompanyJob
-            store={props.store}
-            job={job}
-            company={props.company}
-          />
-        );
-      })}
-    </div>
-  );
+          {displayMessage !== "" && (
+            <Cell small={6} medium={6} large={4} className="result-message">
+              {displayMessage}
+            </Cell>
+          )}
+        </Grid>
+        {jobsToDisplay.map(job => {
+          return (
+            <ResultsCompanyJob
+              store={this.props.store}
+              job={job}
+              company={this.props.company}
+            />
+          );
+        })}
+      </div>
+    );
+  }
 }
 
 export default observer(Result);

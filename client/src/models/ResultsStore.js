@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { types, destroy } from "mobx-state-tree";
 import Job from "./Job";
 import Board from "./Board";
 import { comparators } from "./comparators";
@@ -15,8 +15,25 @@ const ResultsStore = types
     }
   }))
   .actions(self => ({
+    addActiveJob(job) {
+      self.activeJobs.push(job);
+    }
+  }))
+  .actions(self => ({
+    archiveActiveJob(jobId) {
+      let temp = self.activeJobs.find(el => el._id === jobId);
+      self.activeJobs.remove(temp);
+      self.ignoredJobs.push(temp);
+    }
+  }))
+  .actions(self => ({
     setIgnoredJobs(jobs) {
       self.ignoredJobs = jobs;
+    }
+  }))
+  .actions(self => ({
+    addIgnoredJob(job) {
+      self.ignoredJobs.push(job);
     }
   }))
   .actions(self => ({
@@ -38,10 +55,35 @@ const ResultsStore = types
       self.searchResults = temp;
       */
       //Mutable
-      let loc = self.searchResults.findIndex(
-        el => el.company !== board.company
+
+      console.log(
+        "addSearchResult: before update boards: ",
+        self.searchResults.length,
+        self.searchResults[0].company,
+        self.searchResults[self.searchResults.length - 1].company
       );
+
+      let loc = self.searchResults.findIndex(
+        el => el.company === board.company
+      );
+      let temp = self.searchResults[loc];
+
+      console.log(
+        "addSearchResult: middle: ",
+        loc,
+        temp.company,
+        board.company
+      );
+
       self.searchResults[loc] = board;
+
+      destroy(temp);
+      console.log(
+        "addSearchResult: after update boards: ",
+        self.searchResults.length,
+        self.searchResults[0].company,
+        self.searchResults[self.searchResults.length - 1].company
+      );
     }
   }))
   .views(self => ({

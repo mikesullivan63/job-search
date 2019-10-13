@@ -81,8 +81,6 @@ class SearchBar extends React.Component {
     title = title || " ";
     location = location || " ";
 
-    console.log("processBoard", board);
-
     fetch("/api/" + board.company + "/" + title + "/" + location)
       .then(res => res.json())
       .then(result => this.props.store.addSearchResult(result))
@@ -99,16 +97,16 @@ class SearchBar extends React.Component {
     this.setIgnoredJobs();
     this.postSearchCall(this.state.title, this.state.location);
 
-    this.props.store.getSearchResults().forEach(board => {
-      console.log("Calling process: ", board);
-      this.processBoard(
-        board.toJSON(),
-        this.state.title,
-        this.state.location,
-        this
+    this.props.store
+      .getSearchResults()
+      .forEach(board =>
+        this.processBoard(
+          board.toJSON(),
+          this.state.title,
+          this.state.location,
+          this
+        )
       );
-      console.log("Called process: ", board);
-    });
   }
 
   componentDidMount() {
@@ -170,17 +168,7 @@ class SearchBar extends React.Component {
             </div>
           </form>
         </StyledSearchBar>
-        <Results
-          store={this.props.store}
-          /*
-          data={this.state.results}
-          activeJobs={this.state.activeJobs}
-          ignoredJobs={this.state.ignoredJobs}
-          archiveCallback={this.archiveLink}
-          watchCallback={this.watchLink}
-          ignoreCallback={this.ignoreLink}
-          */
-        />
+        <Results store={this.props.store} />
       </React.Fragment>
     );
   }
