@@ -1,19 +1,11 @@
 import React from "react";
+import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Button, Colors } from "react-foundation";
 import Cookies from "universal-cookie";
 import Results from "./Results";
 import { authenticationService } from "../../services/authentication";
-
-function boardSort(l, r) {
-  if (l.company > r.company) {
-    return 1;
-  }
-  if (l.company < r.company) {
-    return -1;
-  }
-  return 0;
-}
+import { comparators } from "../../models/comparators";
 
 const cookies = new Cookies();
 const StyledSearchBar = styled.div`
@@ -37,17 +29,11 @@ class SearchBar extends React.Component {
 
     this.state = {
       title: cookies.get("job-title"),
-      location: cookies.get("job-location"),
-      results: [],
-      activeJobs: [],
-      ignoredJobs: []
+      location: cookies.get("job-location")
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.archiveLink = this.archiveLink.bind(this);
-    this.watchLink = this.watchLink.bind(this);
-    this.ignoreLink = this.ignoreLink.bind(this);
   }
 
   handleInputChange(event) {
@@ -58,7 +44,10 @@ class SearchBar extends React.Component {
   }
 
   updateResults(data) {
-    this.updateStateForProperty("results", data.sort(boardSort));
+    this.updateStateForProperty(
+      "results",
+      data.sort(comparators.boardComparator)
+    );
   }
 
   setActiveJobs = () =>
@@ -92,6 +81,8 @@ class SearchBar extends React.Component {
     title = title || " ";
     location = location || " ";
 
+    console.log("processBoard", board);
+
     fetch("/api/" + board.company + "/" + title + "/" + location)
       .then(res => res.json())
       .then(result => this.props.store.addSearchResult(result))
@@ -108,22 +99,29 @@ class SearchBar extends React.Component {
     this.setIgnoredJobs();
     this.postSearchCall(this.state.title, this.state.location);
 
-    this.state.results.forEach(board =>
-      this.processBoard(board, this.state.title, this.state.location, this)
-    );
+    this.props.store.getSearchResults().forEach(board => {
+      console.log("Calling process: ", board);
+      this.processBoard(
+        board.toJSON(),
+        this.state.title,
+        this.state.location,
+        this
+      );
+      console.log("Called process: ", board);
+    });
   }
 
   componentDidMount() {
     fetch("/api/companies")
       .then(res => res.json())
-      .then(data =>
-        this.setState({
-          results: data.companies.map(company => ({
+      .then(data => {
+        this.props.store.setSearchResults(
+          data.companies.map(company => ({
             company: company.name,
             jobs: []
           }))
-        })
-      )
+        );
+      })
       .catch(error => console.log("Error loading boards: ", error));
 
     fetch("/user/last-search", {
@@ -173,7 +171,7 @@ class SearchBar extends React.Component {
           </form>
         </StyledSearchBar>
         <Results
-          store={store}
+          store={this.props.store}
           /*
           data={this.state.results}
           activeJobs={this.state.activeJobs}
@@ -188,4 +186,4 @@ class SearchBar extends React.Component {
   }
 }
 
-export default SearchBar;
+export default observer(SearchBar);

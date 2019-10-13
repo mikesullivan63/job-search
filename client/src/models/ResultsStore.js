@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
-import { Job } from "./Job";
-import { Board } from "./Board";
+import Job from "./Job";
+import Board from "./Board";
+import { comparators } from "./comparators";
 
 const ResultsStore = types
   .model("ResultsStore", {
@@ -20,26 +21,38 @@ const ResultsStore = types
   }))
   .actions(self => ({
     setSearchResults(boards) {
-      self.searchResults = boards.slice().sort(Board.comparator);
+      self.searchResults.replace(
+        boards.slice().sort(comparators.boardComparator)
+      );
     }
   }))
   .actions(self => ({
     addSearchResult(board) {
-      self.searchResults = boards
+      /*
+      //Immutable attempt
+      let temp = self.searchResults
         .slice()
-        .filter(el => el.company !== board.company)
-        .push(board)
-        .sort(Board.comparator);
+        .filter(el => el.company !== board.company);
+      temp.push(board);
+      temp.sort(comparators.boardComparator);
+      self.searchResults = temp;
+      */
+      //Mutable
+      let loc = self.searchResults.findIndex(
+        el => el.company !== board.company
+      );
+      self.searchResults[loc] = board;
     }
   }))
   .views(self => ({
     isIgnored(job) {
       return self.ignoredJobs.some(el => el.url === job.url);
-    }
-  }))
-  .views(self => ({
+    },
     isActive(job) {
       return self.activeJobs.some(el => el.url === job.url);
+    },
+    getSearchResults() {
+      return self.searchResults.slice();
     }
   }));
 

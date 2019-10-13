@@ -2,10 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Grid, Cell } from "react-foundation";
-
-const StyledResultsArea = styled.div`
-  margin: 10px;
-`;
+import { authenticationService } from "../../services/authentication";
 
 const StyledResultsCompanyName = styled.h4`
   margin: 0.1em;
@@ -47,7 +44,7 @@ const addJobToList = function(event, data, url, updateCallback) {
 };
 
 function ArchiveLink(props) {
-  archiveLink = (event, jobId) =>
+  const archiveLink = (event, jobId) =>
     addJobToList(event, { jobId }, "/job/archive-job", result => {
       this.props.store.setActiveJobs(result.active);
       this.props.store.setIgnoredJobs(result.ignored);
@@ -66,7 +63,7 @@ function ArchiveLink(props) {
 }
 
 function WatchLink(props) {
-  watchLink = (event, board, url, title, location) =>
+  const watchLink = (event, board, url, title, location) =>
     addJobToList(
       event,
       { board, url, title, location },
@@ -93,7 +90,7 @@ function WatchLink(props) {
 }
 
 function IgnoreLink(props) {
-  ignoreLink = (event, board, url, title, location) =>
+  const ignoreLink = (event, board, url, title, location) =>
     addJobToList(
       event,
       { board, url, title, location },
@@ -119,7 +116,7 @@ function IgnoreLink(props) {
   );
 }
 
-function ResultsCompanySuccess(props) {
+function ResultsCompanyJob(props) {
   return (
     <Grid className="display">
       <Cell small={4} medium={3} large={4}>
@@ -147,7 +144,7 @@ function ResultsCompanySuccess(props) {
         )}
       </Cell>
       <Cell small={2} medium={1} large={1}>
-        {!isActive && (
+        {!props.job.isActive && (
           <IgnoreLink
             store={props.store}
             job={props.job}
@@ -159,7 +156,7 @@ function ResultsCompanySuccess(props) {
   );
 }
 
-function ResultsCompany(props) {
+function Result(props) {
   let displayStyle = "callout";
   let displayMessage = "";
 
@@ -184,6 +181,8 @@ function ResultsCompany(props) {
         ? "No Matching Jobs"
         : "";
   }
+
+  console.log("Displaying list");
 
   let jobsToDisplay = props.company.jobs
     .filter(el => !this.props.store.isIgnored(el))
@@ -211,7 +210,7 @@ function ResultsCompany(props) {
       </Grid>
       {jobsToDisplay.map(job => {
         return (
-          <ResultsCompany
+          <ResultsCompanyJob
             store={props.store}
             job={job}
             company={props.company}
@@ -221,3 +220,5 @@ function ResultsCompany(props) {
     </div>
   );
 }
+
+export default observer(Result);

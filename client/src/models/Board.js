@@ -1,5 +1,5 @@
 import { types } from "mobx-state-tree";
-import { Job } from "./Job";
+import Job from "./Job";
 
 const Board = types
   .model("Board", {
@@ -30,15 +30,5 @@ const Board = types
       self.error = error;
     }
   }));
-
-Board.methods.comparator = function(left, right) {
-  if (left.company > right.company) {
-    return 1;
-  }
-  if (left.company < right.company) {
-    return -1;
-  }
-  return 0;
-};
 
 export default Board;
