@@ -185,9 +185,9 @@ function Result(props) {
   console.log("Displaying list");
 
   let jobsToDisplay = props.company.jobs
-    .filter(el => !this.props.store.isIgnored(el))
+    .filter(el => !props.store.isIgnored(el))
     .map(el => {
-      el.isActive = this.props.store.isActive(el);
+      el.isActive = props.store.isActive(el);
       return el;
     })
     .sort();

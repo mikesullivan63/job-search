@@ -23,8 +23,8 @@ const StyledResultsArea = styled.div`
 function Results(props) {
   return (
     <StyledResultsArea class="search-results grid-x grid-margin-x">
-      {props && props.data ? (
-        props.data.map(function(company) {
+      {props.store.getSearchResults() ? (
+        props.store.getSearchResults().map(function(company) {
           return (
             <Result
               store={props.store}
