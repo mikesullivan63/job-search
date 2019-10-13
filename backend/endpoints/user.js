@@ -21,9 +21,7 @@ routes.route("/register").post(function(req, res) {
     var token;
     token = jwt.generateJwt(user);
     res.status(200);
-    res.json({
-      token: token
-    });
+    res.json({ token });
   });
 });
 
