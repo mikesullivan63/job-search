@@ -17,8 +17,9 @@ function getProfile() {
       return profile;
     });
 }
-*/
 
 export const profileService = {
   getProfile
 };
+
+*/
