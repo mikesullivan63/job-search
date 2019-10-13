@@ -8,7 +8,7 @@ const jwt = require("../config/jwt");
 
 function findUserJobs(userId) {
   return new Promise(function(resolve, reject) {
-    UserJobs.findOne({ userId: userId }).exec((err, userJobs) => {
+    UserJobs.findOne({ userId }).exec((err, userJobs) => {
       if (err) {
         return reject(err);
       } else {

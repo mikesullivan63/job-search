@@ -1,12 +1,11 @@
 import React from "react";
-import { Route, Switch /*, useHistory */ } from 'react-router-dom'
+import { Route, Switch } from "react-router-dom";
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
 import { RegisterPage } from "./screens/register";
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from "history";
 import { authenticationService } from "./services/authentication";
-
 
 class App extends React.Component {
   constructor(props) {
@@ -25,12 +24,8 @@ class App extends React.Component {
 
   processRegistration() {
     const history = createBrowserHistory();
-
-    console.log("In register callback")
     history.push("/");
-    console.log("Pushed history")
     this.setState({ currentUser: authenticationService.getCurrentUser() });
-    console.log("State set")
   }
 
   logout() {
@@ -47,18 +42,26 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <Header logoutCallback={this.logout} />
-        {!currentUser && 
+        {!currentUser && (
           <Switch>
-            <Route 
-              exact path="/register" 
-              render={(props) => <RegisterPage {...props} registrationCallback={this.processRegistration} />} 
-              />
-            <Route 
-              path="/" 
-              render={(props) => <LoginPage {...props} loginCallback={this.processLogin} />} 
-              />
+            <Route
+              exact
+              path="/register"
+              render={props => (
+                <RegisterPage
+                  {...props}
+                  registrationCallback={this.processRegistration}
+                />
+              )}
+            />
+            <Route
+              path="/"
+              render={props => (
+                <LoginPage {...props} loginCallback={this.processLogin} />
+              )}
+            />
           </Switch>
-        }
+        )}
         {currentUser && <SearchBar />}
       </React.Fragment>
     );

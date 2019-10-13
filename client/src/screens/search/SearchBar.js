@@ -6,8 +6,12 @@ import Results from "./Results";
 import { authenticationService } from "../../services/authentication";
 
 function boardSort(l, r) {
-  if (l.company > r.company) return 1;
-  if (l.company < r.company) return -1;
+  if (l.company > r.company) {
+    return 1;
+  }
+  if (l.company < r.company) {
+    return -1;
+  }
   return 0;
 }
 
@@ -148,7 +152,6 @@ class SearchBar extends React.Component {
       { board: board, url: url, title: title, location: location },
       "/job/ignore-job",
       result => {
-        console.log("result: " + JSON.stringify(result));
         this.setState({ ignoredJobs: result });
       }
     );
@@ -156,7 +159,7 @@ class SearchBar extends React.Component {
   watchLink = (event, board, url, title, location) =>
     this.addJobToList(
       event,
-      { board: board, url: url, title: title, location: location },
+      { board, url, title, location },
       "/job/add-job",
       result => {
         console.log("result: " + JSON.stringify(result));
@@ -165,7 +168,7 @@ class SearchBar extends React.Component {
     );
 
   archiveLink = (event, jobId) =>
-    this.addJobToList(event, { jobId: jobId }, "/job/archive-job", result =>
+    this.addJobToList(event, { jobId }, "/job/archive-job", result =>
       this.setState({ activeJobs: result.active, ignoredJobs: result.ignored })
     );
 

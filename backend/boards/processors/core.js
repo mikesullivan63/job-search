@@ -28,7 +28,7 @@ module.exports = (
     request
       .get({
         uri: url,
-        transform: function(body) {
+        transform(body) {
           return cheerio.load(body);
         }
       })
@@ -57,11 +57,19 @@ module.exports = (
                 url: linkExtractor($(el), $)
               })
               .sort((l, r) => {
-                if (l.title > r.title) return 1;
-                if (l.title < r.title) return -1;
+                if (l.title > r.title) {
+                  return 1;
+                }
+                if (l.title < r.title) {
+                  return -1;
+                }
 
-                if (l.url > r.url) return 1;
-                if (l.url < r.url) return -1;
+                if (l.url > r.url) {
+                  return 1;
+                }
+                if (l.url < r.url) {
+                  return -1;
+                }
 
                 return 0;
               });
@@ -70,7 +78,7 @@ module.exports = (
           console.log("Done parsing: " + jobs.length);
         }
 
-        resolve({ company: board.name, url: url, jobs: jobs });
+        resolve({ company: board.name, url, jobs });
       })
       .catch(error => {
         console.log("Error loading board: " + board.name + " - " + error);

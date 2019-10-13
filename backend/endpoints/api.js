@@ -5,8 +5,12 @@ const Boards = require("../boards/boards");
 
 routes.route("/companies", auth).get(function(req, res) {
   let sorted = Boards.Boards.slice().sort((l, r) => {
-    if (l.name > r.name) return 1;
-    if (l.name < r.name) return -1;
+    if (l.name > r.name) {
+      return 1;
+    }
+    if (l.name < r.name) {
+      return -1;
+    }
     return 0;
   });
   res.json({ companies: sorted });
@@ -25,9 +29,7 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
   board
     .processor(board, title, location)
     .then(result => res.json(result))
-    .catch(error =>
-      res.json({ company: board.name, url: board.url, error: error })
-    )
+    .catch(error => res.json({ company: board.name, url: board.url, error }))
     .finally(() => res.end());
 });
 

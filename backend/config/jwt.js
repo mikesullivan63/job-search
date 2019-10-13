@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const express_jwt = require("express-jwt");
+const expressJwt = require("express-jwt");
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || "DEVELOPMENT_KEY";
 
-module.exports.auth = express_jwt({
+module.exports.auth = expressJwt({
   secret: ENCRYPTION_KEY,
   userProperty: "payload"
 });

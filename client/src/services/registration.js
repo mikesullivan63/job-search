@@ -44,7 +44,7 @@ function register(email, firstName, lastName, password, confirm) {
       return reject(errors);
     }
 
-    fetch(`/user/register`, requestOptions)
+    fetch("/user/register", requestOptions)
       .then(handleRegistrationResponse)
       .then(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
