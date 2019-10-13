@@ -149,7 +149,7 @@ class SearchBar extends React.Component {
   ignoreLink = (event, board, url, title, location) =>
     this.addJobToList(
       event,
-      { board: board, url: url, title: title, location: location },
+      { board, url, title, location },
       "/job/ignore-job",
       result => {
         this.setState({ ignoredJobs: result });

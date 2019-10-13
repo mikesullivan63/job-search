@@ -41,9 +41,7 @@ routes.route("/login").post(function(req, res) {
     if (user) {
       token = jwt.generateJwt(user);
       res.status(200);
-      res.json({
-        token: token
-      });
+      res.json({ token });
     } else {
       // If user is not found
       res.status(401).json(info);
