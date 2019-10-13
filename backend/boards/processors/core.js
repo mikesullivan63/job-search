@@ -13,6 +13,24 @@ function match(needles, haystack) {
     .some(needle => lowerStack.indexOf(needle.trim()) !== -1);
 }
 
+function jobComparator(left, right) {
+  if (left.title > right.title) {
+    return 1;
+  }
+  if (left.title < right.title) {
+    return -1;
+  }
+
+  if (left.url > right.url) {
+    return 1;
+  }
+  if (left.url < right.url) {
+    return -1;
+  }
+
+  return 0;
+}
+
 module.exports = (
   board,
   url,
@@ -56,23 +74,7 @@ module.exports = (
                 location: locationExtractor($(el), $),
                 url: linkExtractor($(el), $)
               })
-              .sort((l, r) => {
-                if (l.title > r.title) {
-                  return 1;
-                }
-                if (l.title < r.title) {
-                  return -1;
-                }
-
-                if (l.url > r.url) {
-                  return 1;
-                }
-                if (l.url < r.url) {
-                  return -1;
-                }
-
-                return 0;
-              });
+              .sort(jobComparator);
           });
         if (debug) {
           console.log("Done parsing: " + jobs.length);
