@@ -14,7 +14,6 @@ function match(needles, haystack) {
 }
 
 function objectComparator(fields) {
-  console.log("Checking fields: ", fields);
   return (left, right) => {
     for (let field of fields) {
       if (left[field] > right[field]) {
