@@ -8,7 +8,7 @@ async function login(email, password) {
   };
 
   let response = await fetch("/user/login", requestOptions);
-  const user = await handleResponse(response);
+  const user = await handleResponse.handlePrivateResponse(response);
   // store user details and jwt token in local storage to keep user logged in between page refreshes
   localStorage.setItem("currentUser", JSON.stringify(user));
   return user;

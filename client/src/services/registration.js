@@ -1,3 +1,5 @@
+import { handleResponse } from "./handleResponse";
+
 function isValidPassword(password) {
   return (
     /[a-z]/.exec(password) &&
@@ -5,19 +7,6 @@ function isValidPassword(password) {
     /[1-9]/.exec(password) &&
     /[$^!%#@&*()-_]/.exec(password)
   );
-}
-
-function handleRegistrationResponse(response) {
-  return response.text().then(text => {
-    //const data = text && JSON.parse(text);
-    if (!response.ok) {
-      //const error = (data && data.message) || response.statusText;
-      console.log("Error on registration", response.statusText, text);
-      return Promise.reject(response.statusText);
-    }
-
-    return text && JSON.parse(text);
-  });
 }
 
 function register(email, firstName, lastName, password, confirm) {
@@ -34,6 +23,10 @@ function register(email, firstName, lastName, password, confirm) {
       errors.push("Passwords do not match");
     }
 
+    if (password.length < 8 || password.length > 64) {
+      errors.push("Passwords must be between 8 and 64 characters");
+    }
+
     if (!isValidPassword(password)) {
       errors.push(
         "Passwords must contain a lower case letter, an upper case letter, a number and a symbol"
@@ -45,7 +38,7 @@ function register(email, firstName, lastName, password, confirm) {
     }
 
     fetch("/user/register", requestOptions)
-      .then(handleRegistrationResponse)
+      .then(handleResponse.handleRegistrationResponse)
       .then(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("currentUser", JSON.stringify(user));

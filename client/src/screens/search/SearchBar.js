@@ -38,20 +38,19 @@ class SearchBar extends React.Component {
     this.ignoreLink = this.ignoreLink.bind(this);
   }
 
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
+  updateStateForProperty(field, value) {
     this.setState({
-      [name]: value
+      [field]: value
     });
   }
 
+  handleInputChange(event) {
+    let target = event.target;
+    this.updateStateForProperty(target.name, target.value);
+  }
+
   updateResults(data) {
-    this.setState({
-      results: data.sort(boardSort)
-    });
+    this.updateStateForProperty("results", data.sort(boardSort));
   }
 
   setFieldFromUrl(url, field) {
@@ -59,12 +58,12 @@ class SearchBar extends React.Component {
       headers: authenticationService.authHeader()
     })
       .then(res => res.json())
-      .then(res =>
-        this.setState({
-          [field]: res
-        })
+      .then(res => this.updateStateForProperty(field, res))
+      .catch(error =>
+        console.log("Received error updating field from ", url, error)
       );
   }
+
   setActiveJobs = () => this.setFieldFromUrl("/job/active-jobs", "activeJobs");
   setIgnoredJobs = () =>
     this.setFieldFromUrl("/job/ignored-jobs", "ignoredJobs");
@@ -72,6 +71,7 @@ class SearchBar extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    //Refresh job lists
     this.setActiveJobs();
     this.setIgnoredJobs();
 
@@ -86,12 +86,23 @@ class SearchBar extends React.Component {
         title: this.state.title,
         location: this.state.location
       })
-    }).then(res => res.json());
-    //Error handling??
+    })
+      .then(
+        this.state.results.forEach(board =>
+          this.processBoard(board, this.state.title, this.state.location, this)
+        )
+      )
+      .catch(error => console.log("Error sending search history over"));
+  }
 
-    this.state.results.forEach(board =>
-      this.processBoard(board, this.state.title, this.state.location, this)
-    );
+  updateBoardResults(result, caller) {
+    result.state = result.error ? "ERROR" : "COMPLETED";
+
+    let newResults = caller.state.results
+      .slice()
+      .filter(element => element.company !== result.company)
+      .concat(result);
+    this.updateResults(newResults);
   }
 
   processBoard(board, title, location, caller) {
@@ -108,27 +119,12 @@ class SearchBar extends React.Component {
     if (newResult) {
       newResult.state = "PENDING";
       newResults.push(newResult);
-      this.setState({
-        results: newResults.sort(boardSort)
-      });
+      this.updateResults(newResults);
     }
 
     fetch("/api/" + board.company + "/" + title + "/" + location)
       .then(res => res.json())
       .then(result => this.updateBoardResults(result, caller));
-  }
-
-  updateBoardResults(result, caller) {
-    result.state = result.error ? "ERROR" : "COMPLETED";
-
-    let newResults = caller.state.results
-      .slice()
-      .filter(element => element.company !== result.company)
-      .concat(result);
-
-    this.setState({
-      results: newResults.sort(boardSort)
-    });
   }
 
   addJobToList(event, data, url, updateCallback) {
@@ -151,9 +147,7 @@ class SearchBar extends React.Component {
       event,
       { board, url, title, location },
       "/job/ignore-job",
-      result => {
-        this.setState({ ignoredJobs: result });
-      }
+      result => this.updateStateForProperty("ignoredJobs", result)
     );
 
   watchLink = (event, board, url, title, location) =>
@@ -161,10 +155,7 @@ class SearchBar extends React.Component {
       event,
       { board, url, title, location },
       "/job/add-job",
-      result => {
-        console.log("result: " + JSON.stringify(result));
-        this.setState({ activeJobs: result });
-      }
+      result => this.updateStateForProperty("activeJobs", result)
     );
 
   archiveLink = (event, jobId) =>
@@ -182,7 +173,8 @@ class SearchBar extends React.Component {
             jobs: []
           }))
         })
-      );
+      )
+      .catch(error => console.log("Error loading boards: ", error));
 
     fetch("/user/last-search", {
       headers: authenticationService.authHeader()
@@ -193,7 +185,8 @@ class SearchBar extends React.Component {
           title: res.title,
           location: res.location
         })
-      );
+      )
+      .catch(error => console.log("Error loading previous results: ", error));
   }
 
   render() {
