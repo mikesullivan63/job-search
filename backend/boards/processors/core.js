@@ -47,6 +47,9 @@ module.exports = (
         }
       })
       .then($ => {
+        console.log("Before processing ", $);
+        console.log("$(jobSelector): ", $(jobSelector));
+        console.log("$(jobSelector): ", $(jobSelector).length);
         if (debug) {
           console.log("$(jobSelector): " + $(jobSelector).length);
         }
