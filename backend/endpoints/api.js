@@ -28,8 +28,14 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
 
   board
     .processor(board, title, location)
+    .then(result => {
+      result.status = "COMPLETED";
+      return result;
+    })
     .then(result => res.json(result))
-    .catch(error => res.json({ company: board.name, url: board.url, error }))
+    .catch(error =>
+      res.json({ company: board.name, url: board.url, status: "ERROR", error })
+    )
     .finally(() => res.end());
 });
 

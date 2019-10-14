@@ -1,6 +1,6 @@
 import { authenticationService } from "./authentication";
 
-export function handleResponse(response) {
+function handlePrivateResponse(response) {
   return response.text().then(text => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
@@ -17,3 +17,18 @@ export function handleResponse(response) {
     return data;
   });
 }
+
+function handleRegistrationResponse(response) {
+  return response.text().then(text => {
+    if (!response.ok) {
+      console.log("Error on registration", response.statusText, text);
+      return Promise.reject(response.statusText);
+    }
+    return text && JSON.parse(text);
+  });
+}
+
+export const handleResponse = {
+  handlePrivateResponse,
+  handleRegistrationResponse
+};
