@@ -1,0 +1,25 @@
+{
+  "name": "job-search",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "cd backend && npm install && node server.js",
+    "build": "cd client && npm install && npm run build",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
