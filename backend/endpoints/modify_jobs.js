@@ -73,21 +73,11 @@ routes.post("/ignore-job", auth, function(req, res) {
 });
 
 routes.post("/archive-job", auth, function(req, res) {
-  console.log("Archiving: ", req.body.jobId);
   processJobModifications(req, res, (req, res, userJobs) => {
     let jobToIgnore = userJobs.active.find(
       job => job._id.toString() === req.body.jobId
     );
-
-    console.log("jobToIgnore: ", jobToIgnore);
-
     if (jobToIgnore) {
-      console.log(
-        "starting: ",
-        userJobs.active.length,
-        userJobs.ignored.length
-      );
-
       userJobs.active = userJobs.active.filter(
         job => job._id.toString() !== req.body.jobId
       );
@@ -98,12 +88,6 @@ routes.post("/archive-job", auth, function(req, res) {
             message: "Error during save: " + err
           });
         } else {
-          console.log(
-            "returning: ",
-            updatedUserJobs.active.length,
-            updatedUserJobs.ignored.length
-          );
-
           res.status(200);
           res.json({
             active: updatedUserJobs.active,
