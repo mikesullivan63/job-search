@@ -2,13 +2,13 @@ import React from "react";
 import { observer } from "mobx-react";
 import { commonMethods } from "./common";
 
-class WatchLink extends React.Component {
-  watchLink = (event, board, url, title, location) =>
+class IgnoreLink extends React.Component {
+  ignoreLink = (event, board, url, title, location) =>
     commonMethods.addJobToList(
       event,
       { board, url, title, location },
-      "/job/add-job",
-      result => this.props.store.addActiveJob(result.find(el => el.url === url))
+      "/job/ignore-job",
+      result => this.props.store.addIgnoredJob({ url, title, location })
     );
 
   render() {
@@ -16,7 +16,7 @@ class WatchLink extends React.Component {
       <button
         className="jobToggleButton"
         onClick={event => {
-          this.watchLink(
+          this.ignoreLink(
             event,
             this.props.company,
             this.props.job.url,
@@ -25,10 +25,10 @@ class WatchLink extends React.Component {
           );
         }}
       >
-        Watch
+        Ignore
       </button>
     );
   }
 }
 
-export default observer(WatchLink);
+export default observer(IgnoreLink);

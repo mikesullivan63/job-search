@@ -55,7 +55,7 @@ class SearchBar extends React.Component {
       this.props.store.setActiveJobs(res)
     );
   setIgnoredJobs = () =>
-    updateStateWithFetch("/job/active-jobs", res =>
+    updateStateWithFetch("/job/ignored-jobs", res =>
       this.props.store.setIgnoredJobs(res)
     );
 

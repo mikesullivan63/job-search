@@ -22,17 +22,6 @@ const StyledResultsArea = styled.div`
 */
 class Results extends React.Component {
   render() {
-    console.log(
-      "Before bulk render: ",
-      this.props.store.getSearchResults().length
-      /*,
-      this.props.store.getSearchResults()[0].company,
-      this.props.store.getSearchResults()[
-        this.props.store.getSearchResults().length - 1
-      ].company
-      */
-    );
-
     return (
       <StyledResultsArea class="search-results grid-x grid-margin-x">
         {this.props.store.getSearchResults() ? (

@@ -3,7 +3,8 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import { Grid, Cell } from "react-foundation";
 import WatchLink from "./WatchLink";
-import { commonMethods } from "./common";
+import IgnoreLink from "./IgnoreLink";
+import ArchiveLink from "./ArchiveLink";
 
 const StyledResultsCompanyName = styled.h4`
   margin: 0.1em;
@@ -28,54 +29,6 @@ const StyledResultsCompanyJobLocation = styled.span`
     }
 */
 
-function ArchiveLink(props) {
-  const archiveLink = (event, jobId) =>
-    commonMethods.addJobToList(event, { jobId }, "/job/archive-job", result => {
-      this.props.store.archiveActiveJob(jobId);
-      //this.props.store.setActiveJobs(result.active);
-      //this.props.store.setIgnoredJobs(result.ignored);
-    });
-
-  return (
-    <button
-      className="jobToggleButton"
-      onClick={event => {
-        archiveLink(event, props.job._id);
-      }}
-    >
-      Archive
-    </button>
-  );
-}
-
-function IgnoreLink(props) {
-  const ignoreLink = (event, board, url, title, location) =>
-    commonMethods.addJobToList(
-      event,
-      { board, url, title, location },
-      "/job/ignore-job",
-      this.props.store.addIgnoredJob({ url, title, location })
-      //result => this.props.store.setIgnoredJobs(result)
-    );
-
-  return (
-    <button
-      className="jobToggleButton"
-      onClick={event => {
-        ignoreLink(
-          event,
-          props.company,
-          props.job.url,
-          props.job.title,
-          props.job.location
-        );
-      }}
-    >
-      Ignore
-    </button>
-  );
-}
-
 function ResultsCompanyJob(props) {
   return (
     <Grid className="display">
@@ -92,10 +45,8 @@ function ResultsCompanyJob(props) {
         </StyledResultsCompanyJobLocation>
       </Cell>
       <Cell small={2} medium={1} large={1}>
-        {props.job.isActive && (
-          <ArchiveLink store={props.store} job={props.job} />
-        )}
-        {!props.job.isActive && (
+        {props.job._id && <ArchiveLink store={props.store} job={props.job} />}
+        {!props.job._id && (
           <WatchLink
             store={props.store}
             job={props.job}
@@ -104,7 +55,7 @@ function ResultsCompanyJob(props) {
         )}
       </Cell>
       <Cell small={2} medium={1} large={1}>
-        {!props.job.isActive && (
+        {!props.job._id && (
           <IgnoreLink
             store={props.store}
             job={props.job}
@@ -142,16 +93,11 @@ class Result extends React.Component {
           ? "No Matching Jobs"
           : "";
     }
-
-    console.log("Displaying list: ", this.props.company.company);
-
     let jobsToDisplay = this.props.company.jobs
       .filter(el => !this.props.store.isIgnored(el))
-      .map(el => {
-        el.isActive = this.props.store.isActive(el);
-        return el;
-      });
-
+      .map(el =>
+        this.props.store.isActive(el) ? this.props.store.getActiveJob(el) : el
+      );
     return (
       <div className={displayStyle}>
         <Grid className="display">

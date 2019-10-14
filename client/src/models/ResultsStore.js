@@ -1,4 +1,4 @@
-import { types, destroy } from "mobx-state-tree";
+import { types, detach, destroy } from "mobx-state-tree";
 import Job from "./Job";
 import Board from "./Board";
 import { comparators } from "./comparators";
@@ -22,8 +22,7 @@ const ResultsStore = types
   .actions(self => ({
     archiveActiveJob(jobId) {
       let temp = self.activeJobs.find(el => el._id === jobId);
-      self.activeJobs.remove(temp);
-      self.ignoredJobs.push(temp);
+      self.ignoredJobs.push(detach(temp));
     }
   }))
   .actions(self => ({
@@ -55,35 +54,12 @@ const ResultsStore = types
       self.searchResults = temp;
       */
       //Mutable
-
-      console.log(
-        "addSearchResult: before update boards: ",
-        self.searchResults.length,
-        self.searchResults[0].company,
-        self.searchResults[self.searchResults.length - 1].company
-      );
-
       let loc = self.searchResults.findIndex(
         el => el.company === board.company
       );
       let temp = self.searchResults[loc];
-
-      console.log(
-        "addSearchResult: middle: ",
-        loc,
-        temp.company,
-        board.company
-      );
-
       self.searchResults[loc] = board;
-
       destroy(temp);
-      console.log(
-        "addSearchResult: after update boards: ",
-        self.searchResults.length,
-        self.searchResults[0].company,
-        self.searchResults[self.searchResults.length - 1].company
-      );
     }
   }))
   .views(self => ({
@@ -92,6 +68,12 @@ const ResultsStore = types
     },
     isActive(job) {
       return self.activeJobs.some(el => el.url === job.url);
+    },
+    getActiveJob(job) {
+      return self.activeJobs.find(el => el.url === job.url);
+    },
+    getIgnoredJob(job) {
+      return self.ignoredJobs.find(el => el.url === job.url);
     },
     getSearchResults() {
       return self.searchResults.slice();
