@@ -4,6 +4,8 @@ const cheerio = require("cheerio");
 const determineSource = url => {
   if (url.indexOf("greenhouse")) {
     return "greenhouse";
+  } else if (url.indexOf("lever")) {
+    return "lever";
   }
 
   throw new Error("Invalid URL: " + url);
