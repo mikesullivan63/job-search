@@ -4,7 +4,6 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
-const PORT = process.env.PORT || 4000;
 
 //DB related setup
 require("./models/db");
@@ -26,9 +25,6 @@ app.use(function(req, res, next) {
 });
 app.use(bodyParser.json());
 app.options("*", cors());
-app.listen(PORT, function() {
-  console.log("Server is running on Port: " + PORT);
-});
 
 //Routes
 app.use("/api", require("./endpoints/api"));
@@ -45,8 +41,7 @@ app.get("*", (req, res) => {
 //Global Errors
 // Catch unauthorised errors
 app.use(function(err, req, res, next) {
-  console.log("Error function: " + JSON.stringify(req.headers));
-  console.log("Error function: err: " + err);
+  console.log("Error function: ", err, JSON.stringify(req.headers));
   if (err.name === "UnauthorizedError") {
     res.status(401);
     res.json({ message: err.name + ": " + err.message });
@@ -55,3 +50,5 @@ app.use(function(err, req, res, next) {
     res.json({ message: err.name + ": " + err.message });
   }
 });
+
+module.exports = app;
