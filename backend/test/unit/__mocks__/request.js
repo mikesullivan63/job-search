@@ -10,6 +10,8 @@ const determineSource = url => {
     return "google";
   } else if (url.indexOf("breezy") > -1) {
     return "breezy";
+  } else if (url.indexOf("workable") > -1) {
+    return "workable";
   }
 
   throw new Error("Invalid URL: " + url);

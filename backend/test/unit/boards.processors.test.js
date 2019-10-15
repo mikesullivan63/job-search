@@ -41,4 +41,8 @@ describe("Suite of tests to ensure all processors work", () => {
   test("Ensure Breezy board works with sample content", () => {
     return testBoard(processBreezy, 4);
   });
+
+  test("Ensure Workable board works with sample content", () => {
+    return testBoard(processWorkable, 1);
+  });
 });
