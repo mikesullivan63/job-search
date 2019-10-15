@@ -39,6 +39,7 @@ module.exports = (
   debug
 ) => {
   return new Promise(function(resolve, reject) {
+    console.log("url: " + url);
     request
       .get({
         uri: url,
@@ -47,9 +48,6 @@ module.exports = (
         }
       })
       .then($ => {
-        console.log("Before processing ", $);
-        console.log("$(jobSelector): ", $(jobSelector));
-        console.log("$(jobSelector): ", $(jobSelector).length);
         if (debug) {
           console.log("$(jobSelector): " + $(jobSelector).length);
         }
