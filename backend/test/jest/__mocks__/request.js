@@ -22,7 +22,7 @@ const request = {
     return new Promise((resolve, reject) => {
       let source = determineSource(options.uri);
       fs.readFile(
-        "./test/unit/__mocks__/data/" + source + ".html",
+        "./test/jest/__mocks__/data/" + source + ".html",
         "utf8",
         (err, data) => {
           if (err) reject(err);
