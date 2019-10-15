@@ -1,5 +1,7 @@
 const Boards = require("../../boards/boards");
 
+jest.unmock("request");
+
 //Live test on live boards - only run manually to verify connectivity
 test("Ensure all boards return values for title, location, and URL", () => {
   return Promise.all(
