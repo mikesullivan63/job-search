@@ -1,4 +1,4 @@
-/*const fs = require("fs");
+const fs = require("fs");
 const cheerio = require("cheerio");
 
 const determineSource = url => {
@@ -18,7 +18,7 @@ const request = {
         "utf8",
         (err, data) => {
           if (err) reject(err);
-          resolve({ entity: cheerio.load(data) });
+          resolve(cheerio.load(data));
         }
       );
     });
@@ -26,5 +26,3 @@ const request = {
 };
 
 module.exports = request;
-
-*/

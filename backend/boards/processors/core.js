@@ -39,7 +39,6 @@ module.exports = (
   debug
 ) => {
   return new Promise(function(resolve, reject) {
-    console.log("url: " + url);
     request
       .get({
         uri: url,
@@ -80,7 +79,11 @@ module.exports = (
         resolve({ company: board.name, url, jobs });
       })
       .catch(error => {
-        console.log("Error loading board: " + board.name + " - " + error);
+        console.log(
+          "Error loading board: " + board.name + " - " + error,
+          error.lineNumber,
+          error.stack
+        );
         reject(error.message);
       });
   });
