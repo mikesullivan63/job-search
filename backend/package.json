@@ -13,7 +13,6 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
-    "codacy-coverage": "^3.4.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
@@ -27,7 +26,10 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
+    "codacy-coverage": "^3.4.0",
     "jest": "^24.9.0",
+    "sinon": "^7.5.0",
+    "sinon-mongoose": "^2.3.0",
     "supertest": "^4.0.2"
   }
 }
