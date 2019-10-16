@@ -2,13 +2,19 @@
 
 const supertest = require("supertest");
 const app = require("../../server");
+const mongoose = require("mongoose");
 const request = supertest(app);
 
 jest.mock("request-promise-core/configure/request2");
 
+afterAll(done => {
+  mongoose.disconnect();
+  done();
+});
+
 describe("Suite of tests to ensure all API's call work", () => {
   it("Ensure list of boards is working", done => {
-    request
+    return request
       .get("/api/companies")
       .expect(200)
       .expect(/companies/)
@@ -24,7 +30,7 @@ describe("Suite of tests to ensure all API's call work", () => {
   });
 
   it("Ensure job search works", done => {
-    request
+    return request
       .get("/api/Abstract/en/san%20or%20sf")
       .expect(200)
       .expect(response => {
@@ -35,13 +41,11 @@ describe("Suite of tests to ensure all API's call work", () => {
         }
       })
       .expect(response => {
-        ///company: board.name, url: board.url, status: "ERROR"
         if (response.body.status !== "COMPLETED") {
           throw new Error("Status is incorrect: " + response.body.status);
         }
       })
       .expect(response => {
-        ///company: board.name, url: board.url, status: "ERROR"
         if (response.body.jobs.length === 0) {
           throw new Error("No jobs returned");
         }

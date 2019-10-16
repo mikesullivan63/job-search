@@ -6,7 +6,6 @@ const cors = require("cors");
 const passport = require("passport");
 
 //DB related setup
-require("./models/db");
 require("./models/job");
 require("./models/query");
 require("./models/user");

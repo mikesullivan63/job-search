@@ -13,8 +13,6 @@ routes.route("/companies", auth).get(function(req, res) {
     }
     return 0;
   });
-
-  console.log("sorted", sorted.length);
   res.json({ companies: sorted });
 });
 

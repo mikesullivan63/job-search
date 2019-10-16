@@ -8,7 +8,7 @@ const processWorkable = require("../../boards/processors/workable")
 
 jest.mock("request-promise-core/configure/request2");
 
-testBoard = (procesor, size) => {
+testBoard = (procesor, size, done) => {
   return procesor({ name: "test", url: "example" }, "", "", false).then(
     board => {
       let jobs = board.jobs.map(job =>
@@ -21,28 +21,29 @@ testBoard = (procesor, size) => {
       );
       expect(jobs.length).toBeGreaterThan(0);
       expect(jobs.length).toBe(size);
+      done();
     }
   );
 };
 
 describe("Suite of tests to ensure all processors work", () => {
-  test("Ensure Greenhouse board works with sample content", () => {
-    return testBoard(processGreenhouse, 7);
+  test("Ensure Greenhouse board works with sample content", done => {
+    return testBoard(processGreenhouse, 7, done);
   });
 
-  test("Ensure Lever board works with sample content", () => {
-    return testBoard(processLever, 8);
+  test("Ensure Lever board works with sample content", done => {
+    return testBoard(processLever, 8, done);
   });
 
-  test("Ensure Google board works with sample content", () => {
-    return testBoard(processGoogle, 10);
+  test("Ensure Google board works with sample content", done => {
+    return testBoard(processGoogle, 10, done);
   });
 
-  test("Ensure Breezy board works with sample content", () => {
-    return testBoard(processBreezy, 4);
+  test("Ensure Breezy board works with sample content", done => {
+    return testBoard(processBreezy, 4, done);
   });
 
-  test("Ensure Workable board works with sample content", () => {
-    return testBoard(processWorkable, 1);
+  test("Ensure Workable board works with sample content", done => {
+    return testBoard(processWorkable, 1, done);
   });
 });
