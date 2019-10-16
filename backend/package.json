@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --detectOpenHandles",
+    "test-with-coverage": "jest --forceExit --detectOpenHandles --coverage && cat ./coverage/lcov.info | codacy-coverage -v -d"
   },
   "keywords": [],
   "author": "",
