@@ -22,7 +22,7 @@ function getAuthToken() {
 }
 
 function getUserJobsObject(active, ignored) {
-  let uj = UserJobs();
+  let uj = new UserJobs();
   uj.active = active;
   uj.ignored = ignored;
   return uj;
