@@ -39,7 +39,10 @@ function returnListFromUserJobs(req, res, listExtractor) {
 routes.get("/active-jobs", auth, (req, res) => {
   console.log("Active jobs call");
   returnListFromUserJobs(req, res, userJobs => {
-    console.log("returnListFromUserJobs post return");
+    console.log(
+      "returnListFromUserJobs post return: ",
+      JSON.stringify(userJobs, null, 2)
+    );
 
     return userJobs ? userJobs.active || [] : [];
   });
