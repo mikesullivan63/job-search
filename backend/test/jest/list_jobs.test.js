@@ -5,7 +5,10 @@ const mongoose = require("mongoose");
 const request = supertest(app);
 require("../../models/user");
 const User = mongoose.model("User");
+const UserJobs = mongoose.model("UserJobs");
 const jwt = require("../../config/jwt");
+const sinon = require("sinon");
+require("sinon-mongoose");
 
 jest.mock("request-promise-core/configure/request2");
 
@@ -32,6 +35,12 @@ describe("Suite of tests to ensure all List Job calls work", () => {
     user.email = "example@example.com";
     const token = jwt.generateJwt(user);
     console.log("token", token);
+
+    sinon
+      .mock(UserJobs)
+      .expects("findOne")
+      .chain("exec")
+      .yields(null, null);
 
     return request
       .get("/job/active-jobs")
