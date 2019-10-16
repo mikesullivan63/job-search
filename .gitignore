@@ -9,10 +9,13 @@
 
 # testing
 /coverage
+/client/coverage
+/backend/coverage
 
 # production
 /build
 /client/build
+/backend/build
 
 # misc
 .DS_Store

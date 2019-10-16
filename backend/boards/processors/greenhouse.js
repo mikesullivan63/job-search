@@ -14,9 +14,9 @@ const processGreenhouseCore = function(
     title,
     location,
     "div.opening",
-    el => el.find("a").text(),
-    el => el.find("span.location").text(),
-    el => linkurl + el.find("a").attr("href"),
+    (el, $) => el.find("a").text(),
+    (el, $) => el.find("span.location").text(),
+    (el, $) => linkurl + el.find("a").attr("href"),
     debug
   );
 };
