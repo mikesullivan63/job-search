@@ -29,4 +29,12 @@ describe("Suite of tests to Mongoose models work", () => {
     user.firstName = "example";
     testUserModel(user, "email", done);
   });
+  it("Ensure user fails when only email is not found", done => {
+    let user = new User();
+    user.lastName = "McEexample";
+    user.firstName = "example";
+    user.email = "example@example.com";
+
+    testUserModel(user, null, done);
+  });
 });
