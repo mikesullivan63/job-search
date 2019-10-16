@@ -20,12 +20,15 @@ function findUserJobs(userId) {
 
 function returnListFromUserJobs(req, res, listExtractor) {
   jwt.protectedRequest(req, res, (req, res) => {
+    console.log("Finding users", req.payload._id);
+
     findUserJobs(req.payload._id)
       .then(userJobs => {
         res.status(200);
         res.json(listExtractor(userJobs));
       })
       .catch(error => {
+        console.log("Error", error);
         res.status(500).json({ message: "Error during lookup: " + error });
       });
   });
@@ -34,7 +37,10 @@ function returnListFromUserJobs(req, res, listExtractor) {
 //Routes
 
 routes.get("/active-jobs", auth, (req, res) => {
+  console.log("Active jobs call");
   returnListFromUserJobs(req, res, userJobs => {
+    console.log("returnListFromUserJobs post return");
+
     return userJobs ? userJobs.active || [] : [];
   });
 });
