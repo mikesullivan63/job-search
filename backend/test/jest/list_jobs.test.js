@@ -18,17 +18,13 @@ function getAuthToken() {
   user.firstName = "example";
   user.lastName = "McEexample";
   user.email = "example@example.com";
-  const token = jwt.generateJwt(user);
-  console.log("token", token);
-  return token;
+  return jwt.generateJwt(user);
 }
 
 function getUserJobsObject(active, ignored) {
   let uj = UserJobs();
   uj.active = active;
   uj.ignored = ignored;
-
-  console.log("Returning: " + JSON.stringify(uj, null, 2));
   return uj;
 }
 
@@ -58,7 +54,6 @@ function getFullUserJobs() {
 }
 
 afterEach(done => {
-  console.log("Resetting mocks");
   sinon.restore();
   done();
 });
@@ -68,18 +63,8 @@ afterAll(done => {
   done();
 });
 
-describe("Suite of tests to ensure all List Job calls work", () => {
-  it("Ensure list of active jobs is protected by authentication, failure", done => {
-    return request
-      .get("/job/active-jobs")
-      .expect(401)
-      .end((error, response) => {
-        if (error) return done(error);
-        done();
-      });
-  });
-
-  it("Ensure list of active jobs is protected by authentication, success", done => {
+describe("Suite of tests to ensure all List Job calls requore authentication", () => {
+  commonUnauthTest = (url, done) => {
     sinon
       .mock(UserJobs)
       .expects("findOne")
@@ -87,65 +72,50 @@ describe("Suite of tests to ensure all List Job calls work", () => {
       .yields(new Error("DB not working"), null);
 
     return request
-      .get("/job/active-jobs")
+      .get(url)
+      .expect(401)
+      .end((error, response) => {
+        if (error) return done(error);
+        done();
+      });
+  };
+
+  commonAuthTest = (url, done) => {
+    sinon
+      .mock(UserJobs)
+      .expects("findOne")
+      .chain("exec")
+      .yields(new Error("DB not working"), null);
+
+    return request
+      .get(url)
       .set({ Authorization: "Bearer " + getAuthToken() })
       .expect(500)
       .end((error, response) => {
         if (error) return done(error);
         done();
       });
+  };
+
+  it("Ensure list of active jobs is protected by authentication, failure", done => {
+    return commonUnauthTest("/job/active-jobs", done);
   });
 
-  it("Ensure list of active jobs returns empty list when no object is found", done => {
-    sinon
-      .mock(UserJobs)
-      .expects("findOne")
-      .chain("exec")
-      .yields(null, null);
-
-    return request
-      .get("/job/active-jobs")
-      .set({ Authorization: "Bearer " + getAuthToken() })
-      .expect(200)
-      .expect(response => {
-        if (response.body.length !== 0) {
-          throw new Error(
-            "Should have been an empty array, instead was " + response
-          );
-        }
-      })
-      .end((error, response) => {
-        if (error) return done(error);
-        done();
-      });
+  it("Ensure list of active jobs is protected by authentication, success", done => {
+    return commonAuthTest("/job/active-jobs", done);
   });
 
-  it("Ensure list of active jobs returns empty list when object is found, but is empty", done => {
-    sinon
-      .mock(UserJobs)
-      .expects("findOne")
-      .chain("exec")
-      .yields(null, getEmptyUserJobs());
-
-    return request
-      .get("/job/active-jobs")
-      .set({ Authorization: "Bearer " + getAuthToken() })
-      .expect(200)
-      .expect(response => {
-        if (response.body.length !== 0) {
-          throw new Error(
-            "Should have been an empty array, instead was " + response
-          );
-        }
-      })
-      .end((error, response) => {
-        if (error) return done(error);
-        done();
-      });
+  it("Ensure list of active jobs is protected by authentication, failure", done => {
+    return commonUnauthTest("/job/ignored-jobs", done);
   });
 
-  it("Ensure list of active jobs returns list when object is found and has entries", done => {
-    const uj = getFullUserJobs();
+  it("Ensure list of active jobs is protected by authentication, success", done => {
+    return commonAuthTest("/job/ignored-jobs", done);
+  });
+});
+
+describe("Suite of tests to ensure all List Job calls work", () => {
+  commonTest = (url, uj, expectedSize, done) => {
     sinon
       .mock(UserJobs)
       .expects("findOne")
@@ -153,15 +123,14 @@ describe("Suite of tests to ensure all List Job calls work", () => {
       .yields(null, uj);
 
     return request
-      .get("/job/active-jobs")
+      .get(url)
       .set({ Authorization: "Bearer " + getAuthToken() })
       .expect(200)
       .expect(response => {
-        console.log("response:", response);
-        if (response.body.length !== uj.active.length) {
+        if (response.body.length !== expectedSize) {
           throw new Error(
             "Found wrong set of boards, should have be " +
-              uj.active.length +
+              expectedSize +
               " not " +
               response.body.length
           );
@@ -171,14 +140,38 @@ describe("Suite of tests to ensure all List Job calls work", () => {
         if (error) return done(error);
         done();
       });
+  };
+
+  activeTest = (uj, expectedSize, done) => {
+    return commonTest("/job/active-jobs", uj, expectedSize, done);
+  };
+  ignoredTest = (uj, expectedSize, done) => {
+    return commonTest("/job/ignored-jobs", uj, expectedSize, done);
+  };
+
+  it("Ensure list of active jobs returns empty list when no object is found", done => {
+    return activeTest(null, 0, done);
   });
-  /*
-  it("Ensure list of ignored jobs is protected by authentication", done => {});
 
-  it("Ensure list of ignored jobs returns empty list when no object is found", done => {});
+  it("Ensure list of active jobs returns empty list when object is found, but is empty", done => {
+    return activeTest(getEmptyUserJobs(), 0, done);
+  });
 
-  it("Ensure list of ignored jobs returns empty list when object is found, but is empty", done => {});
+  it("Ensure list of active jobs returns list when object is found and has entries", done => {
+    const uj = getFullUserJobs();
+    return activeTest(uj, uj.active.length, done);
+  });
 
-  it("Ensure list of ignored jobs returns list when object is found and has entries", done => {});
-  */
+  it("Ensure list of ignored jobs returns empty list when no object is found", done => {
+    return ignoredTest(null, 0, done);
+  });
+
+  it("Ensure list of ignored jobs returns empty list when object is found, but is empty", done => {
+    return ignoredTest(getEmptyUserJobs(), 0, done);
+  });
+
+  it("Ensure list of ignored jobs returns list when object is found and has entries", done => {
+    const uj = getFullUserJobs();
+    return ignoredTest(uj, uj.ignored.length, done);
+  });
 });

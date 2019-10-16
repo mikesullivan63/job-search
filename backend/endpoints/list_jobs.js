@@ -20,8 +20,6 @@ function findUserJobs(userId) {
 
 function returnListFromUserJobs(req, res, listExtractor) {
   jwt.protectedRequest(req, res, (req, res) => {
-    console.log("Finding users", req.payload._id);
-
     findUserJobs(req.payload._id)
       .then(userJobs => {
         res.status(200);
@@ -37,13 +35,7 @@ function returnListFromUserJobs(req, res, listExtractor) {
 //Routes
 
 routes.get("/active-jobs", auth, (req, res) => {
-  console.log("Active jobs call");
   returnListFromUserJobs(req, res, userJobs => {
-    console.log(
-      "returnListFromUserJobs post return: ",
-      JSON.stringify(userJobs, null, 2)
-    );
-
     return userJobs ? userJobs.active || [] : [];
   });
 });
