@@ -22,12 +22,5 @@ describe("Suite of tests to ensure all API's call work", () => {
         if (error) return done(error);
         done();
       });
-    /*
-        
-    } catch (error) {
-      done(error);
-    }
-        */
-    done();
   });
 });
