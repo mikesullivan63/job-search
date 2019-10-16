@@ -5,7 +5,7 @@ import { Button, Colors } from "react-foundation";
 import Cookies from "universal-cookie";
 import Results from "./Results";
 import { authenticationService } from "../../services/authentication";
-import { comparators } from "../../models/comparators";
+import { objectComparator } from "../../../common/util/comparator";
 
 const cookies = new Cookies();
 const StyledSearchBar = styled.div`
