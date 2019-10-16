@@ -1,7 +1,7 @@
 import { types, detach, destroy } from "mobx-state-tree";
 import Job from "./Job";
 import Board from "./Board";
-import { comparators } from "./comparators";
+import { objectComparator } from "../../../common/util/comparator";
 
 const ResultsStore = types
   .model("ResultsStore", {
@@ -38,21 +38,12 @@ const ResultsStore = types
   .actions(self => ({
     setSearchResults(boards) {
       self.searchResults.replace(
-        boards.slice().sort(comparators.boardComparator)
+        boards.slice().sort(objectComparator("company"))
       );
     }
   }))
   .actions(self => ({
     addSearchResult(board) {
-      /*
-      //Immutable attempt
-      let temp = self.searchResults
-        .slice()
-        .filter(el => el.company !== board.company);
-      temp.push(board);
-      temp.sort(comparators.boardComparator);
-      self.searchResults = temp;
-      */
       //Mutable
       let loc = self.searchResults.findIndex(
         el => el.company === board.company

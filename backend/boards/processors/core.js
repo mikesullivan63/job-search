@@ -1,5 +1,7 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
+const objectComparator = require("../../../common/util/comparator")
+  .objectComparator;
 
 function match(needles, haystack) {
   let lowerStack = haystack.toLowerCase();
@@ -11,20 +13,6 @@ function match(needles, haystack) {
     .toLowerCase()
     .split(" or ")
     .some(needle => lowerStack.indexOf(needle.trim()) !== -1);
-}
-
-function objectComparator(fields) {
-  return (left, right) => {
-    for (let field of fields) {
-      if (left[field] > right[field]) {
-        return 1;
-      }
-      if (left[field] < right[field]) {
-        return -1;
-      }
-    }
-    return 0;
-  };
 }
 
 module.exports = (
@@ -70,7 +58,7 @@ module.exports = (
                 location: locationExtractor($(el), $),
                 url: linkExtractor($(el), $)
               })
-              .sort(objectComparator(["title", "url"]));
+              .sort(objectComparator(["title", "location", "url"]));
           });
         if (debug) {
           console.log("Done parsing: " + jobs.length);

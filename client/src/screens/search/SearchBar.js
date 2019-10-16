@@ -46,7 +46,7 @@ class SearchBar extends React.Component {
   updateResults(data) {
     this.updateStateForProperty(
       "results",
-      data.sort(comparators.boardComparator)
+      data.sort(objectComparator("company"))
     );
   }
 
