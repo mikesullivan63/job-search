@@ -93,11 +93,15 @@ class Result extends React.Component {
           ? "No Matching Jobs"
           : "";
     }
-    let jobsToDisplay = this.props.company.jobs
-      .filter(el => !this.props.store.isIgnored(el))
-      .map(el =>
-        this.props.store.isActive(el) ? this.props.store.getActiveJob(el) : el
-      );
+    let jobsToDisplay = !this.props.company.jobs
+      ? null
+      : this.props.company.jobs
+          .filter(el => !this.props.store.isIgnored(el))
+          .map(el =>
+            this.props.store.isActive(el)
+              ? this.props.store.getActiveJob(el)
+              : el
+          );
     return (
       <div className={displayStyle}>
         <Grid className="display">
