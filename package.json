@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cd backend && npm install && node startup.js",
     "build": "cd client && npm install && npm run build",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "test-with-coverage": "cd client && npm run test-with-coverage && cd ../backend && npm run test-with-coverage && cat ../client/coverage/lcov.info ./coverage/lcov.info | codacy-coverage -v -d"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,5 +22,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "codacy-coverage": "^3.4.0"
   }
 }

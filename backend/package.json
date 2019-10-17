@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "test-with-coverage": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage -v -d"
+    "test-with-coverage": "jest --coverage",
+    "test-with-coverage-only": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage -v -d"
   },
   "keywords": [],
   "author": "",
