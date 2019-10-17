@@ -20,6 +20,19 @@ function processJobModifications(req, res, modification) {
   });
 }
 
+function handleSaveAndReturn(res, userJobs, returnData) {
+  userJobs.save(function(err, updatedUserJobs) {
+    if (err) {
+      res.status(500).json({
+        message: "Error during save: " + err
+      });
+    } else {
+      res.status(200);
+      res.json(returnData(updatedUserJobs));
+    }
+  });
+}
+
 function processJobAdditions(req, res, update, returnData) {
   processJobModifications(req, res, (req, res, userJobs) => {
     if (!userJobs) {
@@ -34,17 +47,7 @@ function processJobAdditions(req, res, update, returnData) {
     job.location = req.body.location;
 
     update(userJobs, job);
-
-    userJobs.save(function(err, updatedUserJobs) {
-      if (err) {
-        res.status(500).json({
-          message: "Error during save: " + err
-        });
-      } else {
-        res.status(200);
-        res.json(returnData(updatedUserJobs));
-      }
-    });
+    handleSaveAndReturn(res, userJobs, returnData);
   });
 }
 
@@ -82,18 +85,11 @@ routes.post("/archive-job", auth, function(req, res) {
         job => job._id.toString() !== req.body.jobId
       );
       userJobs.ignored = userJobs.ignored.slice().concat(jobToIgnore);
-      userJobs.save(function(err, updatedUserJobs) {
-        if (err) {
-          res.status(500).json({
-            message: "Error during save: " + err
-          });
-        } else {
-          res.status(200);
-          res.json({
-            active: updatedUserJobs.active,
-            ignored: updatedUserJobs.ignored
-          });
-        }
+      handleSaveAndReturn(res, userJobs, userJobs => {
+        return {
+          active: userJobs.active,
+          ignored: userJobs.ignored
+        };
       });
     } else {
       res.status(500).json({
