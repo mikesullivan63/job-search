@@ -14,7 +14,7 @@ class WatchLink extends React.Component {
   render() {
     return (
       <button
-        className="jobToggleButton"
+        className="jobToggleButton watchButton"
         onClick={event => {
           this.watchLink(
             event,

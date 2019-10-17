@@ -1,11 +1,16 @@
 import React from "react";
 import renderer from "react-test-renderer";
+import Adapter from "enzyme-adapter-react-16";
+import Enzyme from "enzyme";
+import { mount } from "enzyme";
 import Result from "../../screens/search/Result";
 import ResultsStore from "../../models/ResultsStore";
 
 //semaphoreci.com/community/tutorials/how-to-test-react-and-mobx-with-jest
 
 describe("Result Display tests", () => {
+  Enzyme.configure({ adapter: new Adapter() });
+
   const buildStore = () => {
     const store = ResultsStore.create({});
     store.setActiveJobs([
@@ -56,6 +61,12 @@ describe("Result Display tests", () => {
             title: "Job Title DEF123",
             location: "San Francisco",
             url: "https://www.example.com/job/DEF123"
+          },
+          {
+            _id: "",
+            title: "Job Title GHI123",
+            location: "San Francisco",
+            url: "https://www.example.com/job/GHI123"
           }
         ]
       },
@@ -125,11 +136,26 @@ describe("Result Display tests", () => {
     store.searchResults
       .filter(el => el.status === "COMPLETED")
       .forEach(company => {
-        const component = renderer.create(
+        const component = mount(
           <Result store={store} key={company.company} company={company} />
         );
+        console.log("component", component.html());
+        console.log(
+          "button",
+          component
+            .find("button")
+            .last()
+            .html(),
+          component
+            .find("button")
+            .first()
+            .html()
+        );
+        console.log("button.archiveButton", component.find("button"));
 
-        const tree = component.toJSON();
+        component.find("button").simulate("click");
+        component.find("button.watchButton").simulate("click");
+
         expect(tree).toMatchSnapshot();
       });
   });

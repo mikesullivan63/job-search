@@ -14,7 +14,7 @@ class IgnoreLink extends React.Component {
   render() {
     return (
       <button
-        className="jobToggleButton"
+        className="jobToggleButton ignoreButton"
         onClick={event => {
           this.ignoreLink(
             event,

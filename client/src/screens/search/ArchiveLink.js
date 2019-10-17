@@ -11,7 +11,7 @@ class ArchiveLink extends React.Component {
   render() {
     return (
       <button
-        className="jobToggleButton"
+        className="jobToggleButton archiveButton"
         onClick={event => {
           this.archiveLink(event, this.props.job._id);
         }}
