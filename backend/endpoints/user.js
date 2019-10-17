@@ -22,7 +22,7 @@ function returnUser(req, res, returnExtractor) {
     findUser(req.payload._id)
       .then(user => {
         res.status(200);
-        res.json(listExtractor(user));
+        res.json(returnExtractor(user));
       })
       .catch(error => {
         console.log("Error", error);
