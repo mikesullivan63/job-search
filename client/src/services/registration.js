@@ -5,7 +5,7 @@ function isValidPassword(password) {
     /[a-z]/.exec(password) &&
     /[A-Z]/.exec(password) &&
     /[1-9]/.exec(password) &&
-    /[$^!%#@&*()-_]/.exec(password)
+    /[$^!%#@&*()\-_]/.exec(password)
   );
 }
 

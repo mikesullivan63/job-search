@@ -126,6 +126,7 @@ class Result extends React.Component {
           return (
             <ResultsCompanyJob
               store={this.props.store}
+              key={job.url}
               job={job}
               company={this.props.company}
             />

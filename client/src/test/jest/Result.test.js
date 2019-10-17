@@ -105,7 +105,6 @@ describe("Result Display tests", () => {
     );
 
     const tree = component.toJSON();
-    console.log("tree", JSON.stringify(tree, null, 2));
     expect(tree).toMatchSnapshot();
   });
 
@@ -118,7 +117,6 @@ describe("Result Display tests", () => {
     );
 
     const tree = component.toJSON();
-    console.log("tree", JSON.stringify(tree, null, 2));
     expect(tree).toMatchSnapshot();
   });
 
@@ -132,7 +130,6 @@ describe("Result Display tests", () => {
         );
 
         const tree = component.toJSON();
-        console.log("tree", JSON.stringify(tree, null, 2));
         expect(tree).toMatchSnapshot();
       });
   });
