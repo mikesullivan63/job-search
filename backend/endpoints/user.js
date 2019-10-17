@@ -21,8 +21,15 @@ function returnUser(req, res, returnExtractor) {
   jwt.protectedRequest(req, res, (req, res) => {
     findUser(req.payload._id)
       .then(user => {
-        res.status(200);
-        res.json(returnExtractor(user));
+        if (user) {
+          res.status(200);
+          res.json(returnExtractor(user));
+        } else {
+          console.log("Error trying to find user for ", req.payload._id);
+          res
+            .status(500)
+            .json({ message: "Error during lookup: no user found" });
+        }
       })
       .catch(error => {
         console.log("Error", error);
@@ -32,7 +39,7 @@ function returnUser(req, res, returnExtractor) {
 }
 
 //Routes
-routes.route("/profile", auth).get(function(req, res) {
+routes.get("/profile", auth, (req, res) => {
   returnUser(req, res, user => user);
 });
 
