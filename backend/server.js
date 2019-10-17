@@ -27,7 +27,9 @@ app.options("*", cors());
 
 //Routes
 app.use("/api", require("./endpoints/api"));
+app.use("/user", require("./endpoints/authentication"));
 app.use("/user", require("./endpoints/user"));
+app.use("/user", require("./endpoints/user_queries"));
 app.use("/job", require("./endpoints/list_jobs"));
 app.use("/job", require("./endpoints/modify_jobs"));
 
