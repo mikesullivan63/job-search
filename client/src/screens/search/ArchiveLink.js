@@ -4,14 +4,14 @@ import { commonMethods } from "./common";
 
 class ArchiveLink extends React.Component {
   archiveLink = (event, jobId) =>
-    commonMethods.addJobToList(event, { jobId }, "/job/archive-job", result =>
-      this.props.store.archiveActiveJob(jobId)
-    );
+    commonMethods.addJobToList(event, { jobId }, "/job/archive-job", result => {
+      this.props.store.archiveActiveJob(jobId);
+    });
 
   render() {
     return (
       <button
-        className="jobToggleButton"
+        className="jobToggleButton archiveButton"
         onClick={event => {
           this.archiveLink(event, this.props.job._id);
         }}
