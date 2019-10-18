@@ -24,7 +24,6 @@ module.exports = (board, url, title, location, selectors, debug) => {
         }
       })
       .then($ => {
-        console.log("selectors: " + JSON.stringify(selectors, null, 2));
         const jobs = selectors.flatMap(selector => {
           if (debug) {
             console.log("jobSelector: " + JSON.stringify(selector, null, 2));
