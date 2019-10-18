@@ -43,7 +43,8 @@ describe("Suite of tests to ensure all processors work", () => {
     return testBoard(processBreezy, 4, done);
   });
 
-  test("Ensure Workable board works with sample content", done => {
+  //Skipping until re-adding
+  xtest("Ensure Workable board works with sample content", done => {
     return testBoard(processWorkable, 1, done);
   });
 });
