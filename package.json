@@ -6,7 +6,7 @@
     "start": "cd backend && npm install && node startup.js",
     "build": "cd client && npm install && npm run build",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "test-with-coverage": "cd client && npm run test-with-coverage && cd ../backend && npm run test-with-coverage && cd ../ && cat client/coverage/lcov.info backend/coverage/lcov.info | codacy-coverage -v -d"
+    "test-with-coverage": "npm install && cd client &&  npm install && npm run test-with-coverage && cd ../backend && npm install && npm run test-with-coverage && cd ../ && cat client/coverage/lcov.info backend/coverage/lcov.info | codacy-coverage -v -d"
   },
   "eslintConfig": {
     "extends": "react-app"
