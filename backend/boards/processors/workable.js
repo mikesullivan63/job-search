@@ -14,34 +14,21 @@ const processBoardPage = require("./core");
 exports.processWorkable = (board, title, location, debug) => {
   return processBoardPage(
     board,
-    "https://" + board.url + ".workable.com/",
+    "https://apply.workable.com/" + board.url,
     title,
     location,
-    "li.job",
+    "li.job-opening",
     el =>
       el
-        .find("h2 a")
+        .find("h2")
         .text()
         .trim(),
     (el, $) =>
       el
-        .find("p.meta")
+        .find("span[data-ui=job-location]")
         .text()
-        .trim() +
-      " " +
-      el
-        .find("p.meta")
-        .children()
-        .map((i, el) =>
-          $(el)
-            .text()
-            .trim()
-        )
-        .get()
-        .join(" ")
         .trim(),
-    el =>
-      "https://" + board.url + ".workable.com" + el.find("h2 a").attr("href"),
+    el => "https://apply.workable.com" + el.find("h2 a").attr("href"),
     debug
   );
 };
