@@ -8,7 +8,8 @@ class IgnoreLink extends React.Component {
       event,
       { board, url, title, location },
       "/job/ignore-job",
-      result => this.props.store.addIgnoredJob({ url, title, location })
+      result =>
+        this.props.store.addIgnoredJob(result.find(el => el.url === url))
     );
 
   render() {

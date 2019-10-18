@@ -31,7 +31,7 @@ const StyledResultsCompanyJobLocation = styled.span`
 
 function ResultsCompanyJob(props) {
   return (
-    <Grid className="display">
+    <Grid className="display resultCompanyJob">
       <Cell small={4} medium={3} large={4}>
         <StyledResultsCompanyJobTitle>
           <a href={props.job.url} target="_blank" rel="noopener noreferrer">

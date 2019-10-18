@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Result Display tests Render result for completed results 1`] = `ReactWrapper {}`;
+
 exports[`Result Display tests Render result for error result 1`] = `
 <div
   className="callout alert"
@@ -31,139 +33,11 @@ exports[`Result Display tests Render result for error result 1`] = `
 </div>
 `;
 
-exports[`Result Display tests Render result for good results 1`] = `
-<div
-  className="callout primary"
->
-  <div
-    className="grid-x display"
-  >
-    <div
-      className="cell small-6 medium-4 large-4"
-    >
-      <a
-        href="https://www.example.com/job/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <h4
-          className="sc-bdVaJa jAtYUa"
-        >
-          Example.com
-        </h4>
-      </a>
-    </div>
-  </div>
-  <div
-    className="grid-x display"
-  >
-    <div
-      className="cell small-4 medium-3 large-4"
-    >
-      <span
-        className="sc-bwzfXH dEHPaE"
-      >
-        <a
-          href="https://www.example.com/job/ABC123"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Job Title ABC123
-        </a>
-      </span>
-    </div>
-    <div
-      className="cell small-4 medium-3 large-4"
-    >
-      <span
-        className="sc-htpNat bkzdGH"
-      >
-        San Francisco
-      </span>
-    </div>
-    <div
-      className="cell small-2 medium-1 large-1"
-    >
-      <button
-        className="jobToggleButton"
-        onClick={[Function]}
-      >
-        Archive
-      </button>
-    </div>
-    <div
-      className="cell small-2 medium-1 large-1"
-    />
-  </div>
-</div>
-`;
+exports[`Result Display tests Render result for good results, archive one of them 1`] = `ReactWrapper {}`;
 
-exports[`Result Display tests Render result for good results 2`] = `
-<div
-  className="callout primary"
->
-  <div
-    className="grid-x display"
-  >
-    <div
-      className="cell small-6 medium-4 large-4"
-    >
-      <a
-        href="https://www.example.org/job/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <h4
-          className="sc-bdVaJa jAtYUa"
-        >
-          Example.org
-        </h4>
-      </a>
-    </div>
-  </div>
-  <div
-    className="grid-x display"
-  >
-    <div
-      className="cell small-4 medium-3 large-4"
-    >
-      <span
-        className="sc-bwzfXH dEHPaE"
-      >
-        <a
-          href="https://www.example.org/job/ABC456"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Job Title ABC456
-        </a>
-      </span>
-    </div>
-    <div
-      className="cell small-4 medium-3 large-4"
-    >
-      <span
-        className="sc-htpNat bkzdGH"
-      >
-        San Francisco
-      </span>
-    </div>
-    <div
-      className="cell small-2 medium-1 large-1"
-    >
-      <button
-        className="jobToggleButton"
-        onClick={[Function]}
-      >
-        Archive
-      </button>
-    </div>
-    <div
-      className="cell small-2 medium-1 large-1"
-    />
-  </div>
-</div>
-`;
+exports[`Result Display tests Render result for good results, ignore one 1`] = `ReactWrapper {}`;
+
+exports[`Result Display tests Render result for good results, watch one 1`] = `ReactWrapper {}`;
 
 exports[`Result Display tests Render result for pending result 1`] = `
 <div
