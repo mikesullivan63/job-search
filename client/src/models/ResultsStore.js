@@ -1,10 +1,12 @@
 import { types, detach, destroy } from "mobx-state-tree";
 import Job from "./Job";
 import Board from "./Board";
+import User from "./User";
 import { objectComparator } from "../util/comparator";
 
 const ResultsStore = types
   .model("ResultsStore", {
+    user: User,
     activeJobs: types.array(Job),
     ignoredJobs: types.array(Job),
     searchResults: types.array(Board)
@@ -12,14 +14,10 @@ const ResultsStore = types
   .actions(self => ({
     setActiveJobs(jobs) {
       self.activeJobs = jobs;
-    }
-  }))
-  .actions(self => ({
+    },
     addActiveJob(job) {
       self.activeJobs.push(job);
-    }
-  }))
-  .actions(self => ({
+    },
     archiveActiveJob(jobId) {
       let temp = self.activeJobs.find(el => el._id === jobId);
       self.ignoredJobs.push(detach(temp));
@@ -28,9 +26,7 @@ const ResultsStore = types
   .actions(self => ({
     setIgnoredJobs(jobs) {
       self.ignoredJobs = jobs;
-    }
-  }))
-  .actions(self => ({
+    },
     addIgnoredJob(job) {
       self.ignoredJobs.push(job);
     }
@@ -40,9 +36,7 @@ const ResultsStore = types
       self.searchResults.replace(
         boards.slice().sort(objectComparator("company"))
       );
-    }
-  }))
-  .actions(self => ({
+    },
     addSearchResult(board) {
       //Mutable
       let loc = self.searchResults.findIndex(
@@ -51,6 +45,14 @@ const ResultsStore = types
       let temp = self.searchResults[loc];
       self.searchResults[loc] = board;
       destroy(temp);
+    }
+  }))
+  .actions(self => ({
+    setUser(user) {
+      self.user.replace(user);
+    },
+    logout() {
+      destroy(self.user);
     }
   }))
   .views(self => ({
@@ -68,6 +70,9 @@ const ResultsStore = types
     },
     getSearchResults() {
       return self.searchResults.slice();
+    },
+    getUser() {
+      return self.user;
     }
   }));
 

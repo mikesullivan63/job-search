@@ -20,6 +20,8 @@ class App extends React.Component {
   }
 
   processLogin() {
+    this.props.store.setUser();
+
     this.setState({ currentUser: authenticationService.getCurrentUser() });
   }
 
