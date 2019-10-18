@@ -33,15 +33,20 @@ exports.processBreezy = (board, title, location, debug) => {
     "https://" + board.url + ".breezy.hr/",
     title,
     location,
-    "li.position.transition a",
-    el => el.find("h2").text(),
-    (el, $) =>
-      el
-        .find("li")
-        .map((i, el) => $(el).text())
-        .get()
-        .join(" "),
-    el => "https://" + board.url + ".breezy.hr" + el.attr("href"),
+    [
+      {
+        jobSelector: "li.position.transition a",
+        titleExtractor: el => el.find("h2").text(),
+        locationExtractor: (el, $) =>
+          el
+            .find("li")
+            .map((i, el) => $(el).text())
+            .get()
+            .join(" "),
+        linkExtractor: el =>
+          "https://" + board.url + ".breezy.hr" + el.attr("href")
+      }
+    ],
     debug
   );
 };

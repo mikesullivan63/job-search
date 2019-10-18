@@ -17,18 +17,24 @@ exports.processWorkable = (board, title, location, debug) => {
     "https://apply.workable.com/" + board.url,
     title,
     location,
-    "li.job-opening",
-    el =>
-      el
-        .find("h2")
-        .text()
-        .trim(),
-    (el, $) =>
-      el
-        .find("span[data-ui=job-location]")
-        .text()
-        .trim(),
-    el => "https://apply.workable.com" + el.find("h2 a").attr("href"),
+
+    [
+      {
+        jobSelector: "li.job-opening",
+        titleExtractor: el =>
+          el
+            .find("h2")
+            .text()
+            .trim(),
+        locationExtractor: (el, $) =>
+          el
+            .find("span[data-ui=job-location]")
+            .text()
+            .trim(),
+        linkExtractor: el =>
+          "https://apply.workable.com" + el.find("h2 a").attr("href")
+      }
+    ],
     debug
   );
 };

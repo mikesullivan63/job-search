@@ -22,10 +22,14 @@ exports.processLever = (board, title, location, debug) => {
     "https://jobs.lever.co/" + board.url,
     title,
     location,
-    "div.posting",
-    el => el.find("[data-qa=posting-name]").text(),
-    el => el.find("span.sort-by-location").text(),
-    el => el.find("a.posting-title").attr("href"),
+    [
+      {
+        jobSelector: "div.posting",
+        titleExtractor: el => el.find("[data-qa=posting-name]").text(),
+        locationExtractor: el => el.find("span.sort-by-location").text(),
+        linkExtractor: el => el.find("a.posting-title").attr("href")
+      }
+    ],
     debug
   );
 };

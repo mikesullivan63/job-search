@@ -39,6 +39,10 @@ describe("Suite of tests to ensure all processors work", () => {
     return testBoard(processGoogle, 10, done);
   });
 
+  test("Ensure Google Alternative board works with sample content", done => {
+    return testBoard(processGoogleAlt, 10, done);
+  });
+
   test("Ensure Breezy board works with sample content", done => {
     return testBoard(processBreezy, 4, done);
   });
