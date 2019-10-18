@@ -36,13 +36,17 @@ module.exports = (
       .then($ => {
         if (debug) {
           console.log("$(jobSelector): " + $(jobSelector).length);
+          if ($(jobSelector).length === 0) {
+            console.log("jobSelector", jobSelector);
+            console.log("Body", $.html("body"));
+          }
         }
 
         let jobs = [];
         $(jobSelector)
           .each((i, el) => {
             if (debug) {
-              console.log("el: " + el);
+              console.log("el: " + $(el).html());
               console.log("title: " + titleExtractor($(el)));
               console.log("loc: " + locationExtractor($(el), $));
               console.log("link: " + linkExtractor($(el), $));

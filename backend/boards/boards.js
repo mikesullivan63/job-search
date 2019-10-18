@@ -3,6 +3,7 @@ const processGreenhouse = GreenhouseCore.processGreenhouse;
 const processGreenhouseEmbed = GreenhouseCore.processGreenhouseEmbed;
 const processLever = require("./processors/lever").processLever;
 const processGoogle = require("./processors/google").processGoogle;
+const processGoogleAlt = require("./processors/google").processGoogleAlt;
 const processBreezy = require("./processors/breezy").processBreezy;
 const processWorkable = require("./processors/workable").processWorkable;
 
@@ -46,14 +47,13 @@ exports.Boards = [
     {name: "Tackle.io", url:"tackleio", processor: processGoogle, notes: ""},
     {name: "10up", url:"get10upcom", processor: processGoogle, notes: ""},
     {name: "RStudio", url:"rstudiocom", processor: processGoogle, notes: ""},
-    {name: "Teespring", url:"teespringcom", processor: processGoogle, notes: ""},
+    {name: "Teespring", url:"teespringcom", processor: processGoogleAlt, notes: ""},
 
     {name: "Zipline", url:"retail-zipline", processor: processBreezy, notes: ""},
     {name: "Nearform", url:"nearform", processor: processBreezy, notes: ""},
     {name: "Piggy", url:"piggy-llc", processor: processBreezy, notes: ""},
     {name: "Time Doctor", url:"time-doctor", processor: processBreezy, notes: ""},
     
-
     {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
     {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
     {name: "Barrel", url:"barrel", processor: processWorkable, notes: ""},

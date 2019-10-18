@@ -27,7 +27,7 @@ routes.route("/:company/:title/:location", auth).get(function(req, res) {
   }
 
   board
-    .processor(board, title, location)
+    .processor(board, title, location, true)
     .then(result => {
       result.status = "COMPLETED";
       return result;

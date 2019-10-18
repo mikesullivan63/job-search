@@ -22,3 +22,25 @@ exports.processGoogle = (board, title, location, debug) => {
     debug
   );
 };
+
+/*
+<li class="bb-public-jobs-list__job-item ptor-jobs-list__item">
+  <a href="https://hire.withgoogle.com"target="_blank" 
+    class="bb-public-jobs-list__job-item-title ptor-jobs-list__item-job-title">Engineering Manager</a>
+  <div class="bb-public-jobs-list__job-item-location ptor-jobs-list__item-location">North America</div>
+</li>
+*/
+
+exports.processGoogleAlt = (board, title, location, debug) => {
+  return processBoardPage(
+    board,
+    "https://hire.withgoogle.com/public/jobs/" + board.url,
+    title,
+    location,
+    "li.bb-public-jobs-list__job-item",
+    el => el.find("a.bb-public-jobs-list__job-item-title").text(),
+    el => el.find("div.bb-public-jobs-list__job-item-location").text(),
+    el => el.find("a.bb-public-jobs-list__job-item-title").attr("href"),
+    debug
+  );
+};
