@@ -8,6 +8,8 @@ const determineSource = url => {
     return "lever";
   } else if (url.indexOf("hire.withgoogle") > -1) {
     return "google";
+  } else if (url.indexOf("hire.withgoogle") > -1) {
+    return "google";
   } else if (url.indexOf("breezy") > -1) {
     return "breezy";
   } else if (url.indexOf("workable") > -1) {

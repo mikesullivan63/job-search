@@ -13,10 +13,14 @@ const processGreenhouseCore = function(
     url,
     title,
     location,
-    "div.opening",
-    (el, $) => el.find("a").text(),
-    (el, $) => el.find("span.location").text(),
-    (el, $) => linkurl + el.find("a").attr("href"),
+    [
+      {
+        jobSelector: "div.opening",
+        titleExtractor: (el, $) => el.find("a").text(),
+        locationExtractor: (el, $) => el.find("span.location").text(),
+        linkExtractor: (el, $) => linkurl + el.find("a").attr("href")
+      }
+    ],
     debug
   );
 };
@@ -27,7 +31,7 @@ exports.processGreenhouse = (board, title, location, debug) => {
     title,
     location,
     "https://boards.greenhouse.io/" + board.url,
-    "https://boards.greenhouse.io/",
+    "https://boards.greenhouse.io",
     debug
   );
 };

@@ -36,14 +36,15 @@ describe("Suite of tests to ensure all processors work", () => {
   });
 
   test("Ensure Google board works with sample content", done => {
-    return testBoard(processGoogle, 10, done);
+    return testBoard(processGoogle, 39, done);
   });
 
   test("Ensure Breezy board works with sample content", done => {
     return testBoard(processBreezy, 4, done);
   });
 
-  test("Ensure Workable board works with sample content", done => {
+  //Skipping until re-adding
+  xtest("Ensure Workable board works with sample content", done => {
     return testBoard(processWorkable, 1, done);
   });
 });
