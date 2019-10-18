@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dab815f74ca248a6a00d73cf22474477)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mikesullivan63/job-search&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/dab815f74ca248a6a00d73cf22474477)](https://www.codacy.com?utm_source=github.com&utm_medium=referral&utm_content=mikesullivan63/job-search&utm_campaign=Badge_Coverage)
+
 # Common Platform Job Search Tool 
 
 This app is designed to allow users to search job postings in real-time across many of the common Applicant Tracking Systems such as Greenhouse, Lever, and Hire with Google.
