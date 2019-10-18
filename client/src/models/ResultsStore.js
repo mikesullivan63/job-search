@@ -1,7 +1,7 @@
 import { types, detach, destroy } from "mobx-state-tree";
 import Job from "./Job";
 import Board from "./Board";
-import { objectComparator } from "../../../common/util/comparator";
+import { objectComparator } from "../util/comparator";
 
 const ResultsStore = types
   .model("ResultsStore", {

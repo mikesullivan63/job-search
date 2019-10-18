@@ -1,7 +1,6 @@
 const request = require("request-promise-native");
 const cheerio = require("cheerio");
-const objectComparator = require("../../../common/util/comparator")
-  .objectComparator;
+const objectComparator = require("../../util/comparator").objectComparator;
 
 function match(needles, haystack) {
   let lowerStack = haystack.toLowerCase();
