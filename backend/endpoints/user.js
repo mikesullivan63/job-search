@@ -40,7 +40,13 @@ function returnUser(req, res, returnExtractor) {
 
 //Routes
 routes.get("/profile", auth, (req, res) => {
+  console.log("Profile lookup ");
+
   returnUser(req, res, user => {
+    console.log(
+      "Profile returning derived from",
+      JSON.stringify(user, null, 2)
+    );
     return {
       email: user.email,
       first_name: user.first_name,

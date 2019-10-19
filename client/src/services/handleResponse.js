@@ -13,7 +13,6 @@ function handlePrivateResponse(response) {
       const error = (data && data.message) || response.statusText;
       return Promise.reject(error);
     }
-    console.log("Returning data", data);
     return data;
   });
 }

@@ -11,15 +11,8 @@ import {
   Segment
 } from "semantic-ui-react";
 import logo from "../../logo.svg";
-import { authenticationService } from "../../services/authentication";
 
 function Header(props) {
-  let profile = null;
-  authenticationService.getCurrentUserProfile().then(result => {
-    profile = result;
-  });
-
-  console.log("In Header:", JSON.stringify(profile));
   return (
     <div>
       <Menu fixed="top" inverted>
@@ -28,9 +21,9 @@ function Header(props) {
             <Image size="mini" src={logo} style={{ marginRight: "1.5em" }} />
             Common Platform Job Search Tool
           </Menu.Item>
-          {authenticationService.getCurrentUser() && (
+          {props.store.isLoggedIn() && (
             <React.Fragment>
-              <Menu.Item>Welcome, {profile.first_name}</Menu.Item>
+              <Menu.Item>Welcome, {props.store.getUser().first_name}</Menu.Item>
               <Menu.Item href="/" target="_blank">
                 Search
               </Menu.Item>
@@ -48,7 +41,7 @@ function Header(props) {
               </Menu.Item>
             </React.Fragment>
           )}
-          {!authenticationService.getCurrentUser() && (
+          {!props.store.isLoggedIn() && (
             <React.Fragment>
               <Menu.Item href="/login" target="_blank">
                 Login

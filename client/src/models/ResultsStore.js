@@ -7,6 +7,7 @@ import { objectComparator } from "../util/comparator";
 const ResultsStore = types
   .model("ResultsStore", {
     user: User,
+    loggedIn: types.boolean,
     activeJobs: types.array(Job),
     ignoredJobs: types.array(Job),
     searchResults: types.array(Board)
@@ -48,10 +49,14 @@ const ResultsStore = types
     }
   }))
   .actions(self => ({
-    setUser(user) {
-      self.user.replace(user);
+    setUser(user, token) {
+      user.token = token.token;
+      console.log("Saving user: " + JSON.stringify(user, null, 2));
+      self.user = user;
+      self.loggedIn = true;
     },
     logout() {
+      self.loggedIn = false;
       destroy(self.user);
     }
   }))
@@ -73,6 +78,9 @@ const ResultsStore = types
     },
     getUser() {
       return self.user;
+    },
+    isLoggedIn() {
+      return self.loggedIn;
     }
   }));
 

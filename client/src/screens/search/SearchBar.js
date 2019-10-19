@@ -12,17 +12,6 @@ const StyledSearchBar = styled.div`
   margin: 10px;
 `;
 
-const updateStateWithFetch = (url, response) => {
-  fetch(url, {
-    headers: authenticationService.authHeader()
-  })
-    .then(res => res.json())
-    .then(res => response(res))
-    .catch(error =>
-      console.log("Received error updating field from ", url, error)
-    );
-};
-
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
@@ -35,6 +24,17 @@ class SearchBar extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  updateStateWithFetch = (url, response) => {
+    fetch(url, {
+      headers: authenticationService.authHeader()
+    })
+      .then(res => res.json())
+      .then(res => response(res))
+      .catch(error =>
+        console.log("Received error updating field from ", url, error)
+      );
+  };
 
   handleInputChange(event) {
     let target = event.target;
@@ -51,11 +51,11 @@ class SearchBar extends React.Component {
   }
 
   setActiveJobs = () =>
-    updateStateWithFetch("/job/active-jobs", res =>
+    this.updateStateWithFetch("/job/active-jobs", res =>
       this.props.store.setActiveJobs(res)
     );
   setIgnoredJobs = () =>
-    updateStateWithFetch("/job/ignored-jobs", res =>
+    this.updateStateWithFetch("/job/ignored-jobs", res =>
       this.props.store.setIgnoredJobs(res)
     );
 
@@ -121,6 +121,8 @@ class SearchBar extends React.Component {
         );
       })
       .catch(error => console.log("Error loading boards: ", error));
+
+    console.log("Calling Last Search", this.props.store);
 
     fetch("/user/last-search", {
       headers: authenticationService.authHeader()

@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { createBrowserHistory } from "history";
 
 import { authenticationService } from "../../services/authentication";
 //https://jasonwatmore.com/post/2019/04/06/react-jwt-authentication-tutorial-example
@@ -10,8 +11,9 @@ class LoginPage extends React.Component {
     super(props);
 
     // redirect to home if already logged in
-    if (authenticationService.currentUserValue) {
-      this.props.history.push("/");
+    if (this.props.store.isLoggedIn()) {
+      console.log("Redirected on render");
+      createBrowserHistory().push("/");
     }
   }
 
@@ -30,15 +32,16 @@ class LoginPage extends React.Component {
           })}
           onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
             setStatus();
-            authenticationService.login(email, password).then(
-              user => {
-                this.props.loginCallback();
-              },
-              error => {
+            authenticationService
+              .login(email, password)
+              .then(token => {
+                console.log("Logged user in: ", token);
+                createBrowserHistory().push("/");
+              })
+              .catch(error => {
                 setSubmitting(false);
                 setStatus(error);
-              }
-            );
+              });
           }}
           render={({ errors, status, touched, isSubmitting }) => (
             <Form>

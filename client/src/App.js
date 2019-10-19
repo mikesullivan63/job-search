@@ -5,48 +5,20 @@ import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
 import { LoginPage } from "./screens/login";
 import { RegisterPage } from "./screens/register";
-import { createBrowserHistory } from "history";
 import { authenticationService } from "./services/authentication";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.processLogin = this.processLogin.bind(this);
-    this.processRegistration = this.processRegistration.bind(this);
-    this.logout = this.logout.bind(this);
-    this.state = {
-      currentUser: null
-    };
+
+    authenticationService.setStore(this.props.store);
+    authenticationService.remember();
   }
-
-  processLogin() {
-    this.props.store.setUser();
-
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-  }
-
-  processRegistration() {
-    const history = createBrowserHistory();
-    history.push("/");
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-  }
-
-  logout() {
-    authenticationService.logout();
-    this.setState({ currentUser: null });
-  }
-
-  componentDidMount() {
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-  }
-
   render() {
-    const { store } = this.props;
-    const { currentUser } = this.state;
     return (
       <React.Fragment>
-        <Header logoutCallback={this.logout} />
-        {!currentUser && (
+        <Header store={this.props.store} />
+        {!this.props.store.isLoggedIn() && (
           <Switch>
             <Route
               exact
@@ -54,6 +26,7 @@ class App extends React.Component {
               render={props => (
                 <RegisterPage
                   {...props}
+                  store={this.props.store}
                   registrationCallback={this.processRegistration}
                 />
               )}
@@ -61,12 +34,14 @@ class App extends React.Component {
             <Route
               path="/"
               render={props => (
-                <LoginPage {...props} loginCallback={this.processLogin} />
+                <LoginPage {...props} store={this.props.store} />
               )}
             />
           </Switch>
         )}
-        {currentUser && <SearchBar store={store} />}
+        {this.props.store.isLoggedIn() && (
+          <SearchBar store={this.props.store} />
+        )}
       </React.Fragment>
     );
   }
