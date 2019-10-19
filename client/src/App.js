@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
 import SearchBar from "./screens/search/SearchBar";
-import { LoginPage } from "./screens/login";
+import LoginPage from "./screens/login/LoginPage";
 import { RegisterPage } from "./screens/register";
 import { authenticationService } from "./services/authentication";
 

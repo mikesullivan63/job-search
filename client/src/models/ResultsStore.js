@@ -51,7 +51,6 @@ const ResultsStore = types
   .actions(self => ({
     setUser(user, token) {
       user.token = token.token;
-      console.log("Saving user: " + JSON.stringify(user, null, 2));
       self.user = user;
       self.loggedIn = true;
     },

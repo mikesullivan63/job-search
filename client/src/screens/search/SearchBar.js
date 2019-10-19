@@ -122,8 +122,6 @@ class SearchBar extends React.Component {
       })
       .catch(error => console.log("Error loading boards: ", error));
 
-    console.log("Calling Last Search", this.props.store);
-
     fetch("/user/last-search", {
       headers: authenticationService.authHeader()
     })
