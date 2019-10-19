@@ -12,7 +12,6 @@ class LoginPage extends React.Component {
 
     // redirect to home if already logged in
     if (this.props.store.isLoggedIn()) {
-      console.log("Redirected on render");
       createBrowserHistory().push("/");
     }
   }
@@ -34,10 +33,7 @@ class LoginPage extends React.Component {
             setStatus();
             authenticationService
               .login(email, password)
-              .then(token => {
-                console.log("Logged user in: ", token);
-                createBrowserHistory().push("/");
-              })
+              .then(console.log("Logged user in"))
               .catch(error => {
                 setSubmitting(false);
                 setStatus(error);

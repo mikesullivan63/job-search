@@ -11,6 +11,7 @@ import {
   Segment
 } from "semantic-ui-react";
 import logo from "../../logo.svg";
+import { authenticationService } from "../../services/authentication";
 
 function Header(props) {
   return (
@@ -38,6 +39,12 @@ function Header(props) {
               </Menu.Item>
               <Menu.Item href="/profile" target="_blank" position="right">
                 Profile
+              </Menu.Item>
+              <Menu.Item
+                position="right"
+                onClick={() => authenticationService.logout()}
+              >
+                Logout
               </Menu.Item>
             </React.Fragment>
           )}
