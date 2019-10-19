@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
+import LoginPageField from "./LoginPageField";
 import { authenticationService } from "../../services/authentication";
 import {
   Button,
@@ -7,8 +8,7 @@ import {
   Grid,
   Header,
   Message,
-  Segment,
-  Input
+  Segment
 } from "semantic-ui-react";
 
 class LoginPage extends React.Component {
@@ -27,7 +27,10 @@ class LoginPage extends React.Component {
     this.validateAndSubmit = this.validateAndSubmit.bind(this);
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  handleChange = (e, { name, value }) => {
+    console.log("event", name, value);
+    this.setState({ [name]: value });
+  };
 
   validateAndSubmit(event) {
     event.preventDefault();
@@ -95,40 +98,22 @@ class LoginPage extends React.Component {
               />
             )}
             <Segment stacked>
-              <Form.Field
-                id="form-input-control-email"
-                control={Input}
-                fluid
-                icon="user"
-                iconPosition="left"
-                inline="true"
+              <LoginPageField
                 name="email"
+                icon="user"
                 label="E-mail address"
                 placeholder="E-mail address"
-                onChange={this.handleChange}
-                error={
-                  this.state.emailErrors.length > 0
-                    ? this.state.emailErrors
-                    : null
-                }
+                errors={this.state.emailErrors}
+                handleChange={this.handleChange}
               />
-              <Form.Field
-                id="form-input-control-password"
-                control={Input}
-                fluid
-                icon="lock"
-                iconPosition="left"
+              <LoginPageField
                 name="password"
-                inline="true"
+                icon="lock"
                 label="Password"
                 placeholder="Password"
                 type="password"
-                onChange={this.handleChange}
-                error={
-                  this.state.passwordErrors.length > 0
-                    ? this.state.passwordErrors
-                    : null
-                }
+                errors={this.state.passwordErrors}
+                handleChange={this.handleChange}
               />
               <Form.Field
                 id="form-button-control-public"
