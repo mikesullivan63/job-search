@@ -5,6 +5,7 @@ import Enzyme from "enzyme";
 import { mount } from "enzyme";
 import Result from "../../screens/search/Result";
 import ResultsStore from "../../models/ResultsStore";
+import { authenticationService } from "../../services/authentication";
 
 //semaphoreci.com/community/tutorials/how-to-test-react-and-mobx-with-jest
 
@@ -109,6 +110,8 @@ describe("Result Display tests", () => {
         error: "Problem accessing page"
       }
     ]);
+
+    authenticationService.setStore(store);
 
     return store;
   };

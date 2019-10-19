@@ -14,7 +14,7 @@ function Header(props) {
           </Menu.Item>
           {props.store.isLoggedIn() && (
             <React.Fragment>
-              <Menu.Item>Welcome, {props.store.getUser().first_name}</Menu.Item>
+              <Menu.Item>Welcome, {props.store.getUser().firstName}</Menu.Item>
               <Menu.Item href="/" target="_blank">
                 Search
               </Menu.Item>

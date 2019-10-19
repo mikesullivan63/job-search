@@ -6,8 +6,8 @@ import { objectComparator } from "../util/comparator";
 
 const ResultsStore = types
   .model("ResultsStore", {
-    user: User,
-    loggedIn: types.boolean,
+    user: types.optional(User, {}),
+    loggedIn: types.optional(types.boolean, false),
     activeJobs: types.array(Job),
     ignoredJobs: types.array(Job),
     searchResults: types.array(Board)

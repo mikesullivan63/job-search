@@ -7,7 +7,7 @@ import App from "./App";
 //import "foundation-sites/dist/css/foundation.min.css";
 import "./index.css";
 
-const store = ResultsStore.create({ loggedIn: false });
+const store = ResultsStore.create({});
 
 render(
   <Provider store={store}>

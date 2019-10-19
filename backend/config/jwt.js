@@ -24,11 +24,9 @@ module.exports.generateJwt = function(user) {
 };
 
 module.exports.protectedRequest = function(req, res, body) {
-  console.log("Auth check: ", JSON.stringify(req.payload, null, 2));
-
   if (req && (!req.payload || !req.payload._id)) {
     res.status(401).json({
-      message: "UnauthorizedError: private profile"
+      message: "UnauthorizedError: private endpoint"
     });
   } else {
     // Otherwise continue
