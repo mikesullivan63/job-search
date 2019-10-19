@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Container,
-  Divider,
-  Dropdown,
-  Grid,
-  //Header,
-  Image,
-  List,
-  Menu,
-  Segment
-} from "semantic-ui-react";
+import { Container, Image, Menu } from "semantic-ui-react";
 import logo from "../../logo.svg";
 import { authenticationService } from "../../services/authentication";
 
