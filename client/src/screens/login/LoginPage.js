@@ -27,10 +27,7 @@ class LoginPage extends React.Component {
     this.validateAndSubmit = this.validateAndSubmit.bind(this);
   }
 
-  handleChange = (e, { name, value }) => {
-    console.log("event", name, value);
-    this.setState({ [name]: value });
-  };
+  handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   validateAndSubmit(event) {
     event.preventDefault();
