@@ -1,8 +1,8 @@
 import React from "react";
-import { Segment, Grid } from "semantic-ui-react";
-import WatchLink from "./WatchLink";
-import IgnoreLink from "./IgnoreLink";
-import ArchiveLink from "./ArchiveLink";
+import { Segment, Grid, Accordion, Icon } from "semantic-ui-react";
+import ActiveJobs from "./ActiveJobs";
+import IgnoredJobs from "./IgnoredJobs";
+import OtherJobs from "./OtherJobs";
 
 class CompletedResult extends React.Component {
   constructor(props) {
@@ -14,7 +14,18 @@ class CompletedResult extends React.Component {
     };
   }
 
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps;
+    if (index === "ignored") {
+      this.setState({ ignoredExpanded: !this.state.ignoredExpanded });
+    } else {
+      this.setState({ otherExpanded: !this.state.otherExpanded });
+    }
+  };
+
   render() {
+    const { ignoredExpanded, otherExpanded } = this.state;
+
     let jobsToDisplay = !this.props.company.jobs
       ? null
       : this.props.company.jobs
@@ -25,6 +36,10 @@ class CompletedResult extends React.Component {
               : el
           );
 
+    let jobsToIgnore = !this.props.company.jobs
+      ? null
+      : this.props.company.jobs.filter(el => this.props.store.isIgnored(el));
+
     return (
       <Segment>
         <a
@@ -34,41 +49,46 @@ class CompletedResult extends React.Component {
         >
           <h4>{this.props.company.company}</h4>
         </a>
-        <Grid columns={3}>
-          {jobsToDisplay.map(job => {
-            return (
-              <React.Fragment>
-                <Grid.Column>
-                  <a href={job.url} target="_blank" rel="noopener noreferrer">
-                    {job.title}
-                  </a>
-                </Grid.Column>
-                <Grid.Column>
-                  <span>{job.location}</span>
-                </Grid.Column>
-                <Grid.Column>
-                  {job._id && (
-                    <ArchiveLink store={this.props.store} job={job} />
-                  )}
-                  {!job._id && (
-                    <React.Fragment>
-                      <WatchLink
-                        store={this.props.store}
-                        job={job}
-                        company={this.props.company.company}
-                      />
-                      <IgnoreLink
-                        store={this.props.store}
-                        job={job}
-                        company={this.props.company.company}
-                      />
-                    </React.Fragment>
-                  )}
-                </Grid.Column>
-              </React.Fragment>
-            );
-          })}
-        </Grid>
+        <div className="activeJobs">
+          <ActiveJobs
+            store={this.props.store}
+            company={this.props.company}
+            jobs={jobsToDisplay}
+          />
+        </div>
+
+        <Accordion>
+          <Accordion.Title
+            index="ignored"
+            active={ignoredExpanded}
+            onClick={this.handleClick}
+          >
+            <Icon name="dropdown" />
+            Ignored Jobs ({!jobsToIgnore ? 0 : jobsToIgnore.length})
+          </Accordion.Title>
+          <Accordion.Content active={ignoredExpanded}>
+            <IgnoredJobs
+              store={this.props.store}
+              company={this.props.company}
+              jobs={jobsToIgnore}
+            />
+          </Accordion.Content>
+          <Accordion.Title
+            index="other"
+            active={otherExpanded}
+            onClick={this.handleClick}
+          >
+            <Icon name="dropdown" />
+            Other Jobs ({!jobsToIgnore ? 0 : jobsToIgnore.length})
+          </Accordion.Title>
+          <Accordion.Content active={otherExpanded}>
+            <OtherJobs
+              store={this.props.store}
+              company={this.props.company}
+              jobs={jobsToIgnore}
+            />
+          </Accordion.Content>
+        </Accordion>
       </Segment>
     );
   }
