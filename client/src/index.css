@@ -12,7 +12,16 @@ code {
     monospace;
 }
 
-div.result-message {
-  margin-top: auto;
-  margin-bottom: auto;
+.searchPage {
+  margin-top: 60px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.searchBarForm {
+  margin-bottom: 20px;
+}
+
+.completedResult {
+  overflow: auto;
 }

@@ -1,4 +1,5 @@
 import { handleResponse } from "./handleResponse";
+import { authenticationService } from "./authentication";
 
 function isValidPassword(password) {
   return (
@@ -14,13 +15,25 @@ function register(email, firstName, lastName, password, confirm) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, firstName, lastName, password })
+      body: JSON.stringify({ email, firstName, lastName, password, confirm })
     };
 
     let errors = [];
 
     if (confirm !== password) {
       errors.push("Passwords do not match");
+    }
+
+    if (!email || email === "" || email.length === 0) {
+      errors.push("Email is required");
+    }
+
+    if (!firstName || firstName === "" || firstName.length === 0) {
+      errors.push("First Name is required");
+    }
+
+    if (!lastName || lastName === "" || lastName.length === 0) {
+      errors.push("last Name is required");
     }
 
     if (password.length < 8 || password.length > 64) {
@@ -39,10 +52,23 @@ function register(email, firstName, lastName, password, confirm) {
 
     fetch("/user/register", requestOptions)
       .then(handleResponse.handleRegistrationResponse)
-      .then(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        return resolve(user);
+      .then(token => {
+        fetch("/user/profile", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`
+          }
+        })
+          .then(response => handleResponse.handlePrivateResponse(response))
+          .then(profile => {
+            authenticationService.storeUser(profile, token);
+            resolve(token);
+          })
+          .catch(error => {
+            console.log("Error loading user profile", error);
+            authenticationService.logout();
+            reject(error);
+          });
       })
       .catch(error => {
         return reject(error);

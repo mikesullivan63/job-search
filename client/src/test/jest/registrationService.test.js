@@ -1,7 +1,11 @@
-import { registrationService } from "../../services/registration";
 import { Response } from "node-fetch";
+import ResultsStore from "../../models/ResultsStore";
+import { registrationService } from "../../services/registration";
+import { authenticationService } from "../../services/authentication";
 
 describe("Testing registration service", () => {
+  authenticationService.setStore(ResultsStore.create({}));
+
   test("Test password validation when failing", async () => {
     //let promise = registrationService.register("", "", "", "", "");
     await expect(
@@ -50,12 +54,18 @@ describe("Testing registration service", () => {
     });
 
     await expect(
-      registrationService.register("", "", "", "abcdefgH1!", "abcdefgH1!")
+      registrationService.register(
+        "7987987",
+        "8789797",
+        "87897997897",
+        "abcdefgH1!",
+        "abcdefgH1!"
+      )
     ).resolves.toMatchObject({
       token: "1234567890123456789012345678901234567890"
     });
 
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(global.fetch).toHaveBeenCalledTimes(2);
     expect(global.fetch).toHaveBeenCalledWith(
       "/user/register",
       expect.anything()
@@ -72,7 +82,13 @@ describe("Testing registration service", () => {
     });
 
     await expect(
-      registrationService.register("", "", "", "abcdefgH1!", "abcdefgH1!")
+      registrationService.register(
+        "8987897 89",
+        "897987897987",
+        "897987897",
+        "abcdefgH1!",
+        "abcdefgH1!"
+      )
     ).rejects.toEqual("DB is down");
 
     expect(global.fetch).toHaveBeenCalledTimes(1);

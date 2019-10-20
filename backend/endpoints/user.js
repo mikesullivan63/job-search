@@ -40,7 +40,13 @@ function returnUser(req, res, returnExtractor) {
 
 //Routes
 routes.get("/profile", auth, (req, res) => {
-  returnUser(req, res, user => user);
+  returnUser(req, res, user => {
+    return {
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName
+    };
+  });
 });
 
 module.exports = routes;

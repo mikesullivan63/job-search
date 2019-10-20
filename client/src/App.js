@@ -2,69 +2,47 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
-import SearchBar from "./screens/search/SearchBar";
-import { LoginPage } from "./screens/login";
-import { RegisterPage } from "./screens/register";
-import { createBrowserHistory } from "history";
+import SearchPage from "./screens/search/SearchPage";
+import LoginPage from "./screens/login/LoginPage";
+import RegisterPage from "./screens/register/RegisterPage";
 import { authenticationService } from "./services/authentication";
+import { registrationService } from "./services/registration";
+import { searchService } from "./services/search";
+import { jobService } from "./services/job";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.processLogin = this.processLogin.bind(this);
-    this.processRegistration = this.processRegistration.bind(this);
-    this.logout = this.logout.bind(this);
-    this.state = {
-      currentUser: null
-    };
-  }
 
-  processLogin() {
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
+    authenticationService.setStore(this.props.store);
+    searchService.setStore(this.props.store);
+    jobService.setStore(this.props.store);
+    authenticationService.remember();
   }
-
-  processRegistration() {
-    const history = createBrowserHistory();
-    history.push("/");
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-  }
-
-  logout() {
-    authenticationService.logout();
-    this.setState({ currentUser: null });
-  }
-
-  componentDidMount() {
-    this.setState({ currentUser: authenticationService.getCurrentUser() });
-  }
-
   render() {
-    const { store } = this.props;
-    const { currentUser } = this.state;
     return (
       <React.Fragment>
-        <Header logoutCallback={this.logout} />
-        {!currentUser && (
+        <Header store={this.props.store} />
+        {!this.props.store.isLoggedIn() && (
           <Switch>
             <Route
               exact
               path="/register"
               render={props => (
-                <RegisterPage
-                  {...props}
-                  registrationCallback={this.processRegistration}
-                />
+                <RegisterPage {...props} store={this.props.store} />
               )}
             />
             <Route
               path="/"
               render={props => (
-                <LoginPage {...props} loginCallback={this.processLogin} />
+                <LoginPage {...props} store={this.props.store} />
               )}
             />
           </Switch>
         )}
-        {currentUser && <SearchBar store={store} />}
+        {this.props.store.isLoggedIn() && (
+          <SearchPage store={this.props.store} />
+        )}
       </React.Fragment>
     );
   }

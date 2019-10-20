@@ -4,22 +4,82 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const jwt = require("../config/jwt");
 
+function isValidPassword(password) {
+  return (
+    /[a-z]/.exec(password) &&
+    /[A-Z]/.exec(password) &&
+    /[1-9]/.exec(password) &&
+    /[$^!%#@&*()\-_]/.exec(password)
+  );
+}
+
 //Routes
 routes.route("/register").post(function(req, res) {
-  var user = new User();
+  const { email, firstName, lastName, password, confirm } = req.body;
+  let errors = [];
 
-  user.email = req.body.email;
-  user.firstName = req.body.firstName;
-  user.lastName = req.body.lastName;
+  if (!email || email === "" || email.length === 0) {
+    errors.push("Email is required");
+  }
 
-  user.setPassword(req.body.password);
+  if (!firstName || firstName === "" || firstName.length === 0) {
+    errors.push("First Name is required");
+  }
 
-  user.save(function(err) {
-    var token;
-    token = jwt.generateJwt(user);
-    res.status(200);
-    res.json({ token });
-  });
+  if (!lastName || lastName === "" || lastName.length === 0) {
+    errors.push("last Name is required");
+  }
+
+  if (confirm !== password) {
+    errors.push("Passwords do not match");
+  }
+
+  if (password.length < 8 || password.length > 64) {
+    errors.push("Passwords must be between 8 and 64 characters");
+  }
+
+  if (!isValidPassword(password)) {
+    errors.push(
+      "Passwords must contain a lower case letter, an upper case letter, a number and a symbol"
+    );
+  }
+
+  User.findOne({ email })
+    .exec()
+    .then(existingUser => {
+      if (existingUser) {
+        errors.push("Error processing submission");
+      }
+
+      if (errors.length > 0) {
+        res.status(500);
+        res.json(errors);
+      } else {
+        //No errrors, run the save;
+        var user = new User();
+        user.email = email;
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.setPassword(password);
+
+        user.save(function(error) {
+          if (error) {
+            console.log("Saving user errored: ", error);
+            res.status(500);
+            res.json("Error processing submission");
+          } else {
+            var token;
+            token = jwt.generateJwt(user);
+            res.status(200);
+            res.json({ token });
+          }
+        });
+      }
+    })
+    .catch(error => {
+      console.log("Error checking for uniqueness in email", email, error);
+      errors.push("Error processing submission");
+    });
 });
 
 routes.route("/login").post(function(req, res) {
