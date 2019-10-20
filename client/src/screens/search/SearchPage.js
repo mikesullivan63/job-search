@@ -2,10 +2,15 @@ import React from "react";
 import { observer } from "mobx-react";
 import SearchBar from "./searchbar/SearchBar";
 import Results from "./results/Results";
+import { searchService } from "../../services/search";
 
 class SearchPage extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    searchService.loadCompanies();
   }
 
   render() {

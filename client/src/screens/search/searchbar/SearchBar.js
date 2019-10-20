@@ -25,7 +25,6 @@ class SearchBar extends React.Component {
   }
 
   componentDidMount() {
-    searchService.loadCompanies();
     searchService
       .loadLastSearch()
       .then(res =>
