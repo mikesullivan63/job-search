@@ -1,8 +1,8 @@
 import React from "react";
-import renderer from "react-test-renderer";
+//import renderer from "react-test-renderer";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme from "enzyme";
-import { mount } from "enzyme";
+import { mount, renderer } from "enzyme";
 import Result from "../../screens/search/results/Result";
 import ResultsStore from "../../models/ResultsStore";
 import { authenticationService } from "../../services/authentication";
@@ -129,24 +129,22 @@ describe("Result Display tests", () => {
     const store = buildStore();
     const company = store.searchResults.find(el => el.status === "PENDING");
 
-    const component = renderer.create(
+    const component = mount(
       <Result store={store} key={company.company} company={company} />
     );
 
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 
   test("Render result for error result", () => {
     const store = buildStore();
     const company = store.searchResults.find(el => el.status === "ERROR");
 
-    const component = renderer.create(
+    const component = mount(
       <Result store={store} key={company.company} company={company} />
     );
 
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+    expect(component).toMatchSnapshot();
   });
 
   test("Render result for completed results", done => {

@@ -2,24 +2,7 @@
 
 exports[`Result Display tests Render result for completed results 1`] = `ReactWrapper {}`;
 
-exports[`Result Display tests Render result for error result 1`] = `
-<div
-  className="ui red inverted secondary segment"
->
-  <a
-    href="https://www.error.com/job/"
-    rel="noopener noreferrer"
-    target="_blank"
-  >
-    <h4>
-      Error.com
-    </h4>
-  </a>
-  <span>
-    Problem accessing page
-  </span>
-</div>
-`;
+exports[`Result Display tests Render result for error result 1`] = `ReactWrapper {}`;
 
 exports[`Result Display tests Render result for good results, archive one of them 1`] = `ReactWrapper {}`;
 
@@ -27,21 +10,4 @@ exports[`Result Display tests Render result for good results, ignore one 1`] = `
 
 exports[`Result Display tests Render result for good results, watch one 1`] = `ReactWrapper {}`;
 
-exports[`Result Display tests Render result for pending result 1`] = `
-<div
-  className="ui tertiary segment"
->
-  <a
-    href="https://www.example.io/job/"
-    rel="noopener noreferrer"
-    target="_blank"
-  >
-    <h4>
-      Example.io
-    </h4>
-  </a>
-  <span>
-    Pending Lookup
-  </span>
-</div>
-`;
+exports[`Result Display tests Render result for pending result 1`] = `ReactWrapper {}`;
