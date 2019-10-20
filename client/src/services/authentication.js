@@ -39,13 +39,13 @@ function login(email, password) {
           })
           .catch(error => {
             console.log("Error loading user profile", error);
-            logout();
+            authenticationService.logout();
             reject(error);
           });
       })
       .catch(error => {
         console.log("Error logging user in", error);
-        logout();
+        authenticationService.logout();
         reject(error);
       });
   });
@@ -66,10 +66,10 @@ function remember() {
       })
       .catch(error => {
         console.log("Error loading user profile", error);
-        logout();
+        authenticationService.logout();
       });
   } else {
-    logout();
+    authenticationService.logout();
   }
 }
 
