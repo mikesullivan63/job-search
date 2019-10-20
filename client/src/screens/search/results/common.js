@@ -1,4 +1,4 @@
-import { authenticationService } from "../../services/authentication";
+import { authenticationService } from "../../../services/authentication";
 
 const addJobToList = function(event, data, url, updateCallback) {
   event.preventDefault();

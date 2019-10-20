@@ -2,9 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Button, Form } from "semantic-ui-react";
 import SearchBarField from "./SearchBarField";
-import { searchService } from "../../services/search";
-
-import Results from "./Results";
+import { searchService } from "../../../services/search";
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -41,7 +39,7 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Form className="searchBarForm">
         <Form.Group widths="equal">
           <SearchBarField
             name="title"
@@ -68,8 +66,7 @@ class SearchBar extends React.Component {
           size="large"
           onClick={event => this.handleSubmit(event)}
         />
-        <Results store={this.props.store} />
-      </React.Fragment>
+      </Form>
     );
   }
 }

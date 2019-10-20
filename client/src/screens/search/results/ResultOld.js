@@ -1,48 +1,21 @@
 import React from "react";
 import { observer } from "mobx-react";
-import styled from "styled-components";
-import { Grid, Cell } from "react-foundation";
 import WatchLink from "./WatchLink";
 import IgnoreLink from "./IgnoreLink";
-import ArchiveLink from "./ArchiveLink";
-
-const StyledResultsCompanyName = styled.h4`
-  margin: 0.1em;
-`;
-
-const StyledResultsCompanyJobTitle = styled.span`
-  vertical-align: top;
-`;
-const StyledResultsCompanyJobLocation = styled.span`
-  vertical-align: top;
-`;
-
-/*
-    Object coming in should look like this:
-    {
-        company: Company Name
-        jobs: [{
-            title: Job Title,
-            location: Job Location,
-            url: URL to posting
-        }]
-    }
-*/
+import ArchiveLink from "../ArchiveLink";
 
 function ResultsCompanyJob(props) {
   return (
     <Grid className="display resultCompanyJob">
       <Cell small={4} medium={3} large={4}>
-        <StyledResultsCompanyJobTitle>
+        <span>
           <a href={props.job.url} target="_blank" rel="noopener noreferrer">
             {props.job.title}
           </a>
-        </StyledResultsCompanyJobTitle>
+        </span>
       </Cell>
       <Cell small={4} medium={3} large={4}>
-        <StyledResultsCompanyJobLocation>
-          {props.job.location}
-        </StyledResultsCompanyJobLocation>
+        <span>{props.job.location}</span>
       </Cell>
       <Cell small={2} medium={1} large={1}>
         {props.job._id && <ArchiveLink store={props.store} job={props.job} />}
@@ -111,9 +84,7 @@ class Result extends React.Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <StyledResultsCompanyName>
-                {this.props.company.company}
-              </StyledResultsCompanyName>
+              <h4>{this.props.company.company}</h4>
             </a>
           </Cell>
           {displayMessage !== "" && (

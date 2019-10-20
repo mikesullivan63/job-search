@@ -94,7 +94,7 @@ class LoginPage extends React.Component {
                 list={this.state.formErrors}
               />
             )}
-            <Segment stacked>
+            <Segment>
               <LoginPageField
                 name="email"
                 icon="user"

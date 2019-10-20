@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
-import SearchBar from "./screens/search/SearchBar";
+import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
 import { RegisterPage } from "./screens/register";
 import { authenticationService } from "./services/authentication";
@@ -42,7 +42,7 @@ class App extends React.Component {
           </Switch>
         )}
         {this.props.store.isLoggedIn() && (
-          <SearchBar store={this.props.store} />
+          <SearchPage store={this.props.store} />
         )}
       </React.Fragment>
     );
