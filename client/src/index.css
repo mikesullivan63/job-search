@@ -21,3 +21,7 @@ code {
 .searchBarForm {
   margin-bottom: 20px;
 }
+
+.completedResult {
+  overflow: auto;
+}

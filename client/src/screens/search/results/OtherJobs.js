@@ -11,7 +11,7 @@ const OtherJobs = props => {
 
   return (
     <div className="collapsableJobsList">
-      <Grid columns={3}>
+      <Grid columns={2}>
         {props.jobs.map(job => {
           return (
             <React.Fragment>
@@ -22,13 +22,6 @@ const OtherJobs = props => {
               </Grid.Column>
               <Grid.Column>
                 <span>{job.location}</span>
-              </Grid.Column>
-              <Grid.Column>
-                {!job._id && (
-                  <React.Fragment>
-                    <span>Re-watch?</span>
-                  </React.Fragment>
-                )}
               </Grid.Column>
             </React.Fragment>
           );

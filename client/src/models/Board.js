@@ -7,12 +7,14 @@ const Board = types
     url: types.string,
     status: types.string,
     error: types.string,
-    jobs: types.array(Job)
+    jobs: types.array(Job),
+    otherJobs: types.array(Job)
   })
   .actions(self => ({
-    setJobs(jobs) {
+    setJobs(jobs, otherJobs) {
       self.status = "COMPLETE";
       self.jobs = jobs;
+      self.otherJobs = otherJobs;
       self.error = null;
     }
   }))

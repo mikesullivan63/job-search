@@ -41,7 +41,10 @@ class CompletedResult extends React.Component {
       : this.props.company.jobs.filter(el => this.props.store.isIgnored(el));
 
     return (
-      <Segment>
+      <Segment
+        className="completedResult"
+        secondary={jobsToDisplay && jobsToDisplay.length > 0 ? null : true}
+      >
         <a
           href={this.props.company.url}
           target="_blank"
@@ -79,13 +82,17 @@ class CompletedResult extends React.Component {
             onClick={this.handleClick}
           >
             <Icon name="dropdown" />
-            Other Jobs ({!jobsToIgnore ? 0 : jobsToIgnore.length})
+            Other Jobs (
+            {!this.props.company.otherJobs
+              ? 0
+              : this.props.company.otherJobs.length}
+            )
           </Accordion.Title>
           <Accordion.Content active={otherExpanded}>
             <OtherJobs
               store={this.props.store}
               company={this.props.company}
-              jobs={jobsToIgnore}
+              jobs={this.props.company.otherJobs}
             />
           </Accordion.Content>
         </Accordion>
