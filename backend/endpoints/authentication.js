@@ -62,7 +62,7 @@ routes.route("/register").post(function(req, res) {
         user.lastName = lastName;
         user.setPassword(password);
 
-        user.save(function(err) {
+        user.save(function(error) {
           if (error) {
             console.log("Saving user errored: ", error);
             res.status(500);

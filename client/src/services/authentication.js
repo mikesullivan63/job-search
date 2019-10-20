@@ -11,6 +11,12 @@ function storeUser(user, token) {
   localStorage.setItem("currentUser", JSON.stringify(token));
 }
 
+function logout() {
+  // remove user from local storage to log user out
+  localStorage.removeItem("currentUser");
+  this.store.logout();
+}
+
 function login(email, password) {
   return new Promise((resolve, reject) => {
     fetch("/user/login", {
@@ -39,7 +45,7 @@ function login(email, password) {
       })
       .catch(error => {
         console.log("Error logging user in", error);
-        authenticationService.logout();
+        logout();
         reject(error);
       });
   });
@@ -65,12 +71,6 @@ function remember() {
   } else {
     logout();
   }
-}
-
-function logout() {
-  // remove user from local storage to log user out
-  localStorage.removeItem("currentUser");
-  this.store.logout();
 }
 
 function authHeader() {
