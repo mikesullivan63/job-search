@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "semantic-ui-react";
 import WatchJobButton from "../buttons/WatchJobButton";
 import IgnoreJobButton from "../buttons/IgnoreJobButton";
-import ArchiveLink from "../buttons/ArchiveJobButton";
+import ArchiveJobButton from "../buttons/ArchiveJobButton";
 
 const ActiveJobs = props => {
   if (!props.jobs || props.jobs.length === 0) {
@@ -13,7 +13,7 @@ const ActiveJobs = props => {
     <Grid columns={3}>
       {props.jobs.map(job => {
         return (
-          <React.Fragment>
+          <React.Fragment key={job.url}>
             <Grid.Column>
               <a href={job.url} target="_blank" rel="noopener noreferrer">
                 {job.title}
@@ -23,7 +23,7 @@ const ActiveJobs = props => {
               <span>{job.location}</span>
             </Grid.Column>
             <Grid.Column>
-              {job._id && <ArchiveLink store={props.store} job={job} />}
+              {job._id && <ArchiveJobButton store={props.store} job={job} />}
               {!job._id && (
                 <React.Fragment>
                   <WatchJobButton

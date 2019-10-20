@@ -63,7 +63,7 @@ class CompletedResultSegment extends React.Component {
           />
         </div>
 
-        <Accordion>
+        <Accordion className="ignoredJobs">
           <Accordion.Title
             index="ignored"
             active={ignoredExpanded}
@@ -79,6 +79,8 @@ class CompletedResultSegment extends React.Component {
               jobs={jobsToIgnore}
             />
           </Accordion.Content>
+        </Accordion>
+        <Accordion className="otherJobs">
           <Accordion.Title
             index="other"
             active={otherExpanded}

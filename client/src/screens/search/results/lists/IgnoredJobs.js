@@ -12,7 +12,7 @@ const IgnoredJobs = props => {
       <Grid columns={3}>
         {props.jobs.map(job => {
           return (
-            <React.Fragment>
+            <React.Fragment key={job.url}>
               <Grid.Column>
                 <a href={job.url} target="_blank" rel="noopener noreferrer">
                   {job.title}

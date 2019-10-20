@@ -11,7 +11,7 @@ const OtherJobs = props => {
       <Grid columns={2}>
         {props.jobs.map(job => {
           return (
-            <React.Fragment>
+            <React.Fragment key={job.url}>
               <Grid.Column>
                 <a href={job.url} target="_blank" rel="noopener noreferrer">
                   {job.title}

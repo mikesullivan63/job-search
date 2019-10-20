@@ -4,32 +4,20 @@ exports[`Result Display tests Render result for completed results 1`] = `ReactWr
 
 exports[`Result Display tests Render result for error result 1`] = `
 <div
-  className="callout alert"
+  className="ui red inverted secondary segment"
 >
-  <div
-    className="grid-x display"
+  <a
+    href="https://www.error.com/job/"
+    rel="noopener noreferrer"
+    target="_blank"
   >
-    <div
-      className="cell small-6 medium-4 large-4"
-    >
-      <a
-        href="https://www.error.com/job/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <h4
-          className="sc-bdVaJa jAtYUa"
-        >
-          Error.com
-        </h4>
-      </a>
-    </div>
-    <div
-      className="cell result-message small-6 medium-6 large-4"
-    >
-      Error: Problem accessing page
-    </div>
-  </div>
+    <h4>
+      Error.com
+    </h4>
+  </a>
+  <span>
+    Problem accessing page
+  </span>
 </div>
 `;
 
@@ -41,31 +29,19 @@ exports[`Result Display tests Render result for good results, watch one 1`] = `R
 
 exports[`Result Display tests Render result for pending result 1`] = `
 <div
-  className="callout"
+  className="ui tertiary segment"
 >
-  <div
-    className="grid-x display"
+  <a
+    href="https://www.example.io/job/"
+    rel="noopener noreferrer"
+    target="_blank"
   >
-    <div
-      className="cell small-6 medium-4 large-4"
-    >
-      <a
-        href="https://www.example.io/job/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <h4
-          className="sc-bdVaJa jAtYUa"
-        >
-          Example.io
-        </h4>
-      </a>
-    </div>
-    <div
-      className="cell result-message small-6 medium-6 large-4"
-    >
-      Pending Lookup
-    </div>
-  </div>
+    <h4>
+      Example.io
+    </h4>
+  </a>
+  <span>
+    Pending Lookup
+  </span>
 </div>
 `;

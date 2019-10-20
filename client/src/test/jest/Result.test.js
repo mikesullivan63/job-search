@@ -3,9 +3,10 @@ import renderer from "react-test-renderer";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme from "enzyme";
 import { mount } from "enzyme";
-import Result from "../../screens/search/Result";
+import Result from "../../screens/search/results/Result";
 import ResultsStore from "../../models/ResultsStore";
 import { authenticationService } from "../../services/authentication";
+import { jobService } from "../../services/job";
 
 //semaphoreci.com/community/tutorials/how-to-test-react-and-mobx-with-jest
 
@@ -75,6 +76,14 @@ describe("Result Display tests", () => {
             location: "San Francisco",
             url: "https://www.example.com/job/JKL123"
           }
+        ],
+        otherJobs: [
+          {
+            _id: "",
+            title: "Job Title MNO123",
+            location: "San Francisco",
+            url: "https://www.example.com/job/MNO123"
+          }
         ]
       },
       {
@@ -112,7 +121,7 @@ describe("Result Display tests", () => {
     ]);
 
     authenticationService.setStore(store);
-
+    jobService.setStore(store);
     return store;
   };
 
@@ -146,10 +155,15 @@ describe("Result Display tests", () => {
     const component = mount(
       <Result store={store} key={company.company} company={company} />
     );
-    expect(component.find("div.resultCompanyJob").length).toBe(3);
+    expect(component.find("div.activeJobs a").length).toBe(3); //3 'Active' jobs
+    expect(component.find("div.ignoredJobs a").length).toBe(1); //1 'Ignored' job
+    expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
+
     expect(component.find("button.archiveButton").length).toBe(1);
     expect(component.find("button.watchButton").length).toBe(2);
     expect(component.find("button.ignoreButton").length).toBe(2);
+    expect(component.find("button.watchIgnoredButton").length).toBe(1);
+
     expect(component).toMatchSnapshot();
     done();
   });
@@ -170,6 +184,12 @@ describe("Result Display tests", () => {
     expect(store.activeJobs.length).toBe(2);
     expect(store.ignoredJobs.length).toBe(2);
 
+    expect(component.find("div.completedResult").length).toBe(1);
+    expect(component.find("div.activeJobs a").length).toBe(3); //3 'Active' jobs
+    expect(component.find("div.ignoredJobs a").length).toBe(1); //1 'Ignored' job
+    expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
+
+    expect(component.find("button.archiveButton").length).toBe(1);
     component.find("button.archiveButton").simulate("click");
 
     setTimeout(() => {
@@ -179,7 +199,10 @@ describe("Result Display tests", () => {
       expect(store.activeJobs.length).toBe(1);
       expect(store.ignoredJobs.length).toBe(3);
       expect(component.find("button.archiveButton").length).toBe(0);
-      expect(component.find("div.resultCompanyJob").length).toBe(2);
+      expect(component.find("div.activeJobs a").length).toBe(2); //2 'Active' jobs remaining
+      expect(component.find("div.ignoredJobs a").length).toBe(2); //2 'Ignored' job, as we just added 0ne
+      expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job, unchanged
+
       expect(component).toMatchSnapshot();
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -234,7 +257,11 @@ describe("Result Display tests", () => {
 
       expect(component.find("button.archiveButton").length).toBe(2);
       expect(component.find("button.watchButton").length).toBe(1);
-      expect(component.find("div.resultCompanyJob").length).toBe(3);
+
+      expect(component.find("div.activeJobs a").length).toBe(3); //3 'Active' jobs
+      expect(component.find("div.ignoredJobs a").length).toBe(1); //1 'Ignored' job
+      expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
+
       expect(component).toMatchSnapshot();
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -289,7 +316,11 @@ describe("Result Display tests", () => {
       expect(store.ignoredJobs.length).toBe(3);
       expect(component.find("button.archiveButton").length).toBe(1);
       expect(component.find("button.watchButton").length).toBe(1);
-      expect(component.find("div.resultCompanyJob").length).toBe(2);
+
+      expect(component.find("div.activeJobs a").length).toBe(2); //2 'Active' jobs, we ignored one
+      expect(component.find("div.ignoredJobs a").length).toBe(2); //2 'Ignored' jobs, we ignored one
+      expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
+
       expect(component).toMatchSnapshot();
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
