@@ -6,6 +6,11 @@ function setStore(localStore) {
   this.store = localStore;
 }
 
+function storeUser(user, token) {
+  this.store.setUser(user, token);
+  localStorage.setItem("currentUser", JSON.stringify(token));
+}
+
 function login(email, password) {
   return new Promise((resolve, reject) => {
     fetch("/user/login", {
@@ -55,16 +60,11 @@ function remember() {
       })
       .catch(error => {
         console.log("Error loading user profile", error);
-        authenticationService.logout();
+        logout();
       });
   } else {
-    authenticationService.logout();
+    logout();
   }
-}
-
-function storeUser(user, token) {
-  this.store.setUser(user, token);
-  localStorage.setItem("currentUser", JSON.stringify(token));
 }
 
 function logout() {

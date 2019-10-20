@@ -44,10 +44,10 @@ routes.route("/register").post(function(req, res) {
     );
   }
 
-  User.findOne({ email: email })
+  User.findOne({ email })
     .exec()
-    .then(user => {
-      if (user) {
+    .then(existingUser => {
+      if (existingUser) {
         errors.push("Error processing submission");
       }
 
@@ -63,7 +63,7 @@ routes.route("/register").post(function(req, res) {
         user.setPassword(password);
 
         user.save(function(err) {
-          if (err) {
+          if (error) {
             console.log("Saving user errored: ", error);
             res.status(500);
             res.json("Error processing submission");

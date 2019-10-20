@@ -33,7 +33,7 @@ class SearchBar extends React.Component {
           location: res.location
         })
       )
-      .catch(error => this.setState({ error: error }));
+      .catch(error => this.setState({ error }));
   }
 
   render() {
