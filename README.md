@@ -38,6 +38,7 @@ Design components (temporary)
 
 Testing
 
+- Jest <https://jestjs.io/>
 - Enzyme <https://airbnb.io/enzyme/>
 - Node Fetch <https://www.npmjs.com/package/node-fetch>
 
@@ -64,3 +65,9 @@ Persistence
 Parsing
 
 - Cheerio <https://www.npmjs.com/package/cheerio>
+
+Testing
+
+- Jest <https://jestjs.io/>
+- Sinon <https://sinonjs.org/>
+- SuperTes <https://www.npmjs.com/package/supertest>
