@@ -1,5 +1,5 @@
 import React from "react";
-import { jobService } from "../../../services/job";
+import { jobService } from "../../../../services/job";
 
 const IgnoreJobButton = props => {
   return (

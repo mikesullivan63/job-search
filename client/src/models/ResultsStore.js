@@ -19,6 +19,10 @@ const ResultsStore = types
     addActiveJob(job) {
       self.activeJobs.push(job);
     },
+    addActiveJobFromIgnored(jobId) {
+      let temp = self.ignoredJobs.find(el => el._id === jobId);
+      self.activeJobs.push(detach(temp));
+    },
     archiveActiveJob(jobId) {
       let temp = self.activeJobs.find(el => el._id === jobId);
       self.ignoredJobs.push(detach(temp));

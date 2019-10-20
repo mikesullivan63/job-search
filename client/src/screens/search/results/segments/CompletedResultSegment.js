@@ -1,11 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Segment, Grid, Accordion, Icon } from "semantic-ui-react";
-import ActiveJobs from "./ActiveJobs";
-import IgnoredJobs from "./IgnoredJobs";
-import OtherJobs from "./OtherJobs";
+import ActiveJobs from "../lists/ActiveJobs";
+import IgnoredJobs from "../lists/IgnoredJobs";
+import OtherJobs from "../lists/OtherJobs";
 
-class CompletedResult extends React.Component {
+class CompletedResultSegment extends React.Component {
   constructor(props) {
     super(props);
 
@@ -39,7 +39,9 @@ class CompletedResult extends React.Component {
 
     let jobsToIgnore = !this.props.company.jobs
       ? null
-      : this.props.company.jobs.filter(el => this.props.store.isIgnored(el));
+      : this.props.company.jobs
+          .filter(el => this.props.store.isIgnored(el))
+          .map(el => this.props.store.getIgnoredJob(el));
 
     return (
       <Segment
@@ -102,4 +104,4 @@ class CompletedResult extends React.Component {
   }
 }
 
-export default observer(CompletedResult);
+export default observer(CompletedResultSegment);

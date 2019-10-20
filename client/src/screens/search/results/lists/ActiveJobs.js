@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import WatchJobButton from "./WatchJobButton";
-import IgnoreJobButton from "./IgnoreJobButton";
-import ArchiveLink from "./ArchiveLink";
+import WatchJobButton from "../buttons/WatchJobButton";
+import IgnoreJobButton from "../buttons/IgnoreJobButton";
+import ArchiveLink from "../buttons/ArchiveJobButton";
 
 const ActiveJobs = props => {
   if (!props.jobs || props.jobs.length === 0) {

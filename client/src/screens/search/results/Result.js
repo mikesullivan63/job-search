@@ -1,18 +1,23 @@
 import React from "react";
-import PendingResult from "./PendingResult";
-import ErrorResult from "./ErrorResult";
-import CompletedResult from "./CompletedResult";
+import PendingResultSegment from "./segments/PendingResultSegment";
+import ErrorResultSegment from "./segments/ErrorResultSegment";
+import CompletedResultSegment from "./segments/CompletedResultSegment";
 
 const Result = props => {
   if (props.company.status === "PENDING" || !props.company.status) {
     return (
-      <PendingResult key={props.company.company} company={props.company} />
+      <PendingResultSegment
+        key={props.company.company}
+        company={props.company}
+      />
     );
   } else if (props.company.status === "ERROR") {
-    return <ErrorResult key={props.company.company} company={props.company} />;
+    return (
+      <ErrorResultSegment key={props.company.company} company={props.company} />
+    );
   } else {
     return (
-      <CompletedResult
+      <CompletedResultSegment
         store={props.store}
         key={props.company.company}
         company={props.company}

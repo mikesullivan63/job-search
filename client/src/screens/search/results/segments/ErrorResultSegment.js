@@ -1,13 +1,13 @@
 import React from "react";
 import { Segment } from "semantic-ui-react";
 
-const PendingResult = props => (
-  <Segment tertiary>
+const ErrorResultSegment = props => (
+  <Segment inverted color="red" secondary>
     <a href={props.company.url} target="_blank" rel="noopener noreferrer">
       <h4>{props.company.company}</h4>
     </a>
-    <span>Pending Lookup</span>
+    <span>{props.company.error}</span>
   </Segment>
 );
 
-export default PendingResult;
+export default ErrorResultSegment;

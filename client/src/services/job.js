@@ -35,8 +35,22 @@ function watchJob(event, board, url, title, location) {
   );
 }
 
+function archiveJob(event, jobId) {
+  addJobToList(event, { jobId }, "/job/archive-job", result => {
+    this.store.archiveActiveJob(jobId);
+  });
+}
+
+function watchIgnoredJob(event, jobId) {
+  addJobToList(event, { jobId }, "/job/watch-ignore-job", result => {
+    this.store.addActiveJobFromIgnored(jobId);
+  });
+}
+
 export const jobService = {
   setStore,
   ignoreJob,
-  watchJob
+  watchJob,
+  archiveJob,
+  watchIgnoredJob
 };
