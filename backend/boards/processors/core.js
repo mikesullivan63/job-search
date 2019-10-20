@@ -24,33 +24,32 @@ module.exports = (board, url, title, location, selectors, debug) => {
         }
       })
       .then($ => {
-        const jobs = selectors.flatMap(selector => {
-          if (debug) {
-            console.log("jobSelector: " + JSON.stringify(selector, null, 2));
-            console.log("$(jobSelector): " + $(selector.jobSelector).length);
-            if ($(selector.jobSelector).length === 0) {
-              console.log(
-                "jobSelector",
-                selector.jobSelector + " didn't match anything in Body",
-                $.html("body")
-              );
+        //Process all selector objects and combine results
+        const jobLists = selectors
+          .map(selector => {
+            //Debug section - skip for actual logic
+            if (debug) {
+              console.log("jobSelector: " + JSON.stringify(selector, null, 2));
+              console.log("$(jobSelector): " + $(selector.jobSelector).length);
+              if ($(selector.jobSelector).length === 0) {
+                console.log(
+                  "jobSelector",
+                  selector.jobSelector + " didn't match anything in Body",
+                  $.html("body")
+                );
+              }
             }
-          }
 
-          const cheerioResults = $(selector.jobSelector)
-            .filter((i, el) => {
+            //Locate all jobs for a given selector
+            const cheerioResults = $(selector.jobSelector).map((i, el) => {
               if (debug) {
                 console.log("el: " + $(el).html());
                 console.log("title: " + selector.titleExtractor($(el)));
                 console.log("loc: " + selector.locationExtractor($(el), $));
                 console.log("link: " + selector.linkExtractor($(el), $));
               }
-              return match(title, selector.titleExtractor($(el), $));
-            })
-            .filter((i, el) =>
-              match(location, selector.locationExtractor($(el), $))
-            )
-            .map((i, el) => {
+
+              //Map to result format
               return {
                 title: selector.titleExtractor($(el), $),
                 location: selector.locationExtractor($(el), $),
@@ -58,21 +57,41 @@ module.exports = (board, url, title, location, selectors, debug) => {
               };
             });
 
-          //Needed to convert from Cheerio Object to array of results
-          const results = [];
-          for (let i = 0; i < cheerioResults.length; i++) {
-            results.push(cheerioResults[i]);
-          }
+            //Needed to convert from Cheerio Object to array of results
+            const convertedResults = [];
+            for (let i = 0; i < cheerioResults.length; i++) {
+              convertedResults.push(cheerioResults[i]);
+            }
 
-          return results;
+            //Split jobs into matches and non-matches, reduce to tupple
+            return convertedResults.reduce(
+              ([matched, other], elem) => {
+                match(title, elem.title) && match(location, elem.location)
+                  ? matched.push(elem)
+                  : other.push(elem);
+                return [matched, other];
+              },
+              [[], []]
+            );
+          })
+          .reduce(
+            //Reduce array of tupples to one tupple
+            ([matched, other], elem) => {
+              return [matched.concat(elem[0]), other.concat(elem[1])];
+            },
+            [[], []]
+          );
+
+        //Sort resulting list
+        jobLists[0].sort(objectComparator(["title", "location", "url"]));
+        jobLists[1].sort(objectComparator(["title", "location", "url"]));
+
+        resolve({
+          company: board.name,
+          url,
+          jobs: jobLists[0],
+          otherJobs: jobLists[1]
         });
-
-        if (debug) {
-          console.log("Done parsing: " + jobs.length);
-        }
-
-        jobs.sort(objectComparator(["title", "location", "url"]));
-        resolve({ company: board.name, url, jobs });
       })
       .catch(error => {
         console.log(
