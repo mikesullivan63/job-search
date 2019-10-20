@@ -4,7 +4,7 @@ import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
 import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
-import { RegisterPage } from "./screens/register";
+import RegisterPage from "./screens/register/RegisterPage";
 import { authenticationService } from "./services/authentication";
 import { searchService } from "./services/search";
 import { jobService } from "./services/job";

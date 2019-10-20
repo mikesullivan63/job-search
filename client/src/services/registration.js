@@ -14,13 +14,25 @@ function register(email, firstName, lastName, password, confirm) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, firstName, lastName, password })
+      body: JSON.stringify({ email, firstName, lastName, password, confirm })
     };
 
     let errors = [];
 
     if (confirm !== password) {
       errors.push("Passwords do not match");
+    }
+
+    if (!email || email === "" || email.length === 0) {
+      errors.push("Email is required");
+    }
+
+    if (!firstName || firstName === "" || firstName.length === 0) {
+      errors.push("First Name is required");
+    }
+
+    if (!lastName || lastName === "" || lastName.length === 0) {
+      errors.push("last Name is required");
     }
 
     if (password.length < 8 || password.length > 64) {

@@ -21,7 +21,7 @@ function handleRegistrationResponse(response) {
   return response.text().then(text => {
     if (!response.ok) {
       console.log("Error on registration", response.statusText, text);
-      return Promise.reject(response.statusText);
+      return Promise.reject(JSON.parse(text));
     }
     return text && JSON.parse(text);
   });
