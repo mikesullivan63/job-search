@@ -1,4 +1,5 @@
 import React from "react";
+import { observer } from "mobx-react";
 import { Segment, Grid, Accordion, Icon } from "semantic-ui-react";
 import ActiveJobs from "./ActiveJobs";
 import IgnoredJobs from "./IgnoredJobs";
@@ -101,4 +102,4 @@ class CompletedResult extends React.Component {
   }
 }
 
-export default CompletedResult;
+export default observer(CompletedResult);
