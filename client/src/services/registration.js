@@ -1,4 +1,5 @@
 import { handleResponse } from "./handleResponse";
+import { authenticationService } from "./authentication";
 
 function isValidPassword(password) {
   return (
@@ -51,10 +52,23 @@ function register(email, firstName, lastName, password, confirm) {
 
     fetch("/user/register", requestOptions)
       .then(handleResponse.handleRegistrationResponse)
-      .then(user => {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        return resolve(user);
+      .then(token => {
+        fetch("/user/profile", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`
+          }
+        })
+          .then(response => handleResponse.handlePrivateResponse(response))
+          .then(profile => {
+            authenticationService.storeUser(profile, token);
+            resolve(token);
+          })
+          .catch(error => {
+            console.log("Error loading user profile", error);
+            authenticationService.logout();
+            reject(error);
+          });
       })
       .catch(error => {
         return reject(error);

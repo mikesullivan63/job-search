@@ -1,5 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
+import { Redirect } from "react-router-dom";
 import RegisterPageField from "./RegisterPageField";
 import { registrationService } from "../../services/registration";
 import {
@@ -27,7 +28,8 @@ class RegisterPage extends React.Component {
       lastNameErrors: [],
       passwordErrors: [],
       confirmErrors: [],
-      formErrors: []
+      formErrors: [],
+      registered: false
     };
 
     this.validateAndSubmit = this.validateAndSubmit.bind(this);
@@ -76,7 +78,7 @@ class RegisterPage extends React.Component {
     if (!password || password === "") {
       clean = false;
       this.setState({
-        passwordErrors: ["Password is required to log in"]
+        passwordErrors: ["Password is required"]
       });
     }
 
@@ -84,7 +86,7 @@ class RegisterPage extends React.Component {
     if (!confirm || confirm === "") {
       clean = false;
       this.setState({
-        confirmErrors: ["Password Confirmation is required to log in"]
+        confirmErrors: ["Password Confirmation is required"]
       });
     }
 
@@ -92,7 +94,11 @@ class RegisterPage extends React.Component {
       this.setState({ loading: true });
       registrationService
         .register(email, firstName, lastName, password, confirm)
-        .then(user => console.log("Submitted registration"))
+        .then(user => {
+          console.log("Saved registration");
+
+          this.setState({ registered: true });
+        })
         .catch(error => {
           this.setState({
             loading: false,
@@ -103,6 +109,10 @@ class RegisterPage extends React.Component {
   }
 
   render() {
+    if (this.state.registered) {
+      return <Redirect to="/" />;
+    }
+
     const { email, firstName, lastName, password, confirm } = this.state;
 
     return (
@@ -113,7 +123,7 @@ class RegisterPage extends React.Component {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as="h2" color="teal" textAlign="center">
-            Log-in to your account
+            Sign up for a new account
           </Header>
           <Form
             size="large"
@@ -124,7 +134,7 @@ class RegisterPage extends React.Component {
             {this.state.formErrors.length > 0 && (
               <Message
                 error
-                header="Error attempting to log in"
+                header="Error attempting to register"
                 list={this.state.formErrors}
               />
             )}

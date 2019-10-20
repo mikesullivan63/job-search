@@ -23,9 +23,7 @@ function login(email, password) {
         })
           .then(response => handleResponse.handlePrivateResponse(response))
           .then(profile => {
-            this.store.setUser(profile, token);
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem("currentUser", JSON.stringify(token));
+            storeUser(profile, token);
             resolve(token);
           })
           .catch(error => {
@@ -53,7 +51,7 @@ function remember() {
     })
       .then(response => handleResponse.handlePrivateResponse(response))
       .then(profile => {
-        this.store.setUser(profile, JSON.parse(persistentToken));
+        storeUser(profile, JSON.parse(persistentToken));
       })
       .catch(error => {
         console.log("Error loading user profile", error);
@@ -62,6 +60,11 @@ function remember() {
   } else {
     authenticationService.logout();
   }
+}
+
+function storeUser(user, token) {
+  this.store.setUser(user, token);
+  localStorage.setItem("currentUser", JSON.stringify(token));
 }
 
 function logout() {
@@ -85,5 +88,6 @@ export const authenticationService = {
   login,
   logout,
   remember,
+  storeUser,
   authHeader
 };

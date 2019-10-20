@@ -6,6 +6,7 @@ import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
 import RegisterPage from "./screens/register/RegisterPage";
 import { authenticationService } from "./services/authentication";
+import { registrationService } from "./services/registration";
 import { searchService } from "./services/search";
 import { jobService } from "./services/job";
 
@@ -28,11 +29,7 @@ class App extends React.Component {
               exact
               path="/register"
               render={props => (
-                <RegisterPage
-                  {...props}
-                  store={this.props.store}
-                  registrationCallback={this.processRegistration}
-                />
+                <RegisterPage {...props} store={this.props.store} />
               )}
             />
             <Route
