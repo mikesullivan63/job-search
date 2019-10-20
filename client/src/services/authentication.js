@@ -39,7 +39,7 @@ function login(email, password) {
           })
           .catch(error => {
             console.log("Error loading user profile", error);
-            authenticationService.logout();
+            logout();
             reject(error);
           });
       })
