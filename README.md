@@ -40,8 +40,6 @@ Testing
 
 - Enzyme <https://airbnb.io/enzyme/>
 - Node Fetch <https://www.npmjs.com/package/node-fetch>
-- "node-fetch": "^2.6.0",
-  "react-test-renderer": "^16.10.2"
 
 ## Backend
 

@@ -47,20 +47,14 @@ routes.route("/register").post(function(req, res) {
   User.findOne({ email: email })
     .exec()
     .then(user => {
-      console.log("Query returned, ", user);
       if (user) {
-        console.log("Email is not unique", email);
         errors.push("Error processing submission");
       }
 
-      console.log("Checking for errors, ", errors);
       if (errors.length > 0) {
-        console.log("Returning errors");
         res.status(500);
         res.json(errors);
       } else {
-        console.log("Attempting save");
-
         //No errrors, run the save;
         var user = new User();
         user.email = email;
@@ -70,11 +64,10 @@ routes.route("/register").post(function(req, res) {
 
         user.save(function(err) {
           if (err) {
+            console.log("Saving user errored: ", error);
             res.status(500);
-            console.log("Save errored,", err);
             res.json("Error processing submission");
           } else {
-            console.log("Save succeeded");
             var token;
             token = jwt.generateJwt(user);
             res.status(200);
@@ -84,8 +77,7 @@ routes.route("/register").post(function(req, res) {
       }
     })
     .catch(error => {
-      console.log("Query errored, ", error);
-      console.log("Error checking for uniqueness in email", email, err);
+      console.log("Error checking for uniqueness in email", email, error);
       errors.push("Error processing submission");
     });
 });
