@@ -1,20 +1,10 @@
+import { loginService } from "./login";
 import { handleResponse } from "./handleResponse";
 
 //Pass in reference to MobX-State-Tree store to allow for simpler manipultion
 let store = null;
 function setStore(localStore) {
   this.store = localStore;
-}
-
-function storeUser(user, token) {
-  this.store.setUser(user, token);
-  localStorage.setItem("currentUser", JSON.stringify(token));
-}
-
-function logout() {
-  // remove user from local storage to log user out
-  localStorage.removeItem("currentUser");
-  this.store.logout();
 }
 
 function login(email, password) {
@@ -34,18 +24,18 @@ function login(email, password) {
         })
           .then(response => handleResponse.handlePrivateResponse(response))
           .then(profile => {
-            storeUser(profile, token);
+            loginService.storeUser(profile, token);
             resolve(token);
           })
           .catch(error => {
             console.log("Error loading user profile", error);
-            authenticationService.logout();
+            loginService.logout();
             reject(error);
           });
       })
       .catch(error => {
         console.log("Error logging user in", error);
-        authenticationService.logout();
+        loginService.logout();
         reject(error);
       });
   });
@@ -62,14 +52,14 @@ function remember() {
     })
       .then(response => handleResponse.handlePrivateResponse(response))
       .then(profile => {
-        storeUser(profile, JSON.parse(persistentToken));
+        loginService.storeUser(profile, JSON.parse(persistentToken));
       })
       .catch(error => {
         console.log("Error loading user profile", error);
-        authenticationService.logout();
+        loginService.logout();
       });
   } else {
-    authenticationService.logout();
+    loginService.logout();
   }
 }
 
@@ -86,8 +76,6 @@ function authHeader() {
 export const authenticationService = {
   setStore,
   login,
-  logout,
   remember,
-  storeUser,
   authHeader
 };

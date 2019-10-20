@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Image, Menu } from "semantic-ui-react";
 import logo from "../../logo.svg";
-import { authenticationService } from "../../services/authentication";
+import { loginService } from "../../services/login";
 
 function Header(props) {
   return (
@@ -30,10 +30,7 @@ function Header(props) {
               <Menu.Item href="/profile" target="_blank" position="right">
                 Profile
               </Menu.Item>
-              <Menu.Item
-                position="right"
-                onClick={() => authenticationService.logout()}
-              >
+              <Menu.Item position="right" onClick={() => loginService.logout()}>
                 Logout
               </Menu.Item>
             </React.Fragment>
