@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import WatchLink from "./WatchLink";
-import IgnoreLink from "./IgnoreLink";
+import WatchJobButton from "./WatchJobButton";
+import IgnoreJobButton from "./IgnoreJobButton";
 import ArchiveLink from "./ArchiveLink";
 
 const ActiveJobs = props => {
@@ -26,12 +26,12 @@ const ActiveJobs = props => {
               {job._id && <ArchiveLink store={props.store} job={job} />}
               {!job._id && (
                 <React.Fragment>
-                  <WatchLink
+                  <WatchJobButton
                     store={props.store}
                     job={job}
                     company={props.company.company}
                   />
-                  <IgnoreLink
+                  <IgnoreJobButton
                     store={props.store}
                     job={job}
                     company={props.company.company}

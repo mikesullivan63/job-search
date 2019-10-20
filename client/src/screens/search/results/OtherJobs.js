@@ -1,8 +1,5 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import WatchLink from "./WatchLink";
-import IgnoreLink from "./IgnoreLink";
-import ArchiveLink from "./ArchiveLink";
 
 const OtherJobs = props => {
   if (!props.jobs || props.jobs.length === 0) {

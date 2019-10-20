@@ -7,6 +7,7 @@ import LoginPage from "./screens/login/LoginPage";
 import { RegisterPage } from "./screens/register";
 import { authenticationService } from "./services/authentication";
 import { searchService } from "./services/search";
+import { jobService } from "./services/job";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class App extends React.Component {
 
     authenticationService.setStore(this.props.store);
     searchService.setStore(this.props.store);
+    jobService.setStore(this.props.store);
     authenticationService.remember();
   }
   render() {

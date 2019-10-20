@@ -1,22 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { commonMethods } from "./common";
+import { jobService } from "../../../services/job";
 
-class WatchLink extends React.Component {
-  watchLink = (event, board, url, title, location) =>
-    commonMethods.addJobToList(
-      event,
-      { board, url, title, location },
-      "/job/add-job",
-      result => this.props.store.addActiveJob(result.find(el => el.url === url))
-    );
-
+class WatchJobButton extends React.Component {
   render() {
     return (
       <button
         className="jobToggleButton watchButton"
         onClick={event => {
-          this.watchLink(
+          jobService.watchJob(
             event,
             this.props.company,
             this.props.job.url,
@@ -31,4 +23,4 @@ class WatchLink extends React.Component {
   }
 }
 
-export default observer(WatchLink);
+export default observer(WatchJobButton);

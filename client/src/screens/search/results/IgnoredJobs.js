@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import WatchLink from "./WatchLink";
+import WatchJobButton from "./WatchJobButton";
 
 const IgnoredJobs = props => {
   if (!props.jobs || props.jobs.length === 0) {
@@ -24,7 +24,7 @@ const IgnoredJobs = props => {
               <Grid.Column>
                 {!job._id && (
                   <React.Fragment>
-                    <WatchLink
+                    <WatchJobButton
                       store={props.store}
                       job={job}
                       company={props.company.company}
