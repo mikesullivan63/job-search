@@ -19,6 +19,7 @@ exports.Boards = [
     {name: "Karat", url:"karat", processor: processGreenhouse, notes: ""},    
     {name: "Algorithmia", url:"algorithmia", processor: processGreenhouse, notes: ""},    
     {name: "ReCharge", url:"recharge", processor: processGreenhouse, notes: ""},       
+    {name: "Good Money", url:"goodmoney", processor: processGreenhouse, notes: ""},       
     //    https://boards.greenhouse.getrake.io/digitalocean98/
 
     {name: "Platform.sh", url:"platformsh", processor: processGreenhouseEmbed, notes: ""},
@@ -42,6 +43,7 @@ exports.Boards = [
     {name: "Blue Mesa", url:"bluemesahealth", processor: processLever, notes: ""},
     {name: "Spark Fund", url:"sparkfund", processor: processLever, notes: ""},
     {name: "Respondent", url:"respondent", processor: processLever, notes: ""},
+    {name: "Slite", url:"slite", processor: processLever, notes: ""},
 
     {name: "Tackle.io", url:"tackleio", processor: processGoogle, notes: ""},
     {name: "10up", url:"get10upcom", processor: processGoogle, notes: ""},
