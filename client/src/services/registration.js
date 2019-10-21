@@ -1,5 +1,6 @@
 import { handleResponse } from "./handleResponse";
 import { authenticationService } from "./authentication";
+import { loginService } from "./login";
 
 function isValidPassword(password) {
   return (
@@ -61,12 +62,12 @@ function register(email, firstName, lastName, password, confirm) {
         })
           .then(response => handleResponse.handlePrivateResponse(response))
           .then(profile => {
-            authenticationService.storeUser(profile, token);
+            loginService.storeUser(profile, token);
             resolve(token);
           })
           .catch(error => {
             console.log("Error loading user profile", error);
-            authenticationService.logout();
+            loginService.logout();
             reject(error);
           });
       })
