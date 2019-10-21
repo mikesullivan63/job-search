@@ -42,16 +42,27 @@ class CompletedResultSegment extends React.Component {
       : this.props.company.jobs
           .filter(el => this.props.store.isIgnored(el))
           .map(el => this.props.store.getIgnoredJob(el));
+
+    let segmentProps = jobsToDisplay.length > 0 ? {} : { secondary: true };
+    const noJobs =
+      jobsToDisplay.length === 0 &&
+      jobsToIgnore.length === 0 &&
+      this.props.company.otherJobs.length === 0;
+
+    const noTitleJobs = this.props.company.otherJobs.some(
+      el => el.title === "" || el.location === ""
+    );
+
+    if (noJobs) {
+      segmentProps = { tertiary: true, color: "orange", inverted: true };
+    }
+
+    if (noTitleJobs) {
+      segmentProps = { tertiary: true, color: "green", inverted: true };
+    }
+
     return (
-      <Segment
-        className="completedResult"
-        secondary={jobsToDisplay.length > 0 ? null : true}
-        {...(jobsToDisplay.length === 0 &&
-        jobsToIgnore.length === 0 &&
-        this.props.company.otherJobs.length === 0
-          ? { color: "orange", inverted: true }
-          : null)}
-      >
+      <Segment className="completedResult" {...segmentProps}>
         <a
           href={this.props.company.url}
           target="_blank"
