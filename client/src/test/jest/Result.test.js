@@ -5,8 +5,8 @@ import Enzyme from "enzyme";
 import { mount, renderer } from "enzyme";
 import Result from "../../screens/search/results/Result";
 import ResultsStore from "../../models/ResultsStore";
-import { authenticationService } from "../../services/authentication";
 import { jobService } from "../../services/job";
+import { loginService } from "../../services/login";
 
 //semaphoreci.com/community/tutorials/how-to-test-react-and-mobx-with-jest
 
@@ -120,7 +120,7 @@ describe("Result Display tests", () => {
       }
     ]);
 
-    authenticationService.setStore(store);
+    loginService.setStore(store);
     jobService.setStore(store);
     return store;
   };
