@@ -28,7 +28,7 @@ class CompletedResultSegment extends React.Component {
     const { ignoredExpanded, otherExpanded } = this.state;
 
     let jobsToDisplay = !this.props.company.jobs
-      ? null
+      ? []
       : this.props.company.jobs
           .filter(el => !this.props.store.isIgnored(el))
           .map(el =>
@@ -38,15 +38,19 @@ class CompletedResultSegment extends React.Component {
           );
 
     let jobsToIgnore = !this.props.company.jobs
-      ? null
+      ? []
       : this.props.company.jobs
           .filter(el => this.props.store.isIgnored(el))
           .map(el => this.props.store.getIgnoredJob(el));
-
     return (
       <Segment
         className="completedResult"
-        secondary={jobsToDisplay && jobsToDisplay.length > 0 ? null : true}
+        secondary={jobsToDisplay.length > 0 ? null : true}
+        {...(jobsToDisplay.length === 0 &&
+        jobsToIgnore.length === 0 &&
+        this.props.company.otherJobs.length === 0
+          ? { color: "orange", inverted: true }
+          : null)}
       >
         <a
           href={this.props.company.url}
