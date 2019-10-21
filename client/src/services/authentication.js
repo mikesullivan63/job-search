@@ -1,12 +1,6 @@
 import { loginService } from "./login";
 import { handleResponse } from "./handleResponse";
 
-//Pass in reference to MobX-State-Tree store to allow for simpler manipultion
-let store = null;
-function setStore(localStore) {
-  this.store = localStore;
-}
-
 function login(email, password) {
   return new Promise((resolve, reject) => {
     fetch("/user/login", {
@@ -65,7 +59,7 @@ function remember() {
 
 function authHeader() {
   // return authorization header with jwt token
-  const currentUser = this.store.getUser();
+  const currentUser = loginService.getUser();
   if (currentUser && currentUser.token) {
     return { Authorization: `Bearer ${currentUser.token}` };
   } else {
@@ -74,7 +68,6 @@ function authHeader() {
 }
 
 export const authenticationService = {
-  setStore,
   login,
   remember,
   authHeader

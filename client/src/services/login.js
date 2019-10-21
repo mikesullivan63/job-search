@@ -16,8 +16,13 @@ function logout() {
   this.store.logout();
 }
 
+function getUser() {
+  return this.store.getUser();
+}
+
 export const loginService = {
   setStore,
   logout,
-  storeUser
+  storeUser,
+  getUser
 };

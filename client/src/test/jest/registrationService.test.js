@@ -1,10 +1,10 @@
 import { Response } from "node-fetch";
 import ResultsStore from "../../models/ResultsStore";
 import { registrationService } from "../../services/registration";
-import { authenticationService } from "../../services/authentication";
+import { loginService } from "../../services/login";
 
 describe("Testing registration service", () => {
-  authenticationService.setStore(ResultsStore.create({}));
+  loginService.setStore(ResultsStore.create({}));
 
   test("Test password validation when failing", async () => {
     //let promise = registrationService.register("", "", "", "", "");

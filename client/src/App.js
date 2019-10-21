@@ -14,7 +14,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    authenticationService.setStore(this.props.store);
     loginService.setStore(this.props.store);
     searchService.setStore(this.props.store);
     jobService.setStore(this.props.store);
