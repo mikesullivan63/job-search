@@ -168,6 +168,7 @@ routes.post("/updatePassword", auth, (req, res) => {
 
     if (errors.length > 0) {
       res.status(500).json(errors);
+      return;
     }
 
     findUser(req.payload._id)
@@ -175,29 +176,27 @@ routes.post("/updatePassword", auth, (req, res) => {
         if (user) {
           if (!user.validPassword(oldPassword)) {
             res.status(500).json("Current Password does not match");
+            return;
           }
 
           user.setPassword(password);
-          use.save(function(err, updatedUser) {
+          user.save(function(err, updatedUser) {
             if (err) {
-              res.status(500).json({
-                message: "Error during save: " + err
-              });
+              console.log("Error during save", err);
+              res.status(500).json("Error updating your password");
             } else {
               res.status(200);
               res.json("SUCCESS");
             }
           });
         } else {
-          console.log("Error trying to find user for ", req.payload._id);
-          res
-            .status(500)
-            .json({ message: "Error during lookup: no user found" });
+          console.log("Error trying to find user for ID", req.payload._id);
+          res.status(500).json("Error updating your password");
         }
       })
       .catch(error => {
-        console.log("Error", error);
-        res.status(500).json({ message: "Error during lookup: " + error });
+        console.log("Error finding user", error);
+        res.status(500).json("Error updating your password");
       });
   });
 });

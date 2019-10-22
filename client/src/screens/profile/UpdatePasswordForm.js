@@ -117,7 +117,7 @@ class UpdatePasswordForm extends React.Component {
             <Message
               error
               header="Error updating password"
-              list={this.state.formErrors}
+              list={this.state.passwordFormErrors}
             />
           )}
           {this.state.passwordUpdated && (
@@ -131,6 +131,7 @@ class UpdatePasswordForm extends React.Component {
               label="Current Password"
               placeholder="Current Password"
               type="password"
+              value={this.state.oldPassword}
               errors={this.state.oldPasswordErrors}
               handleChange={this.handleChange}
             />
@@ -141,6 +142,7 @@ class UpdatePasswordForm extends React.Component {
               label="New Password"
               placeholder="New Password"
               type="password"
+              value={this.state.password}
               errors={this.state.passwordErrors}
               handleChange={this.handleChange}
             />
@@ -151,6 +153,7 @@ class UpdatePasswordForm extends React.Component {
               label="Confirm Password"
               placeholder="Confirm Password"
               type="password"
+              value={this.state.confirm}
               errors={this.state.confirmErrors}
               handleChange={this.handleChange}
             />
