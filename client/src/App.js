@@ -1,67 +1,102 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import Header from "./screens/common/Header";
 import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
 import RegisterPage from "./screens/register/RegisterPage";
 import EditProfilePage from "./screens/profile/EditProfilePage";
-
 import { authenticationService } from "./services/authentication";
-import { loginService } from "./services/login";
-import { searchService } from "./services/search";
-import { jobService } from "./services/job";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    loginService.setStore(this.props.store);
-    searchService.setStore(this.props.store);
-    jobService.setStore(this.props.store);
-    authenticationService.remember();
+    this.state = {
+      remembered: false
+    };
   }
+
+  componentDidMount() {
+    authenticationService.remember().then(profile => {
+      console.log("Rembering done");
+      this.setState({ remembered: true });
+    });
+  }
+
   render() {
-    console.log("Rendering app with status", this.props.store.isLoggedIn());
+    if (!this.state.remembered) {
+      return null;
+    }
+    const location = this.props.location.pathname;
+    console.log(
+      "Rendering app with status",
+      this.props.store.isLoggedIn(),
+      "at location",
+      location
+    );
+    if (!this.props.store.isLoggedIn()) {
+      if (location !== "/login" && location !== "/register") {
+        return <Redirect to="/login" />;
+      }
+    }
+
+    if (this.props.store.isLoggedIn()) {
+      console.log(
+        "Logged in route check",
+        location !== "/",
+        location !== "/profile"
+      );
+
+      if (location !== "/" && location !== "/profile") {
+        console.log("Redirecting");
+        return <Redirect to="/" />;
+      }
+    }
+    console.log("Not redirecting, rendering fully");
+
     return (
       <React.Fragment>
         <Header store={this.props.store} />
-        {!this.props.store.isLoggedIn() && (
-          <Switch>
-            <Route
-              exact
-              path="/register"
-              render={props => (
-                <RegisterPage {...props} store={this.props.store} />
-              )}
-            />
-            <Route
-              path="/"
-              render={props => (
-                <LoginPage {...props} store={this.props.store} />
-              )}
-            />
-          </Switch>
-        )}
-        {this.props.store.isLoggedIn() && (
-          <Switch>
-            <Route
-              path="/profile"
-              render={props => (
-                <EditProfilePage {...props} store={this.props.store} />
-              )}
-            />
-            <Route
-              path="/"
-              render={props => (
-                <SearchPage {...props} store={this.props.store} />
-              )}
-            />
-          </Switch>
-        )}
+        <Switch>
+          {!this.props.store.isLoggedIn() && (
+            <React.Fragment>
+              <Route
+                exact
+                path="/register"
+                render={props => (
+                  <RegisterPage {...props} store={this.props.store} />
+                )}
+              />
+              <Route
+                exact
+                path="/login"
+                render={props => (
+                  <LoginPage {...props} store={this.props.store} />
+                )}
+              />
+            </React.Fragment>
+          )}
+          {this.props.store.isLoggedIn() && (
+            <React.Fragment>
+              <Route
+                path="/profile"
+                render={props => (
+                  <EditProfilePage {...props} store={this.props.store} />
+                )}
+              />
+              <Route
+                path="/"
+                render={props => (
+                  <SearchPage {...props} store={this.props.store} />
+                )}
+              />
+            </React.Fragment>
+          )}
+        </Switch>
       </React.Fragment>
     );
   }
 }
 
-export default inject("store")(observer(App));
+export default inject("store")(observer(withRouter(App)));

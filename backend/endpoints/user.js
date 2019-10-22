@@ -5,6 +5,15 @@ const auth = require("../config/jwt").auth;
 const jwt = require("../config/jwt");
 
 //Common logic
+function isValidPassword(password) {
+  return (
+    /[a-z]/.exec(password) &&
+    /[A-Z]/.exec(password) &&
+    /[1-9]/.exec(password) &&
+    /[$^!%#@&*()\-_]/.exec(password)
+  );
+}
+
 function findUser(userId) {
   return new Promise(function(resolve, reject) {
     User.findById(userId).exec(function(err, user) {
@@ -40,12 +49,156 @@ function returnUser(req, res, returnExtractor) {
 
 //Routes
 routes.get("/profile", auth, (req, res) => {
-  returnUser(req, res, user => {
-    return {
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName
-    };
+  jwt.protectedRequest(req, res, (req, res) => {
+    returnUser(req, res, user => {
+      return {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+      };
+    });
+  });
+});
+
+routes.post("/updateProfile", auth, (req, res) => {
+  jwt.protectedRequest(req, res, (req, res) => {
+    const { email, firstName, lastName } = req.body;
+
+    const errors = [];
+    if (!email || email === "") {
+      errors.push("Email can not be empty");
+    }
+
+    if (!email || email === "") {
+      errors.push("Email can not be empty");
+    }
+
+    if (!firstName || firstName === "") {
+      errors.push("First Name can not be empty");
+    }
+    if (!lastName || lastName === "") {
+      errors.push("Last Name can not be empty");
+    }
+
+    if (errors.length > 0) {
+      res.status(500).json(errors);
+      return;
+    }
+
+    if (errors.length === 0) {
+      User.findOne({ email })
+        .exec()
+        .then(existingUser => {
+          console.log(
+            "Existing user found with email",
+            existingUser,
+            req.payload._id
+          );
+          if (existingUser && existingUser._id.toString() !== req.payload._id) {
+            console.log("errors after collision push", errors);
+            res.status(500).json("Error setting email to " + email);
+            return;
+          }
+          findUser(req.payload._id)
+            .then(user => {
+              if (user) {
+                user.email = email;
+                user.firstName = firstName;
+                user.lastName = lastName;
+
+                user.save(function(err, updatedUser) {
+                  if (err) {
+                    console.log(
+                      "Error trying to save user, ",
+                      JSON.stringify(user, null, 2),
+                      err
+                    );
+                    res.status(500).json("Error during save");
+                  } else {
+                    res.status(200);
+                    res.json({ email, firstName, lastName });
+                  }
+                });
+              } else {
+                console.log("No user found for ", req.payload._id);
+                res.status(500).json("Error during save");
+              }
+            })
+            .catch(error => {
+              console.log(
+                "Error trying to find user for ",
+                req.payload._id,
+                error
+              );
+              res.status(500).json("Error processing submission");
+            });
+        })
+        .catch(error => {
+          console.log("Existing user lookup resulted in error", error);
+          res.status(500).json("Error processing submission");
+        });
+    }
+  });
+});
+
+routes.post("/updatePassword", auth, (req, res) => {
+  jwt.protectedRequest(req, res, (req, res) => {
+    const { oldPassword, password, confirm } = req.body;
+
+    const errors = [];
+    if (!oldPassword || oldPassword === "") {
+      errors.push("Current Password can not be empty");
+    }
+
+    if (!isValidPassword(password)) {
+      errors.push(
+        "Passwords must contain a lower case letter, an upper case letter, a number and a symbol"
+      );
+    }
+
+    if (!password || password === "") {
+      errors.push("new Password can not be empty");
+    }
+    if (!confirm || confirm === "") {
+      errors.push("Confirm Password can not be empty");
+    }
+    if (confirm !== password) {
+      errors.push("Password and Confirmation must match");
+    }
+
+    if (errors.length > 0) {
+      res.status(500).json(errors);
+    }
+
+    findUser(req.payload._id)
+      .then(user => {
+        if (user) {
+          if (!user.validPassword(oldPassword)) {
+            res.status(500).json("Current Password does not match");
+          }
+
+          user.setPassword(password);
+          use.save(function(err, updatedUser) {
+            if (err) {
+              res.status(500).json({
+                message: "Error during save: " + err
+              });
+            } else {
+              res.status(200);
+              res.json("SUCCESS");
+            }
+          });
+        } else {
+          console.log("Error trying to find user for ", req.payload._id);
+          res
+            .status(500)
+            .json({ message: "Error during lookup: no user found" });
+        }
+      })
+      .catch(error => {
+        console.log("Error", error);
+        res.status(500).json({ message: "Error during lookup: " + error });
+      });
   });
 });
 

@@ -1,3 +1,4 @@
+import { authenticationService } from "./authentication";
 import { profileValidationService } from "./profileValidation";
 import { handleResponse } from "./handleResponse";
 import { loginService } from "./login";
@@ -16,7 +17,10 @@ function updateProfile(email, firstName, lastName) {
 
     fetch("/user/updateProfile", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        ...authenticationService.authHeader(),
+        ...{ "Content-Type": "application/json" }
+      },
       body: JSON.stringify({ email, firstName, lastName })
     })
       .then(handleResponse.handlePrivateResponse)
@@ -68,16 +72,15 @@ function updatePassword(oldPassword, password, confirm) {
 
     fetch("/user/updatePassword", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        ...authenticationService.authHeader(),
+        ...{ "Content-Type": "application/json" }
+      },
       body: JSON.stringify({ oldPassword, password, confirm })
     })
       .then(handleResponse.handlePrivateResponse)
       .then(profile => {
-        console.log(
-          "Updating password with ",
-          JSON.stringify(profile, null, 2)
-        );
-        loginService.updateProfile(profile);
+        console.log("Updated password");
         resolve("SUCCESS");
       })
       .catch(error => {

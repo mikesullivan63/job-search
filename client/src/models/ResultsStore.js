@@ -54,9 +54,11 @@ const ResultsStore = types
   }))
   .actions(self => ({
     setUser(user, token) {
-      user.token = token.token;
+      user.token = token;
       self.user = user;
       self.loggedIn = true;
+
+      console.log("In store, set user user: ", JSON.stringify(user, null, 2));
     },
     logout() {
       self.loggedIn = false;

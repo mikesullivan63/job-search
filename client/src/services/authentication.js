@@ -36,25 +36,32 @@ function login(email, password) {
 }
 
 function remember() {
-  const persistentToken = localStorage.getItem("currentUser");
-  if (persistentToken && JSON.parse(persistentToken).token) {
-    fetch("/user/profile", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${JSON.parse(persistentToken).token}`
-      }
-    })
-      .then(response => handleResponse.handlePrivateResponse(response))
-      .then(profile => {
-        loginService.storeUser(profile, JSON.parse(persistentToken));
+  console.log("In Remember");
+  return new Promise((resolve, reject) => {
+    const persistentToken = localStorage.getItem("currentUser");
+    if (persistentToken && JSON.parse(persistentToken).token) {
+      fetch("/user/profile", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${JSON.parse(persistentToken).token}`
+        }
       })
-      .catch(error => {
-        console.log("Error loading user profile", error);
-        loginService.logout();
-      });
-  } else {
-    loginService.logout();
-  }
+        .then(response => handleResponse.handlePrivateResponse(response))
+        .then(profile => {
+          loginService.storeUser(profile, JSON.parse(persistentToken));
+          console.log("Resolving from remember");
+          return resolve(profile);
+        })
+        .catch(error => {
+          console.log("Error loading user profile", error);
+          loginService.logout();
+          return reject(error);
+        });
+    } else {
+      loginService.logout();
+      return resolve(null);
+    }
+  });
 }
 
 function authHeader() {

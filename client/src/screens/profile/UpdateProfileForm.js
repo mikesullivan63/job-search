@@ -73,14 +73,11 @@ class UpdateProfileForm extends React.Component {
       profileService
         .updateProfile(email, firstName, lastName)
         .then(user => {
-          console.log("Profile Updated");
+          console.log("Profile Updated", JSON.stringify(user, null, 2));
 
           this.setState({
             profileLoading: false,
             profileUpdated: true,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
             emailErrors: [],
             firstNameErrors: [],
             lastNameErrors: [],

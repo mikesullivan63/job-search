@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { observer } from "mobx-react";
 import ProfileTextField from "../common/ProfileTextField";
 import { authenticationService } from "../../services/authentication";
@@ -71,6 +72,10 @@ class LoginPage extends React.Component {
   }
 
   render() {
+    if (this.props.store.isLoggedIn()) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Grid
         textAlign="center"
