@@ -1,6 +1,7 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { observer } from "mobx-react";
-import LoginPageField from "./LoginPageField";
+import ProfileTextField from "../common/ProfileTextField";
 import { authenticationService } from "../../services/authentication";
 import {
   Button,
@@ -71,6 +72,10 @@ class LoginPage extends React.Component {
   }
 
   render() {
+    if (this.props.store.isLoggedIn()) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <Grid
         textAlign="center"
@@ -95,7 +100,7 @@ class LoginPage extends React.Component {
               />
             )}
             <Segment>
-              <LoginPageField
+              <ProfileTextField
                 name="email"
                 icon="user"
                 label="E-mail address"
@@ -103,7 +108,7 @@ class LoginPage extends React.Component {
                 errors={this.state.emailErrors}
                 handleChange={this.handleChange}
               />
-              <LoginPageField
+              <ProfileTextField
                 name="password"
                 icon="lock"
                 label="Password"

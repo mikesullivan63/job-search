@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Redirect } from "react-router-dom";
-import RegisterPageField from "./RegisterPageField";
+import ProfileTextField from "../common/ProfileTextField";
 import { registrationService } from "../../services/registration";
 import {
   Button,
@@ -139,7 +139,8 @@ class RegisterPage extends React.Component {
               />
             )}
             <Segment>
-              <RegisterPageField
+              <ProfileTextField
+                form="register"
                 name="email"
                 icon="user"
                 label="E-mail address"
@@ -147,21 +148,24 @@ class RegisterPage extends React.Component {
                 errors={this.state.emailErrors}
                 handleChange={this.handleChange}
               />
-              <RegisterPageField
+              <ProfileTextField
+                form="register"
                 name="firstName"
                 label="First Name"
                 placeholder="First Name"
                 errors={this.state.firstNameErrors}
                 handleChange={this.handleChange}
               />
-              <RegisterPageField
+              <ProfileTextField
+                form="register"
                 name="lastName"
                 label="Last Name"
                 placeholder="Last Name"
                 errors={this.state.lastNameErrors}
                 handleChange={this.handleChange}
               />
-              <RegisterPageField
+              <ProfileTextField
+                form="register"
                 name="password"
                 icon="lock"
                 label="Password"
@@ -170,7 +174,8 @@ class RegisterPage extends React.Component {
                 errors={this.state.passwordErrors}
                 handleChange={this.handleChange}
               />
-              <RegisterPageField
+              <ProfileTextField
+                form="register"
                 name="confirm"
                 icon="lock"
                 label="Confirm Password"

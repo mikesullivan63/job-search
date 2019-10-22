@@ -10,8 +10,14 @@ function handlePrivateResponse(response) {
         //location.reload(true);
       }
 
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
+      let message = response.statusText;
+      if (data && data.message) {
+        message = data.message;
+      } else if (data) {
+        message = data;
+      }
+
+      return Promise.reject(message);
     }
     return data;
   });
