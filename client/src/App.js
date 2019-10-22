@@ -5,6 +5,8 @@ import Header from "./screens/common/Header";
 import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
 import RegisterPage from "./screens/register/RegisterPage";
+import EditProfilePage from "./screens/profile/EditProfilePage";
+
 import { authenticationService } from "./services/authentication";
 import { loginService } from "./services/login";
 import { searchService } from "./services/search";
@@ -20,6 +22,7 @@ class App extends React.Component {
     authenticationService.remember();
   }
   render() {
+    console.log("Rendering app with status", this.props.store.isLoggedIn());
     return (
       <React.Fragment>
         <Header store={this.props.store} />
@@ -41,7 +44,20 @@ class App extends React.Component {
           </Switch>
         )}
         {this.props.store.isLoggedIn() && (
-          <SearchPage store={this.props.store} />
+          <Switch>
+            <Route
+              path="/profile"
+              render={props => (
+                <EditProfilePage {...props} store={this.props.store} />
+              )}
+            />
+            <Route
+              path="/"
+              render={props => (
+                <SearchPage {...props} store={this.props.store} />
+              )}
+            />
+          </Switch>
         )}
       </React.Fragment>
     );

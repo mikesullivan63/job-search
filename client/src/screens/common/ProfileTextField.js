@@ -13,6 +13,7 @@ const ProfileTextField = props => {
       icon={props.icon}
       label={props.label}
       placeholder={props.placeholder}
+      value={props.value}
       error={props.errors && props.errors.length > 0 ? props.errors : null}
       onChange={props.handleChange}
     />

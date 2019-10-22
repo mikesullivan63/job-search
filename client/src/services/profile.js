@@ -1,4 +1,5 @@
 import { profileValidationService } from "./profileValidation";
+import { handleResponse } from "./handleResponse";
 import { loginService } from "./login";
 
 function updateProfile(email, firstName, lastName) {
@@ -17,13 +18,15 @@ function updateProfile(email, firstName, lastName) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, firstName, lastName })
-    }).then(handleResponse.handlePrivateResponse);
-    then(profile => {
-      loginService.updateProfile(profile);
-      resolve("SUCCESS");
-    }).catch(error => {
-      return reject(error);
-    });
+    })
+      .then(handleResponse.handlePrivateResponse)
+      .then(profile => {
+        loginService.updateProfile(profile);
+        resolve("SUCCESS");
+      })
+      .catch(error => {
+        return reject(error);
+      });
   });
 }
 
@@ -45,13 +48,15 @@ function updatePassword(oldPassword, password, confirm) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ oldPassword, password, confirm })
-    }).then(handleResponse.handlePrivateResponse);
-    then(profile => {
-      loginService.updateProfile(profile);
-      resolve("SUCCESS");
-    }).catch(error => {
-      return reject(error);
-    });
+    })
+      .then(handleResponse.handlePrivateResponse)
+      .then(profile => {
+        loginService.updateProfile(profile);
+        resolve("SUCCESS");
+      })
+      .catch(error => {
+        return reject(error);
+      });
   });
 }
 

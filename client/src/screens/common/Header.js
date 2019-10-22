@@ -1,9 +1,15 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { Container, Image, Menu } from "semantic-ui-react";
 import logo from "../../logo.svg";
 import { loginService } from "../../services/login";
 
 function Header(props) {
+  const location = useLocation();
+  console.log(
+    "Rendering header with location",
+    JSON.stringify(location, null, 2)
+  );
   return (
     <div>
       <Menu fixed="top" inverted>
@@ -15,19 +21,15 @@ function Header(props) {
           {props.store.isLoggedIn() && (
             <React.Fragment>
               <Menu.Item>Welcome, {props.store.getUser().firstName}</Menu.Item>
-              <Menu.Item href="/" target="_blank">
-                Search
-              </Menu.Item>
-              <Menu.Item href="/watched-jobs" target="_blank">
-                Watched Jobs
-              </Menu.Item>
-              <Menu.Item href="/ignored-jobs" target="_blank">
-                Ignored Jobs
-              </Menu.Item>
-              <Menu.Item href="/search-history" target="_blank">
-                Search History
-              </Menu.Item>
-              <Menu.Item href="/profile" target="_blank" position="right">
+              <Menu.Item href="/">Search</Menu.Item>
+              <Menu.Item href="/watched-jobs">Watched Jobs</Menu.Item>
+              <Menu.Item href="/ignored-jobs">Ignored Jobs</Menu.Item>
+              <Menu.Item href="/search-history">Search History</Menu.Item>
+              <Menu.Item
+                href="/profile"
+                position="right"
+                active={location.pathname === "/profile"}
+              >
                 Profile
               </Menu.Item>
               <Menu.Item position="right" onClick={() => loginService.logout()}>
@@ -37,12 +39,8 @@ function Header(props) {
           )}
           {!props.store.isLoggedIn() && (
             <React.Fragment>
-              <Menu.Item href="/login" target="_blank">
-                Login
-              </Menu.Item>
-              <Menu.Item href="/register" target="_blank">
-                Register
-              </Menu.Item>
+              <Menu.Item href="/login">Login</Menu.Item>
+              <Menu.Item href="/register">Register</Menu.Item>
             </React.Fragment>
           )}
         </Container>
