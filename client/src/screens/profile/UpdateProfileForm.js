@@ -112,7 +112,7 @@ class UpdateProfileForm extends React.Component {
           {this.state.profileFormErrors.length > 0 && (
             <Message
               error
-              header="Error attempting to register"
+              header="Error updating profile"
               list={this.state.profileFormErrors}
             />
           )}

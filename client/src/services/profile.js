@@ -32,17 +32,39 @@ function updateProfile(email, firstName, lastName) {
 
 function updatePassword(oldPassword, password, confirm) {
   return new Promise(function(resolve, reject) {
+    console.log(
+      "Submitting password update with ",
+      oldPassword,
+      password,
+      confirm
+    );
     let errors = [];
 
     if (confirm !== password) {
       errors.push("Passwords do not match");
     }
 
-    errors = errors.concat(profileValidationService(password));
+    errors = errors
+      .concat(
+        profileValidationService.requiredValueCheck(
+          oldPassword,
+          "Current Password"
+        )
+      )
+      .concat(
+        profileValidationService.requiredValueCheck(password, "New Password")
+      )
+      .concat(profileValidationService.isValidPassword(password))
+      .concat(
+        profileValidationService.requiredValueCheck(confirm, "Confirm Password")
+      );
 
     if (errors.length > 0) {
+      console.log("Rejecting password with ", JSON.stringify(errors, null, 2));
       return reject(errors);
     }
+
+    console.log("Fetching password with ", JSON.stringify(errors, null, 2));
 
     fetch("/user/updatePassword", {
       method: "POST",
@@ -51,10 +73,15 @@ function updatePassword(oldPassword, password, confirm) {
     })
       .then(handleResponse.handlePrivateResponse)
       .then(profile => {
+        console.log(
+          "Updating password with ",
+          JSON.stringify(profile, null, 2)
+        );
         loginService.updateProfile(profile);
         resolve("SUCCESS");
       })
       .catch(error => {
+        console.log("Errored password with ", JSON.stringify(error, null, 2));
         return reject(error);
       });
   });

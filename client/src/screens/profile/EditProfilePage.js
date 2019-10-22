@@ -18,6 +18,7 @@ class EditProfilePage extends React.Component {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           <UpdateProfileForm store={this.props.store} />
+          <UpdatePasswordForm store={this.props.store} />
         </Grid.Column>
       </Grid>
     );

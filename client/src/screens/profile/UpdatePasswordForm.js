@@ -21,6 +21,8 @@ class UpdatePasswordForm extends React.Component {
       confirmErrors: [],
       passwordFormErrors: []
     };
+
+    this.validateAndSubmitPassword = this.validateAndSubmitPassword.bind(this);
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
@@ -45,10 +47,11 @@ class UpdatePasswordForm extends React.Component {
       password,
       "New Password"
     );
-
-    errors.passwordErrors = errors.passwordErrors.concat(
-      profileValidationService.isValidPassword
-    );
+    if (errors.passwordErrors.length === 0) {
+      errors.passwordErrors = profileValidationService.isValidPassword(
+        password
+      );
+    }
 
     errors.confirmErrors = profileValidationService.requiredValueCheck(
       confirm,
@@ -62,6 +65,7 @@ class UpdatePasswordForm extends React.Component {
       errors.confirmErrors.length === 0;
 
     if (clean) {
+      console.log("Submitting password update");
       this.setState({ passwordLoading: true, passwordUpdated: false });
       profileService
         .updatePassword(oldPassword, password, confirm)
@@ -71,16 +75,22 @@ class UpdatePasswordForm extends React.Component {
           this.setState({ passwordLoading: false, passwordUpdated: true });
         })
         .catch(error => {
+          console.log("Submitting password update resulted in error", error);
           this.setState({
             passwordLoading: false,
             passwordUpdated: false,
-            formErrors: [].concat(error)
+            passwordFormErrors: [].concat(error)
           });
         });
     }
   }
 
   render() {
+    console.log(
+      "Rendering form from state",
+      JSON.stringify(this.state, null, 2)
+    );
+
     return (
       <React.Fragment>
         <Header as="h2" color="teal" textAlign="center">
@@ -88,30 +98,44 @@ class UpdatePasswordForm extends React.Component {
         </Header>
         <Form
           size="large"
-          loading={this.state.loading}
-          error={this.state.formErrors.length > 0}
+          loading={this.state.passwordLoading}
+          error={this.state.passwordFormErrors.length > 0}
+          success={this.state.passwordUpdated}
           onSubmit={this.validateAndSubmitPassword}
         >
-          {this.state.formErrors.length > 0 && (
+          {this.state.passwordFormErrors.length > 0 && (
             <Message
               error
-              header="Error attempting to register"
+              header="Error updating password"
               list={this.state.formErrors}
             />
           )}
+          {this.state.passwordUpdated && (
+            <Message positive header="Password Updated" />
+          )}
           <Segment>
             <ProfileTextField
-              form="register"
+              form="password"
+              name="oldPassword"
+              icon="lock"
+              label="Current Password"
+              placeholder="Current Password"
+              type="password"
+              errors={this.state.oldPasswordErrors}
+              handleChange={this.handleChange}
+            />
+            <ProfileTextField
+              form="password"
               name="password"
               icon="lock"
-              label="Password"
-              placeholder="Password"
+              label="New Password"
+              placeholder="New Password"
               type="password"
               errors={this.state.passwordErrors}
               handleChange={this.handleChange}
             />
             <ProfileTextField
-              form="register"
+              form="password"
               name="confirm"
               icon="lock"
               label="Confirm Password"
@@ -123,7 +147,7 @@ class UpdatePasswordForm extends React.Component {
             <Form.Field
               id="form-button-control-public"
               control={Button}
-              content="Register Account"
+              content="Update Password"
               label=""
               color="teal"
               fluid
