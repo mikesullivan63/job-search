@@ -10,14 +10,6 @@ class Header extends React.Component {
     super(props);
   }
   render() {
-    const { location, history } = this.props;
-
-    console.log(
-      "Rendering header with location",
-      JSON.stringify(location, null, 2),
-      " and user ",
-      JSON.stringify(this.props.store.getUser())
-    );
     return (
       <div>
         <Menu fixed="top" inverted>
@@ -31,31 +23,34 @@ class Header extends React.Component {
                 <Menu.Item>
                   Welcome, {this.props.store.getUser().firstName}
                 </Menu.Item>
-                <Menu.Item href="/" active={location.pathname === "/"}>
+                <Menu.Item
+                  href="/"
+                  active={this.props.location.pathname === "/"}
+                >
                   Search
                 </Menu.Item>
                 <Menu.Item
                   href="/watched-jobs"
-                  active={location.pathname === "/watched-jobs"}
+                  active={this.props.location.pathname === "/watched-jobs"}
                 >
                   Watched Jobs
                 </Menu.Item>
                 <Menu.Item
                   href="/ignored-jobs"
-                  active={location.pathname === "/ignored-jobs"}
+                  active={this.props.location.pathname === "/ignored-jobs"}
                 >
                   Ignored Jobs
                 </Menu.Item>
                 <Menu.Item
                   href="/search-history"
-                  active={location.pathname === "/search-history"}
+                  active={this.props.location.pathname === "/search-history"}
                 >
                   Search History
                 </Menu.Item>
                 <Menu.Item
                   href="/profile"
                   position="right"
-                  active={location.pathname === "/profile"}
+                  active={this.props.location.pathname === "/profile"}
                 >
                   Profile
                 </Menu.Item>
@@ -63,7 +58,7 @@ class Header extends React.Component {
                   position="right"
                   onClick={() => {
                     loginService.logout();
-                    history.push("/login");
+                    this.props.history.push("/login");
                   }}
                 >
                   Logout
@@ -74,13 +69,13 @@ class Header extends React.Component {
               <React.Fragment>
                 <Menu.Item
                   href="/login"
-                  active={location.pathname === "/login"}
+                  active={this.props.location.pathname === "/login"}
                 >
                   Login
                 </Menu.Item>
                 <Menu.Item
                   href="/register"
-                  active={location.pathname === "/register"}
+                  active={this.props.location.pathname === "/register"}
                 >
                   Register
                 </Menu.Item>
