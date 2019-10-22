@@ -10,6 +10,10 @@ function storeUser(user, token) {
   localStorage.setItem("currentUser", JSON.stringify(token));
 }
 
+function updateProfile(user, token) {
+  this.store.setUser(user, this.store.getUser().token);
+}
+
 function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem("currentUser");
@@ -24,5 +28,6 @@ export const loginService = {
   setStore,
   logout,
   storeUser,
+  updateProfile,
   getUser
 };
