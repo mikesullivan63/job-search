@@ -72,7 +72,17 @@ class UpdatePasswordForm extends React.Component {
         .then(user => {
           console.log("Password updated registration");
 
-          this.setState({ passwordLoading: false, passwordUpdated: true });
+          this.setState({
+            passwordLoading: false,
+            passwordUpdated: true,
+            oldPassword: "",
+            password: "",
+            confirm: "",
+            oldPasswordErrors: [],
+            passwordErrors: [],
+            confirmErrors: [],
+            passwordFormErrors: []
+          });
         })
         .catch(error => {
           console.log("Submitting password update resulted in error", error);
@@ -94,7 +104,7 @@ class UpdatePasswordForm extends React.Component {
     return (
       <React.Fragment>
         <Header as="h2" color="teal" textAlign="center">
-          Change yoru password
+          Change your password
         </Header>
         <Form
           size="large"
@@ -145,7 +155,7 @@ class UpdatePasswordForm extends React.Component {
               handleChange={this.handleChange}
             />
             <Form.Field
-              id="form-button-control-public"
+              id="password-form-button"
               control={Button}
               content="Update Password"
               label=""

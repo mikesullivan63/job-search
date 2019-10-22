@@ -75,7 +75,17 @@ class UpdateProfileForm extends React.Component {
         .then(user => {
           console.log("Profile Updated");
 
-          this.setState({ profileLoading: false, profileUpdated: true });
+          this.setState({
+            profileLoading: false,
+            profileUpdated: true,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            emailErrors: [],
+            firstNameErrors: [],
+            lastNameErrors: [],
+            profileFormErrors: []
+          });
         })
         .catch(error => {
           console.log(
@@ -149,7 +159,7 @@ class UpdateProfileForm extends React.Component {
               handleChange={this.handleChange}
             />
             <Form.Field
-              id="form-button-control-public"
+              id="profile-form-button"
               control={Button}
               content="Update Profile"
               label=""
