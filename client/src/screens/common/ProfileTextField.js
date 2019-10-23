@@ -7,7 +7,8 @@ const ProfileTextField = props => {
     .filter(el => el && el !== null && el !== "null");
   return (
     <Form.Field
-      fluid
+      inline
+      //width={16}
       control={Input}
       iconPosition="left"
       id={props.form + "-form-input-control" + props.name}

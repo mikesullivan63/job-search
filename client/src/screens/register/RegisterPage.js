@@ -23,14 +23,42 @@ class RegisterPage extends React.Component {
       lastName: "",
       password: "",
       confirm: "",
-      emailErrors: [],
-      firstNameErrors: [],
-      lastNameErrors: [],
-      passwordErrors: [],
-      confirmErrors: [],
-      formErrors: [],
+      errors: [],
       registered: false
     };
+
+    this.formFields = [
+      {
+        name: "email",
+        label: "E-mail address",
+        icon: "user",
+        required: true
+      },
+      {
+        name: "firstName",
+        label: "First Name",
+        required: true
+      },
+      {
+        name: "lastName",
+        label: "Last Names",
+        required: true
+      },
+      {
+        name: "password",
+        label: "Password",
+        icon: "lock",
+        type: "password",
+        required: true
+      },
+      {
+        name: "confirm",
+        label: "Confirm Password",
+        icon: "lock",
+        type: "password",
+        required: true
+      }
+    ];
 
     this.validateAndSubmit = this.validateAndSubmit.bind(this);
   }
@@ -41,34 +69,18 @@ class RegisterPage extends React.Component {
     event.preventDefault();
 
     this.setState({
-      emailErrors: [],
-      firstNameErrors: [],
-      lastNameErrors: [],
-      passwordErrors: [],
-      confirmErrors: [],
-      formErrors: []
+      errors: []
     });
     const { email, firstName, lastName, password, confirm } = this.state;
-
-    const fieldChecks = [
-      [email, "Email", emailErrors],
-      [firstName, "First Name", firstNameErrors],
-      [lastName, "Last Name", lastNameErrors],
-      [password, "Password", passwordErrors],
-      [confirm, "Password Confirmation", confirmErrors]
-    ];
-
-    const errors = fieldChecks
-      .filter(group => validationService.requiredValueCheck(group[0]))
-      .forEach(group => {
-        errors[group[2]] = group[1] + "is required";
+    const errors = this.formFields
+      .filter(field => this.state[field.name] === "")
+      .map(field => {
+        return { field: field.name, message: field.label + " is required" };
       });
 
-    const clean = fieldChecks.every(
-      group => !errors[group[2]] || errors[group[2]].length == 0
-    );
-
-    if (clean) {
+    if (errors.length > 0) {
+      this.setState({ errors: errors });
+    } else {
       this.setState({ loading: true });
       registrationService
         .register(email, firstName, lastName, password, confirm)
@@ -78,10 +90,19 @@ class RegisterPage extends React.Component {
           this.setState({ registered: true });
         })
         .catch(error => {
-          this.setState({
-            loading: false,
-            formErrors: [].concat(error)
-          });
+          if (Array.isArray(error)) {
+            this.setState({
+              loading: false,
+              errors: error.map(el => {
+                return { field: "", message: el };
+              })
+            });
+          } else {
+            this.setState({
+              loading: false,
+              errors: [{ field: "", message: error }]
+            });
+          }
         });
     }
   }
@@ -90,8 +111,6 @@ class RegisterPage extends React.Component {
     if (this.state.registered) {
       return <Redirect to="/" />;
     }
-
-    const { email, firstName, lastName, password, confirm } = this.state;
 
     return (
       <Grid
@@ -106,62 +125,40 @@ class RegisterPage extends React.Component {
           <Form
             size="large"
             loading={this.state.loading}
-            error={this.state.formErrors.length > 0}
+            error={this.state.errors.filter(el => el.field === "") > 0}
             onSubmit={this.validateAndSubmit}
           >
-            {this.state.formErrors.length > 0 && (
-              <Message
-                error
-                header="Error attempting to register"
-                list={this.state.formErrors}
-              />
-            )}
+            <Message
+              error
+              header="Error attempting to register"
+              list={this.state.errors
+                .filter(el => el.field === "")
+                .map(el => el.message)}
+            />
             <Segment>
-              <ProfileTextField
-                form="register"
-                name="email"
-                icon="user"
-                label="E-mail address"
-                placeholder="E-mail address"
-                errors={this.state.emailErrors}
-                handleChange={this.handleChange}
-              />
-              <ProfileTextField
-                form="register"
-                name="firstName"
-                label="First Name"
-                placeholder="First Name"
-                errors={this.state.firstNameErrors}
-                handleChange={this.handleChange}
-              />
-              <ProfileTextField
-                form="register"
-                name="lastName"
-                label="Last Name"
-                placeholder="Last Name"
-                errors={this.state.lastNameErrors}
-                handleChange={this.handleChange}
-              />
-              <ProfileTextField
-                form="register"
-                name="password"
-                icon="lock"
-                label="Password"
-                placeholder="Password"
-                type="password"
-                errors={this.state.passwordErrors}
-                handleChange={this.handleChange}
-              />
-              <ProfileTextField
-                form="register"
-                name="confirm"
-                icon="lock"
-                label="Confirm Password"
-                placeholder="Confirm Password"
-                type="password"
-                errors={this.state.confirmErrors}
-                handleChange={this.handleChange}
-              />
+              {this.formFields.map(field => {
+                const props = {};
+                props.form = "register";
+                props.name = field.name;
+                if (field.icon) {
+                  props.icon = field.icon;
+                }
+                props.label = field.label;
+                props.placeholder = field.label;
+
+                if (field.type) {
+                  props.type = field.type;
+                }
+                return (
+                  <ProfileTextField
+                    {...props}
+                    errors={this.state.errors
+                      .filter(el => el.field === field.name)
+                      .map(el => el.message)}
+                    handleChange={this.handleChange}
+                  />
+                );
+              })}
               <Form.Field
                 id="form-button-control-public"
                 control={Button}

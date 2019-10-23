@@ -1,5 +1,5 @@
 import { handleResponse } from "./handleResponse";
-import { profileValidationService } from "./validation";
+import { validationService } from "./validation";
 import { loginService } from "./login";
 
 function register(email, firstName, lastName, password, confirm) {
@@ -11,9 +11,9 @@ function register(email, firstName, lastName, password, confirm) {
     }
 
     errors = errors.concat(
-      profileValidationService.areProfileValuesValid(email, firstName, lastName)
+      validationService.areProfileValuesValid(email, firstName, lastName)
     );
-    errors = errors.concat(profileValidationService.isValidPassword(password));
+    errors = errors.concat(validationService.isValidPassword(password));
 
     if (errors.length > 0) {
       return reject(errors);

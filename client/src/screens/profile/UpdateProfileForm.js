@@ -46,11 +46,13 @@ class UpdateProfileForm extends React.Component {
 
     //Process e-mail
     const errors = [
-      [email, "Email", emailErrors],
-      [firstName, "First Name", firstNameErrors],
-      [lastName, "Last Name", lastNameErrors]
+      [email, "Email", "emailErrors"],
+      [firstName, "First Name", "firstNameErrors"],
+      [lastName, "Last Name", "lastNameErrors"]
     ]
-      .filter(group => validationService.requiredValueCheck(group[0]))
+      .filter(group =>
+        validationService.requiredValueCheck(this.state[group[0]])
+      )
       .forEach(group => {
         errors[group[2]] = [group[1] + "is required"];
       });

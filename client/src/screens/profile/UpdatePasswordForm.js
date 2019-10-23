@@ -39,11 +39,13 @@ class UpdatePasswordForm extends React.Component {
     const { oldPassword, password, confirm } = this.state;
 
     const errors = [
-      [oldPassword, "Current Password", oldPasswordErrors],
-      [password, "New Password", passwordErrors],
-      [confirm, "Confirm Password", confirmErrors]
+      [oldPassword, "Current Password", "oldPasswordErrors"],
+      [password, "New Password", "passwordErrors"],
+      [confirm, "Confirm Password", "confirmErrors"]
     ]
-      .filter(group => validationService.requiredValueCheck(group[0]))
+      .filter(group =>
+        validationService.requiredValueCheck(this.sate[group[0]])
+      )
       .forEach(group => {
         errors[group[2]] = [group[1] + "is required"];
       });
