@@ -5,16 +5,6 @@ import { loginService } from "./login";
 
 function updateProfile(email, firstName, lastName) {
   return new Promise(function(resolve, reject) {
-    let errors = [];
-
-    errors = errors.concat(
-      profileValidationService.areProfileValuesValid(email, firstName, lastName)
-    );
-
-    if (errors.length > 0) {
-      return reject(errors);
-    }
-
     fetch("/user/updateProfile", {
       method: "POST",
       headers: {
@@ -36,40 +26,6 @@ function updateProfile(email, firstName, lastName) {
 
 function updatePassword(oldPassword, password, confirm) {
   return new Promise(function(resolve, reject) {
-    console.log(
-      "Submitting password update with ",
-      oldPassword,
-      password,
-      confirm
-    );
-    let errors = [];
-
-    if (confirm !== password) {
-      errors.push("Passwords do not match");
-    }
-
-    errors = errors
-      .concat(
-        profileValidationService.requiredValueCheck(
-          oldPassword,
-          "Current Password"
-        )
-      )
-      .concat(
-        profileValidationService.requiredValueCheck(password, "New Password")
-      )
-      .concat(profileValidationService.isValidPassword(password))
-      .concat(
-        profileValidationService.requiredValueCheck(confirm, "Confirm Password")
-      );
-
-    if (errors.length > 0) {
-      console.log("Rejecting password with ", JSON.stringify(errors, null, 2));
-      return reject(errors);
-    }
-
-    console.log("Fetching password with ", JSON.stringify(errors, null, 2));
-
     fetch("/user/updatePassword", {
       method: "POST",
       headers: {

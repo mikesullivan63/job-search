@@ -38,25 +38,15 @@ class UpdatePasswordForm extends React.Component {
     });
     const { oldPassword, password, confirm } = this.state;
 
-    const errors = {};
-    errors.oldPasswordErrors = profileValidationService.requiredValueCheck(
-      oldPassword,
-      "Current Password"
-    );
-    errors.passwordErrors = profileValidationService.requiredValueCheck(
-      password,
-      "New Password"
-    );
-    if (errors.passwordErrors.length === 0) {
-      errors.passwordErrors = profileValidationService.isValidPassword(
-        password
-      );
-    }
-
-    errors.confirmErrors = profileValidationService.requiredValueCheck(
-      confirm,
-      "Confirm Password"
-    );
+    const errors = [
+      [oldPassword, "Current Password", oldPasswordErrors],
+      [password, "New Password", passwordErrors],
+      [confirm, "Confirm Password", confirmErrors]
+    ]
+      .filter(group => profileValidationService.requiredValueCheck(group[0]))
+      .forEach(group => {
+        errors[group[2]] = group[1] + "is required";
+      });
 
     this.setState(errors);
     const clean =

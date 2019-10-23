@@ -45,19 +45,15 @@ class UpdateProfileForm extends React.Component {
     const { email, firstName, lastName } = this.state;
 
     //Process e-mail
-    const errors = {};
-    errors.emailErrors = profileValidationService.requiredValueCheck(
-      email,
-      "Email"
-    );
-    errors.firstNameErrors = profileValidationService.requiredValueCheck(
-      firstName,
-      "First Name"
-    );
-    errors.lastNameErrors = profileValidationService.requiredValueCheck(
-      lastName,
-      "Last Name"
-    );
+    const errors = [
+      [email, "Email", emailErrors],
+      [firstName, "First Name", firstNameErrors],
+      [lastName, "Last Name", lastNameErrors]
+    ]
+      .filter(group => profileValidationService.requiredValueCheck(group[0]))
+      .forEach(group => {
+        errors[group[2]] = group[1] + "is required";
+      });
 
     this.setState(errors);
 
