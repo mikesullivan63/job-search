@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, Form, Message, Segment, Button } from "semantic-ui-react";
 import ProfileTextField from "../common/ProfileTextField";
-import { profileValidationService } from "../../services/profileValidation";
+import { validationService } from "../../services/validation";
 import { profileService } from "../../services/profile";
 
 class UpdateProfileForm extends React.Component {
@@ -50,9 +50,9 @@ class UpdateProfileForm extends React.Component {
       [firstName, "First Name", firstNameErrors],
       [lastName, "Last Name", lastNameErrors]
     ]
-      .filter(group => profileValidationService.requiredValueCheck(group[0]))
+      .filter(group => validationService.requiredValueCheck(group[0]))
       .forEach(group => {
-        errors[group[2]] = group[1] + "is required";
+        errors[group[2]] = [group[1] + "is required"];
       });
 
     this.setState(errors);

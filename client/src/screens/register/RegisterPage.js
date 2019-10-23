@@ -39,7 +39,6 @@ class RegisterPage extends React.Component {
 
   validateAndSubmit(event) {
     event.preventDefault();
-    let clean = true;
 
     this.setState({
       emailErrors: [],
@@ -51,44 +50,23 @@ class RegisterPage extends React.Component {
     });
     const { email, firstName, lastName, password, confirm } = this.state;
 
-    //Process e-mail
-    if (!email || email === "") {
-      clean = false;
-      this.setState({
-        emailErrors: ["Email is required"]
-      });
-    }
+    const fieldChecks = [
+      [email, "Email", emailErrors],
+      [firstName, "First Name", firstNameErrors],
+      [lastName, "Last Name", lastNameErrors],
+      [password, "Password", passwordErrors],
+      [confirm, "Password Confirmation", confirmErrors]
+    ];
 
-    //Process First Name
-    if (!firstName || firstName === "") {
-      clean = false;
-      this.setState({
-        firstNameErrors: ["First Name is required"]
+    const errors = fieldChecks
+      .filter(group => validationService.requiredValueCheck(group[0]))
+      .forEach(group => {
+        errors[group[2]] = group[1] + "is required";
       });
-    }
-    //Process Last Name
-    if (!lastName || lastName === "") {
-      clean = false;
-      this.setState({
-        lastNameErrors: ["Last Name is required"]
-      });
-    }
 
-    //Process password
-    if (!password || password === "") {
-      clean = false;
-      this.setState({
-        passwordErrors: ["Password is required"]
-      });
-    }
-
-    //Process password confirmation
-    if (!confirm || confirm === "") {
-      clean = false;
-      this.setState({
-        confirmErrors: ["Password Confirmation is required"]
-      });
-    }
+    const clean = fieldChecks.every(
+      group => !errors[group[2]] || errors[group[2]].length == 0
+    );
 
     if (clean) {
       this.setState({ loading: true });

@@ -1,5 +1,4 @@
 import { authenticationService } from "./authentication";
-import { profileValidationService } from "./profileValidation";
 import { handleResponse } from "./handleResponse";
 import { loginService } from "./login";
 

@@ -1,5 +1,5 @@
 import { handleResponse } from "./handleResponse";
-import { profileValidationService } from "./profileValidation";
+import { profileValidationService } from "./validation";
 import { loginService } from "./login";
 
 function register(email, firstName, lastName, password, confirm) {
