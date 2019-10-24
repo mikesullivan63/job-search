@@ -6,10 +6,10 @@ function updateProfile(email, firstName, lastName) {
   return new Promise(function(resolve, reject) {
     fetch("/user/updateProfile", {
       method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      }),
+
       body: JSON.stringify({ email, firstName, lastName })
     })
       .then(handleResponse.handlePrivateResponse)
@@ -27,10 +27,9 @@ function updatePassword(oldPassword, password, confirm) {
   return new Promise(function(resolve, reject) {
     fetch("/user/updatePassword", {
       method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      }),
       body: JSON.stringify({ oldPassword, password, confirm })
     })
       .then(handleResponse.handlePrivateResponse)

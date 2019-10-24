@@ -62,13 +62,16 @@ function remember() {
   });
 }
 
-function authHeader() {
+function authHeader(otherHeaders) {
   // return authorization header with jwt token
   const currentUser = loginService.getUser();
   if (currentUser && currentUser.token) {
-    return { Authorization: `Bearer ${currentUser.token}` };
+    return {
+      ...otherHeaders,
+      ...{ Authorization: `Bearer ${currentUser.token}` }
+    };
   } else {
-    return {};
+    return otherHeaders;
   }
 }
 
