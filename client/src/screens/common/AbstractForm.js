@@ -10,7 +10,7 @@ class AbstractForm extends React.Component {
       loading: false,
       fields: [],
       errors: [],
-      complete: false
+      success: false
     };
 
     this.validateAndSubmit = this.validateAndSubmit.bind(this);
@@ -53,7 +53,7 @@ class AbstractForm extends React.Component {
       this.submitForm()
         .then(result => {
           this.handleSuccess(result);
-          this.setState({ completed: true });
+          this.setState({ loading: false, success: true });
         })
         .catch(error => {
           if (Array.isArray(error)) {
@@ -93,7 +93,7 @@ class AbstractForm extends React.Component {
               .filter(el => el.field === "")
               .map(el => el.message)}
           />
-          {this.state.complete && <Message positive header={successMessage} />}
+          {this.state.success && <Message positive header={successMessage} />}
           <Segment>
             {this.state.fields.map(field => {
               return (
