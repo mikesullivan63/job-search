@@ -47,33 +47,33 @@ routes.route("/register").post(function(req, res) {
   User.findOne({ email })
     .exec()
     .then(existingUser => {
-      if (existingUser) {
-        errors.push("Error processing submission");
-      }
-
       if (errors.length > 0) {
         res.status(500);
         res.json(errors);
       } else {
-        //No errrors, run the save;
-        var user = new User();
-        user.email = email;
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.setPassword(password);
+        if (existingUser) {
+          res.status(500).json("Error processing submission");
+        } else {
+          //No errrors, run the save;
+          var user = new User();
+          user.email = email;
+          user.firstName = firstName;
+          user.lastName = lastName;
+          user.setPassword(password);
 
-        user.save(function(error) {
-          if (error) {
-            console.log("Saving user errored: ", error);
-            res.status(500);
-            res.json("Error processing submission");
-          } else {
-            var token;
-            token = jwt.generateJwt(user);
-            res.status(200);
-            res.json({ token });
-          }
-        });
+          user.save(function(error) {
+            if (error) {
+              console.log("Saving user errored: ", error);
+              res.status(500);
+              res.json("Error processing submission");
+            } else {
+              var token;
+              token = jwt.generateJwt(user);
+              res.status(200);
+              res.json({ token });
+            }
+          });
+        }
       }
     })
     .catch(error => {

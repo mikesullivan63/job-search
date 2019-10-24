@@ -36,7 +36,6 @@ function login(email, password) {
 }
 
 function remember() {
-  console.log("In Remember");
   return new Promise((resolve, reject) => {
     const persistentToken = localStorage.getItem("currentUser");
     if (persistentToken && JSON.parse(persistentToken).token) {
@@ -49,7 +48,6 @@ function remember() {
         .then(response => handleResponse.handlePrivateResponse(response))
         .then(profile => {
           loginService.storeUser(profile, JSON.parse(persistentToken));
-          console.log("Resolving from remember");
           return resolve(profile);
         })
         .catch(error => {

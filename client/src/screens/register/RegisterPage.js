@@ -1,33 +1,16 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Redirect } from "react-router-dom";
-import ProfileTextField from "../common/ProfileTextField";
+import AbstractForm from "../common/AbstractForm";
 import { registrationService } from "../../services/registration";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment
-} from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 
-class RegisterPage extends React.Component {
+class RegisterPage extends AbstractForm {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-      confirm: "",
-      errors: [],
-      registered: false
-    };
-
-    this.formFields = [
+    //Form fields
+    this.state.fields = [
       {
         name: "email",
         label: "E-mail address",
@@ -59,56 +42,25 @@ class RegisterPage extends React.Component {
         required: true
       }
     ];
-
-    this.validateAndSubmit = this.validateAndSubmit.bind(this);
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  submitForm = () => {
+    return registrationService.register(
+      this.getValueForField("email"),
+      this.getValueForField("firstName"),
+      this.getValueForField("lastName"),
+      this.getValueForField("password"),
+      this.getValueForField("confirm")
+    );
+  };
 
-  validateAndSubmit(event) {
-    event.preventDefault();
-
-    this.setState({
-      errors: []
-    });
-    const { email, firstName, lastName, password, confirm } = this.state;
-    const errors = this.formFields
-      .filter(field => this.state[field.name] === "")
-      .map(field => {
-        return { field: field.name, message: field.label + " is required" };
-      });
-
-    if (errors.length > 0) {
-      this.setState({ errors: errors });
-    } else {
-      this.setState({ loading: true });
-      registrationService
-        .register(email, firstName, lastName, password, confirm)
-        .then(user => {
-          console.log("Saved registration");
-
-          this.setState({ registered: true });
-        })
-        .catch(error => {
-          if (Array.isArray(error)) {
-            this.setState({
-              loading: false,
-              errors: error.map(el => {
-                return { field: "", message: el };
-              })
-            });
-          } else {
-            this.setState({
-              loading: false,
-              errors: [{ field: "", message: error }]
-            });
-          }
-        });
-    }
-  }
+  handleSuccess = result => {
+    console.log("Saved registration");
+  };
 
   render() {
-    if (this.state.registered) {
+    console.log("Rendering with state", JSON.stringify(this.state, null, 2));
+    if (this.state.completed) {
       return <Redirect to="/" />;
     }
 
@@ -119,58 +71,12 @@ class RegisterPage extends React.Component {
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="teal" textAlign="center">
-            Sign up for a new account
-          </Header>
-          <Form
-            size="large"
-            loading={this.state.loading}
-            error={this.state.errors.filter(el => el.field === "") > 0}
-            onSubmit={this.validateAndSubmit}
-          >
-            <Message
-              error
-              header="Error attempting to register"
-              list={this.state.errors
-                .filter(el => el.field === "")
-                .map(el => el.message)}
-            />
-            <Segment>
-              {this.formFields.map(field => {
-                const props = {};
-                props.form = "register";
-                props.name = field.name;
-                if (field.icon) {
-                  props.icon = field.icon;
-                }
-                props.label = field.label;
-                props.placeholder = field.label;
-
-                if (field.type) {
-                  props.type = field.type;
-                }
-                return (
-                  <ProfileTextField
-                    {...props}
-                    errors={this.state.errors
-                      .filter(el => el.field === field.name)
-                      .map(el => el.message)}
-                    handleChange={this.handleChange}
-                  />
-                );
-              })}
-              <Form.Field
-                id="form-button-control-public"
-                control={Button}
-                content="Register Account"
-                label=""
-                color="teal"
-                fluid
-                size="large"
-                onClick={event => this.validateAndSubmit(event)}
-              />
-            </Segment>
-          </Form>
+          {this.renderHeaderAndForm(
+            "Sign up for a new account",
+            "Register Account",
+            "New account registered",
+            "Error attempting to register"
+          )}
         </Grid.Column>
       </Grid>
     );

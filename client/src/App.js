@@ -19,7 +19,6 @@ class App extends React.Component {
 
   componentDidMount() {
     authenticationService.remember().then(profile => {
-      console.log("Rembering done");
       this.setState({ remembered: true });
     });
   }
@@ -29,12 +28,6 @@ class App extends React.Component {
       return null;
     }
     const location = this.props.location.pathname;
-    console.log(
-      "Rendering app with status",
-      this.props.store.isLoggedIn(),
-      "at location",
-      location
-    );
     if (!this.props.store.isLoggedIn()) {
       if (location !== "/login" && location !== "/register") {
         return <Redirect to="/login" />;
@@ -42,18 +35,10 @@ class App extends React.Component {
     }
 
     if (this.props.store.isLoggedIn()) {
-      console.log(
-        "Logged in route check",
-        location !== "/",
-        location !== "/profile"
-      );
-
       if (location !== "/" && location !== "/profile") {
-        console.log("Redirecting");
         return <Redirect to="/" />;
       }
     }
-    console.log("Not redirecting, rendering fully");
 
     return (
       <React.Fragment>

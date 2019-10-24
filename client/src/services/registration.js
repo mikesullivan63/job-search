@@ -4,21 +4,6 @@ import { loginService } from "./login";
 
 function register(email, firstName, lastName, password, confirm) {
   return new Promise(function(resolve, reject) {
-    let errors = [];
-
-    if (confirm !== password) {
-      errors.push("Passwords do not match");
-    }
-
-    errors = errors.concat(
-      validationService.areProfileValuesValid(email, firstName, lastName)
-    );
-    errors = errors.concat(validationService.isValidPassword(password));
-
-    if (errors.length > 0) {
-      return reject(errors);
-    }
-
     fetch("/user/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
