@@ -13,9 +13,8 @@ function updateCall(url, data, success, failure) {
       body: JSON.stringify(data)
     })
       .then(handleResponse.handlePrivateResponse)
-      .then(profile => {
-        success(profile);
-        resolve("SUCCESS");
+      .then(result => {
+        resolve(success(result));
       })
       .catch(error => {
         failure(error);
@@ -24,11 +23,40 @@ function updateCall(url, data, success, failure) {
   });
 }
 
+function register(email, firstName, lastName, password, confirm) {
+  return updateCall(
+    "/user/register",
+    { email, firstName, lastName, password, confirm },
+    token => {
+      fetch("/user/profile", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.token}`
+        }
+      })
+        .then(handleResponse.handlePrivateResponse)
+        .then(profile => {
+          loginService.storeUser(profile, token);
+          return token;
+        })
+        .catch(error => {
+          console.log("Error loading user profile", error);
+          loginService.logout();
+          throw error;
+        });
+    },
+    error => {}
+  );
+}
+
 function updateProfile(email, firstName, lastName) {
   return updateCall(
     "/user/updateProfile",
     { email, firstName, lastName },
-    profile => loginService.updateProfile(profile),
+    profile => {
+      loginService.updateProfile(profile);
+      return "SUCCESS";
+    },
     error => {}
   );
 }
@@ -37,12 +65,15 @@ function updatePassword(oldPassword, password, confirm) {
   return updateCall(
     "/user/updatePassword",
     { oldPassword, password, confirm },
-    profile => {},
+    profile => {
+      return "SUCCESS";
+    },
     error => {}
   );
 }
 
 export const profileService = {
   updateProfile,
-  updatePassword
+  updatePassword,
+  register
 };

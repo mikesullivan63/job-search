@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Redirect } from "react-router-dom";
 import AbstractForm from "../common/AbstractForm";
-import { registrationService } from "../../services/registration";
+import { profileService } from "../../services/profile";
 import { Grid } from "semantic-ui-react";
 
 class RegisterPage extends AbstractForm {
@@ -45,7 +45,7 @@ class RegisterPage extends AbstractForm {
   }
 
   submitForm = () => {
-    return registrationService.register(
+    return profileService.register(
       this.getValueForField("email"),
       this.getValueForField("firstName"),
       this.getValueForField("lastName"),
@@ -59,7 +59,7 @@ class RegisterPage extends AbstractForm {
   };
 
   render() {
-    if (this.state.completed) {
+    if (this.state.success) {
       return <Redirect to="/" />;
     }
 
