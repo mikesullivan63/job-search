@@ -1,7 +1,4 @@
-import React from "react";
-import { Header, Form, Message, Segment, Button } from "semantic-ui-react";
 import AbstractForm from "../common/AbstractForm";
-import { validationService } from "../../services/validation";
 import { profileService } from "../../services/profile";
 
 class UpdateProfileForm extends AbstractForm {
@@ -46,11 +43,8 @@ class UpdateProfileForm extends AbstractForm {
   };
 
   render() {
-    console.log(
-      "Rendering UpdateProfileForm section",
-      JSON.stringify(this.state, null, 2)
-    );
     return this.renderHeaderAndForm(
+      "profile",
       "Edit your profile",
       "Update Profile",
       "Profile Updated",

@@ -71,6 +71,7 @@ class RegisterPage extends AbstractForm {
       >
         <Grid.Column style={{ maxWidth: 450 }}>
           {this.renderHeaderAndForm(
+            "register",
             "Sign up for a new account",
             "Register Account",
             "New account registered",

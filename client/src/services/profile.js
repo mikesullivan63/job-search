@@ -35,7 +35,6 @@ function updatePassword(oldPassword, password, confirm) {
     })
       .then(handleResponse.handlePrivateResponse)
       .then(profile => {
-        console.log("Updated password");
         resolve("SUCCESS");
       })
       .catch(error => {

@@ -7,8 +7,6 @@ import { searchService } from "../../services/search";
 class SearchPage extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log("Loading search page");
   }
 
   componentDidMount() {

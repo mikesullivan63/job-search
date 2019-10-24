@@ -73,7 +73,7 @@ class AbstractForm extends React.Component {
     }
   }
 
-  renderHeaderAndForm(title, buttonLabel, successMessage, errorMessage) {
+  renderHeaderAndForm(key, title, buttonLabel, successMessage, errorMessage) {
     return (
       <React.Fragment>
         <Header as="h2" color="teal" textAlign="center">
@@ -107,7 +107,7 @@ class AbstractForm extends React.Component {
               );
             })}
             <Form.Field
-              id="form-button-control-public"
+              id={key + "form-button-control-public"}
               control={Button}
               content={buttonLabel}
               label=""
