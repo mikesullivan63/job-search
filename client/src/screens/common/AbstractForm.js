@@ -74,12 +74,6 @@ class AbstractForm extends React.Component {
   }
 
   renderHeaderAndForm(title, buttonLabel, successMessage, errorMessage) {
-    console.log(
-      "Errors?",
-      JSON.stringify(this.state.errors, null, 2),
-      this.state.errors.some(el => el.field === ""),
-      this.state.errors.filter(el => el.field === "").map(el => el.message)
-    );
     return (
       <React.Fragment>
         <Header as="h2" color="teal" textAlign="center">

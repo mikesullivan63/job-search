@@ -59,7 +59,6 @@ class RegisterPage extends AbstractForm {
   };
 
   render() {
-    console.log("Rendering with state", JSON.stringify(this.state, null, 2));
     if (this.state.completed) {
       return <Redirect to="/" />;
     }
