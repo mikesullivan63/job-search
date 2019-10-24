@@ -2,45 +2,44 @@ import { authenticationService } from "./authentication";
 import { handleResponse } from "./handleResponse";
 import { loginService } from "./login";
 
-function updateProfile(email, firstName, lastName) {
+function updateCall(url, data, success, failure) {
   return new Promise(function(resolve, reject) {
-    fetch("/user/updateProfile", {
+    fetch(url, {
       method: "POST",
       headers: authenticationService.authHeader({
         "Content-Type": "application/json"
       }),
 
-      body: JSON.stringify({ email, firstName, lastName })
+      body: JSON.stringify(data)
     })
       .then(handleResponse.handlePrivateResponse)
       .then(profile => {
-        loginService.updateProfile(profile);
+        success(profile);
         resolve("SUCCESS");
       })
       .catch(error => {
+        failure(error);
         return reject(error);
       });
   });
 }
 
+function updateProfile(email, firstName, lastName) {
+  return updateCall(
+    "/user/updateProfile",
+    { email, firstName, lastName },
+    profile => loginService.updateProfile(profile),
+    error => {}
+  );
+}
+
 function updatePassword(oldPassword, password, confirm) {
-  return new Promise(function(resolve, reject) {
-    fetch("/user/updatePassword", {
-      method: "POST",
-      headers: authenticationService.authHeader({
-        "Content-Type": "application/json"
-      }),
-      body: JSON.stringify({ oldPassword, password, confirm })
-    })
-      .then(handleResponse.handlePrivateResponse)
-      .then(profile => {
-        resolve("SUCCESS");
-      })
-      .catch(error => {
-        console.log("Errored password with ", JSON.stringify(error, null, 2));
-        return reject(error);
-      });
-  });
+  return updateCall(
+    "/user/updatePassword",
+    { oldPassword, password, confirm },
+    profile => {},
+    error => {}
+  );
 }
 
 export const profileService = {
