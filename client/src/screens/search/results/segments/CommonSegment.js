@@ -6,7 +6,7 @@ const CommonSegment = props => (
     <a href={props.company.url} target="_blank" rel="noopener noreferrer">
       <h4>{props.company.company}</h4>
     </a>
-    <span>{props.message}</span>
+    {props.children}
   </Segment>
 );
 

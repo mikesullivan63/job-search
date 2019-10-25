@@ -5,8 +5,9 @@ const ErrorResultSegment = props => (
   <CommonSegment
     style={{ inverted: true, color: "red", secondary: true }}
     company={props.company}
-    message={props.company.error}
-  />
+  >
+    <span>{props.company.error}</span>
+  </CommonSegment>
 );
 
 export default ErrorResultSegment;
