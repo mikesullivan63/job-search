@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import JobDetails from "./JobDetails";
 
 class JobListRow extends React.Component {
   constructor(props) {
@@ -13,11 +12,23 @@ class JobListRow extends React.Component {
   render() {
     return (
       <React.Fragment key={this.props.job.url}>
-        <JobDetails job={this.props.job} />
-        {this.props.children(this.props.job, event => {
-          event.preventDefault();
-          this.setState({ transitioning: true });
-        })}
+        <Grid.Column>
+          <a
+            href={this.props.job.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {this.props.job.title}
+          </a>
+        </Grid.Column>
+        <Grid.Column>
+          <span>{this.props.job.location}</span>
+        </Grid.Column>
+        {this.props.children &&
+          this.props.children(this.props.job, event => {
+            event.preventDefault();
+            this.setState({ transitioning: true });
+          })}
       </React.Fragment>
     );
   }
