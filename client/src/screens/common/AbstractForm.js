@@ -47,7 +47,7 @@ class AbstractForm extends React.Component {
       });
 
     if (errors.length > 0) {
-      this.setState({ errors: errors });
+      this.setState({ errors });
     } else {
       this.setState({ loading: true });
       this.submitForm()
