@@ -65,12 +65,14 @@ class App extends React.Component {
           {this.props.store.isLoggedIn() && (
             <React.Fragment>
               <Route
+                exact
                 path="/profile"
                 render={props => (
                   <EditProfilePage {...props} store={this.props.store} />
                 )}
               />
               <Route
+                exact
                 path="/"
                 render={props => (
                   <SearchPage {...props} store={this.props.store} />
