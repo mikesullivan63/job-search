@@ -1,124 +1,70 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Segment, Grid, Accordion, Icon } from "semantic-ui-react";
-import ActiveJobs from "../lists/ActiveJobs";
-import IgnoredJobs from "../lists/IgnoredJobs";
-import OtherJobs from "../lists/OtherJobs";
+import CommonSegment from "./CommonSegment";
+import ActiveJobs from "./lists/ActiveJobs";
+import IgnoredJobs from "./lists/IgnoredJobs";
+import OtherJobs from "./lists/OtherJobs";
 
-class CompletedResultSegment extends React.Component {
-  constructor(props) {
-    super(props);
+const CompletedResultSegment = props => {
+  //Determine lists for subsections and formatting
+  let jobsToDisplay = !props.company.jobs
+    ? []
+    : props.company.jobs
+        .filter(el => !props.store.isIgnored(el))
+        .map(el =>
+          props.store.isActive(el) ? props.store.getActiveJob(el) : el
+        );
 
-    this.state = {
-      ignoredExpanded: false,
-      otherExpanded: false
-    };
+  let jobsToIgnore = !props.company.jobs
+    ? []
+    : props.company.jobs
+        .filter(el => props.store.isIgnored(el))
+        .map(el => props.store.getIgnoredJob(el));
+
+  //Formatting values for the current segment
+  let segmentProps = jobsToDisplay.length > 0 ? {} : { secondary: true };
+  const noJobs =
+    jobsToDisplay.length === 0 &&
+    jobsToIgnore.length === 0 &&
+    props.company.otherJobs.length === 0;
+
+  const noTitleJobs = props.company.otherJobs.some(
+    el => el.title === "" || el.location === ""
+  );
+
+  if (noJobs) {
+    segmentProps = { tertiary: true, color: "orange", inverted: true };
   }
 
-  handleClick = (e, titleProps) => {
-    const { index } = titleProps;
-    if (index === "ignored") {
-      this.setState({ ignoredExpanded: !this.state.ignoredExpanded });
-    } else {
-      this.setState({ otherExpanded: !this.state.otherExpanded });
-    }
-  };
-
-  render() {
-    const { ignoredExpanded, otherExpanded } = this.state;
-
-    let jobsToDisplay = !this.props.company.jobs
-      ? []
-      : this.props.company.jobs
-          .filter(el => !this.props.store.isIgnored(el))
-          .map(el =>
-            this.props.store.isActive(el)
-              ? this.props.store.getActiveJob(el)
-              : el
-          );
-
-    let jobsToIgnore = !this.props.company.jobs
-      ? []
-      : this.props.company.jobs
-          .filter(el => this.props.store.isIgnored(el))
-          .map(el => this.props.store.getIgnoredJob(el));
-
-    let segmentProps = jobsToDisplay.length > 0 ? {} : { secondary: true };
-    const noJobs =
-      jobsToDisplay.length === 0 &&
-      jobsToIgnore.length === 0 &&
-      this.props.company.otherJobs.length === 0;
-
-    const noTitleJobs = this.props.company.otherJobs.some(
-      el => el.title === "" || el.location === ""
-    );
-
-    if (noJobs) {
-      segmentProps = { tertiary: true, color: "orange", inverted: true };
-    }
-
-    if (noTitleJobs) {
-      segmentProps = { tertiary: true, color: "green", inverted: true };
-    }
-
-    return (
-      <Segment className="completedResult" {...segmentProps}>
-        <a
-          href={this.props.company.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h4>{this.props.company.company}</h4>
-        </a>
-        <div className="activeJobs">
-          <ActiveJobs
-            store={this.props.store}
-            company={this.props.company}
-            jobs={jobsToDisplay}
-          />
-        </div>
-
-        <Accordion className="ignoredJobs">
-          <Accordion.Title
-            index="ignored"
-            active={ignoredExpanded}
-            onClick={this.handleClick}
-          >
-            <Icon name="dropdown" />
-            Ignored Jobs ({!jobsToIgnore ? 0 : jobsToIgnore.length})
-          </Accordion.Title>
-          <Accordion.Content active={ignoredExpanded}>
-            <IgnoredJobs
-              store={this.props.store}
-              company={this.props.company}
-              jobs={jobsToIgnore}
-            />
-          </Accordion.Content>
-        </Accordion>
-        <Accordion className="otherJobs">
-          <Accordion.Title
-            index="other"
-            active={otherExpanded}
-            onClick={this.handleClick}
-          >
-            <Icon name="dropdown" />
-            Other Jobs (
-            {!this.props.company.otherJobs
-              ? 0
-              : this.props.company.otherJobs.length}
-            )
-          </Accordion.Title>
-          <Accordion.Content active={otherExpanded}>
-            <OtherJobs
-              store={this.props.store}
-              company={this.props.company}
-              jobs={this.props.company.otherJobs}
-            />
-          </Accordion.Content>
-        </Accordion>
-      </Segment>
-    );
+  if (noTitleJobs) {
+    segmentProps = { tertiary: true, color: "green", inverted: true };
   }
-}
+
+  return (
+    <CommonSegment
+      className="completedResult"
+      style={segmentProps}
+      company={props.company}
+    >
+      <ActiveJobs
+        store={props.store}
+        company={props.company}
+        jobs={jobsToDisplay}
+      />
+
+      <IgnoredJobs
+        store={props.store}
+        company={props.company}
+        jobs={jobsToIgnore}
+      />
+      <OtherJobs
+        store={props.store}
+        company={props.company}
+        jobs={props.company.otherJobs}
+      />
+    </CommonSegment>
+  );
+};
 
 export default observer(CompletedResultSegment);

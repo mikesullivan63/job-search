@@ -1,48 +1,45 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
+import JobList from "../lists/JobList";
 import WatchJobButton from "../buttons/WatchJobButton";
 import IgnoreJobButton from "../buttons/IgnoreJobButton";
 import ArchiveJobButton from "../buttons/ArchiveJobButton";
 
 const ActiveJobs = props => {
-  if (!props.jobs || props.jobs.length === 0) {
-    return <span>No matching jobs found</span>;
-  }
-
   return (
-    <Grid columns={3}>
-      {props.jobs.map(job => {
-        return (
-          <React.Fragment key={job.url}>
+    <div className="activeJobs">
+      {(!props.jobs || props.jobs.length === 0) && (
+        <span>No matching jobs found</span>
+      )}
+      {props.jobs && props.jobs.length > 0 && (
+        <JobList store={props.store} columns={3} jobs={props.jobs}>
+          {(job, beforeCallback, afterCallback) => (
             <Grid.Column>
-              <a href={job.url} target="_blank" rel="noopener noreferrer">
-                {job.title}
-              </a>
-            </Grid.Column>
-            <Grid.Column>
-              <span>{job.location}</span>
-            </Grid.Column>
-            <Grid.Column>
-              {job._id && <ArchiveJobButton store={props.store} job={job} />}
+              {job._id && (
+                <ArchiveJobButton
+                  store={props.store}
+                  {...{ job, beforeCallback, afterCallback }}
+                />
+              )}
               {!job._id && (
                 <React.Fragment>
                   <WatchJobButton
                     store={props.store}
-                    job={job}
                     company={props.company.company}
+                    {...{ job, beforeCallback, afterCallback }}
                   />
                   <IgnoreJobButton
                     store={props.store}
-                    job={job}
                     company={props.company.company}
+                    {...{ job, beforeCallback, afterCallback }}
                   />
                 </React.Fragment>
               )}
             </Grid.Column>
-          </React.Fragment>
-        );
-      })}
-    </Grid>
+          )}
+        </JobList>
+      )}
+    </div>
   );
 };
 export default ActiveJobs;
