@@ -1,5 +1,4 @@
 import React from "react";
-import { observer } from "mobx-react";
 import { Button, Form } from "semantic-ui-react";
 import SearchBarField from "./SearchBarField";
 import { searchService } from "../../../services/search";
