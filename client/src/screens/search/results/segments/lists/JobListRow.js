@@ -2,11 +2,19 @@ import React from "react";
 import { Grid, Dimmer } from "semantic-ui-react";
 
 class JobListRow extends React.Component {
+  _isMounted = false; //Used to prevent Asynchronous updates to unmounted rows
   constructor(props) {
     super(props);
     this.state = {
       transitioning: false
     };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
@@ -34,9 +42,15 @@ class JobListRow extends React.Component {
             this.props.job,
             event => {
               event.preventDefault();
-              this.setState({ transitioning: true });
+              if (this._isMounted) {
+                this.setState({ transitioning: true });
+              }
             },
-            () => this.setState({ transitioning: false })
+            () => {
+              if (this._isMounted) {
+                this.setState({ transitioning: false });
+              }
+            }
           )}
       </Dimmer.Dimmable>
     );

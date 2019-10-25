@@ -191,7 +191,6 @@ describe("Result Display tests", () => {
     component.find("button.archiveButton").simulate("click");
 
     setTimeout(() => {
-      console.log("After callback test");
       component.update();
 
       expect(store.activeJobs.length).toBe(1);
@@ -248,7 +247,6 @@ describe("Result Display tests", () => {
       .simulate("click");
 
     setTimeout(() => {
-      console.log("After callback test");
       component.update();
       expect(store.activeJobs.length).toBe(3);
       expect(store.ignoredJobs.length).toBe(2);
@@ -307,7 +305,6 @@ describe("Result Display tests", () => {
       .simulate("click");
 
     setTimeout(() => {
-      console.log("After callback test");
       component.update();
 
       expect(store.activeJobs.length).toBe(2);

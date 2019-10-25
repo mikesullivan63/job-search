@@ -6,7 +6,7 @@ const JobList = props => {
   return (
     <Grid columns={props.columns}>
       {props.jobs.map(job => {
-        return <JobListRow job={job} children={props.children} />;
+        return <JobListRow key={job.url} job={job} children={props.children} />;
       })}
     </Grid>
   );
