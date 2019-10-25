@@ -73,8 +73,14 @@ const ResultsStore = types
     getActiveJob(job) {
       return self.activeJobs.find(el => el.url === job.url);
     },
+    getActiveJobs() {
+      return self.activeJobs.slice();
+    },
     getIgnoredJob(job) {
       return self.ignoredJobs.find(el => el.url === job.url);
+    },
+    getIgnoredJobs() {
+      return self.ignoredJobs.slice();
     },
     getSearchResults() {
       return self.searchResults.slice();

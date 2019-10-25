@@ -6,6 +6,7 @@ import SearchPage from "./screens/search/SearchPage";
 import LoginPage from "./screens/login/LoginPage";
 import RegisterPage from "./screens/register/RegisterPage";
 import EditProfilePage from "./screens/profile/EditProfilePage";
+import WatchedJobsPage from "./screens/jobs/WatchedJobsPage";
 import { authenticationService } from "./services/authentication";
 
 class App extends React.Component {
@@ -35,7 +36,11 @@ class App extends React.Component {
     }
 
     if (this.props.store.isLoggedIn()) {
-      if (location !== "/" && location !== "/profile") {
+      if (
+        location !== "/" &&
+        location !== "/profile" &&
+        location !== "/watched-jobs"
+      ) {
         return <Redirect to="/" />;
       }
     }
@@ -66,6 +71,13 @@ class App extends React.Component {
             <React.Fragment>
               <Route
                 exact
+                path="/"
+                render={props => (
+                  <SearchPage {...props} store={this.props.store} />
+                )}
+              />
+              <Route
+                exact
                 path="/profile"
                 render={props => (
                   <EditProfilePage {...props} store={this.props.store} />
@@ -73,9 +85,9 @@ class App extends React.Component {
               />
               <Route
                 exact
-                path="/"
+                path="/watched-jobs"
                 render={props => (
-                  <SearchPage {...props} store={this.props.store} />
+                  <WatchedJobsPage {...props} store={this.props.store} />
                 )}
               />
             </React.Fragment>

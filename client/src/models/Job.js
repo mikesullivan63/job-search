@@ -3,6 +3,7 @@ import { types } from "mobx-state-tree";
 
 const Job = types.model("Job", {
   _id: types.string,
+  board: types.string,
   title: types.string,
   location: types.string,
   url: types.string
