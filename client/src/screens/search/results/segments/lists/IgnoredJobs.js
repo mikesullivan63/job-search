@@ -12,13 +12,12 @@ const IgnoredJobs = props => {
       columns={3}
       jobs={props.jobs}
     >
-      {(job, callback) => (
+      {(job, beforeCallback, afterCallback) => (
         <Grid.Column>
           <WatchIgnoredJobButton
             store={props.store}
-            job={job}
             company={props.company.company}
-            callback={callback}
+            {...{ job, beforeCallback, afterCallback }}
           />
         </Grid.Column>
       )}

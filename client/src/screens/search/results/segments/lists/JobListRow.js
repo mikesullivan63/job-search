@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Dimmer } from "semantic-ui-react";
 
 class JobListRow extends React.Component {
   constructor(props) {
@@ -11,7 +11,12 @@ class JobListRow extends React.Component {
 
   render() {
     return (
-      <React.Fragment key={this.props.job.url}>
+      <Dimmer.Dimmable
+        key={this.props.job.url}
+        as={Grid.Row}
+        blurring
+        dimmed={this.state.transitioning}
+      >
         <Grid.Column>
           <a
             href={this.props.job.url}
@@ -25,11 +30,15 @@ class JobListRow extends React.Component {
           <span>{this.props.job.location}</span>
         </Grid.Column>
         {this.props.children &&
-          this.props.children(this.props.job, event => {
-            event.preventDefault();
-            this.setState({ transitioning: true });
-          })}
-      </React.Fragment>
+          this.props.children(
+            this.props.job,
+            event => {
+              event.preventDefault();
+              this.setState({ transitioning: true });
+            },
+            () => this.setState({ transitioning: false })
+          )}
+      </Dimmer.Dimmable>
     );
   }
 }

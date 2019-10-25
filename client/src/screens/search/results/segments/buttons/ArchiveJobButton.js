@@ -8,8 +8,8 @@ const ArchiveJobButton = props => {
       className="archiveButton"
       label="Archive"
       callback={event => {
-        props.callback(event);
-        jobService.archiveJob(props.job._id);
+        props.beforeCallback(event);
+        jobService.archiveJob(props.job._id, props.afterCallback);
       }}
     />
   );

@@ -18,27 +18,31 @@ function addJobToList(data, url, updateCallback) {
     .catch(reason => console.log("Error: " + reason));
 }
 
-function ignoreJob(board, url, title, location) {
-  addJobToList({ board, url, title, location }, "/job/ignore-job", result =>
-    this.store.addIgnoredJob(result.find(el => el.url === url))
-  );
-}
-
-function watchJob(board, url, title, location) {
-  addJobToList({ board, url, title, location }, "/job/add-job", result =>
-    this.store.addActiveJob(result.find(el => el.url === url))
-  );
-}
-
-function archiveJob(jobId) {
-  addJobToList({ jobId }, "/job/archive-job", result => {
-    this.store.archiveActiveJob(jobId);
+function ignoreJob(board, url, title, location, callback) {
+  addJobToList({ board, url, title, location }, "/job/ignore-job", result => {
+    this.store.addIgnoredJob(result.find(el => el.url === url));
+    callback();
   });
 }
 
-function watchIgnoredJob(jobId) {
+function watchJob(board, url, title, location, callback) {
+  addJobToList({ board, url, title, location }, "/job/add-job", result => {
+    this.store.addActiveJob(result.find(el => el.url === url));
+    callback();
+  });
+}
+
+function archiveJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/archive-job", result => {
+    this.store.archiveActiveJob(jobId);
+    callback();
+  });
+}
+
+function watchIgnoredJob(jobId, callback) {
   addJobToList({ jobId }, "/job/watch-ignore-job", result => {
     this.store.addActiveJobFromIgnored(jobId);
+    callback();
   });
 }
 

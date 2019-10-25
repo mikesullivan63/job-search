@@ -8,12 +8,13 @@ const WatchJobButton = props => {
       className="watchButton"
       label="Watch"
       callback={event => {
-        props.callback(event);
+        props.beforeCallback(event);
         jobService.watchJob(
           props.company,
           props.job.url,
           props.job.title,
-          props.job.location
+          props.job.location,
+          props.afterCallback
         );
       }}
     />

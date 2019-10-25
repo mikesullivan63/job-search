@@ -8,8 +8,8 @@ const WatchIgnoredJobButton = props => {
       className="watchIgnoredButton"
       label="Watch"
       callback={event => {
-        props.callback(event);
-        jobService.watchIgnoredJob(props.job._id);
+        props.beforeCallback(event);
+        jobService.watchIgnoredJob(props.job._id, props.afterCallback);
       }}
     />
   );

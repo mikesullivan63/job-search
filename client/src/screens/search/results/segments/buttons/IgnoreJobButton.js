@@ -8,12 +8,13 @@ const IgnoreJobButton = props => {
       className="ignoreButton"
       label="Ignore"
       callback={event => {
-        props.callback(event);
+        props.beforeCallback(event);
         jobService.ignoreJob(
           props.company,
           props.job.url,
           props.job.title,
-          props.job.location
+          props.job.location,
+          props.afterCallback
         );
       }}
     />
