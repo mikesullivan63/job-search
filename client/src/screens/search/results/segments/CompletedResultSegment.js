@@ -42,10 +42,11 @@ const CompletedResultSegment = props => {
   }
 
   return (
-    <Segment className="completedResult" {...segmentProps}>
-      <a href={props.company.url} target="_blank" rel="noopener noreferrer">
-        <h4>{props.company.company}</h4>
-      </a>
+    <CommonSegment
+      className="completedResult"
+      style={segmentProps}
+      company={props.company}
+    >
       <ActiveJobs
         store={props.store}
         company={props.company}
@@ -62,7 +63,7 @@ const CompletedResultSegment = props => {
         company={props.company}
         jobs={props.company.otherJobs}
       />
-    </Segment>
+    </CommonSegment>
   );
 };
 
