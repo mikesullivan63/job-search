@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { jobService } from "../../../../services/job";
+import { jobService } from "../../../../../services/job";
 
 const WatchJobButton = props => {
   return (
