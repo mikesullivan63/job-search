@@ -10,38 +10,9 @@ class RegisterPage extends AbstractForm {
     super(props);
 
     //Form fields
-    this.state.fields = [
-      {
-        name: "email",
-        label: "E-mail address",
-        icon: "user",
-        required: true
-      },
-      {
-        name: "firstName",
-        label: "First Name",
-        required: true
-      },
-      {
-        name: "lastName",
-        label: "Last Names",
-        required: true
-      },
-      {
-        name: "password",
-        label: "Password",
-        icon: "lock",
-        type: "password",
-        required: true
-      },
-      {
-        name: "confirm",
-        label: "Confirm Password",
-        icon: "lock",
-        type: "password",
-        required: true
-      }
-    ];
+    this.state.fields = profileService.PROFILE_FIELDS.concat(
+      profileService.PASSWORD_FIELDS
+    );
   }
 
   submitForm = () => {

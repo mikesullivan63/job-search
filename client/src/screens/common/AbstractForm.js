@@ -98,6 +98,7 @@ class AbstractForm extends React.Component {
             {this.state.fields.map(field => {
               return (
                 <ProfileTextField
+                  form={key}
                   {...field}
                   errors={this.state.errors
                     .filter(el => el.field === field.name)

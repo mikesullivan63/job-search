@@ -12,22 +12,8 @@ class UpdatePasswordForm extends AbstractForm {
         icon: "lock",
         type: "password",
         required: true
-      },
-      {
-        name: "password",
-        label: "Password",
-        icon: "lock",
-        type: "password",
-        required: true
-      },
-      {
-        name: "confirm",
-        label: "Confirm Password",
-        icon: "lock",
-        type: "password",
-        required: true
       }
-    ];
+    ].concat(profileService.PASSWORD_FIELDS);
   }
 
   submitForm = () => {

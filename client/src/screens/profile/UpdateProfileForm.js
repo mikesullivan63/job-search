@@ -7,27 +7,8 @@ class UpdateProfileForm extends AbstractForm {
 
     const user = this.props.store.getUser();
 
-    this.state.fields = [
-      {
-        name: "email",
-        label: "E-mail address",
-        icon: "user",
-        required: true,
-        value: user.email
-      },
-      {
-        name: "firstName",
-        label: "First Name",
-        required: true,
-        value: user.firstName
-      },
-      {
-        name: "lastName",
-        label: "Last Names",
-        required: true,
-        value: user.lastName
-      }
-    ];
+    this.state.fields = this.state.fields = profileService.PROFILE_FIELDS;
+    this.state.fields.forEach(field => (field.value = user[field.name]));
   }
 
   submitForm = () => {
