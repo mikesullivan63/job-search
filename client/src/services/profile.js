@@ -40,7 +40,6 @@ function register(email, firstName, lastName, password, confirm) {
           return token;
         })
         .catch(error => {
-          console.log("Error loading user profile", error);
           loginService.logout();
           throw error;
         });
