@@ -9,10 +9,9 @@ function addJobToList(event, data, url, updateCallback) {
   event.preventDefault();
   fetch(url, {
     method: "POST",
-    headers: {
-      ...authenticationService.authHeader(),
-      ...{ "Content-Type": "application/json" }
-    },
+    headers: authenticationService.authHeader({
+      "Content-Type": "application/json"
+    }),
     body: JSON.stringify(data)
   })
     .then(res => res.json())

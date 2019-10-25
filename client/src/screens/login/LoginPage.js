@@ -1,75 +1,39 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { observer } from "mobx-react";
-import ProfileTextField from "../common/ProfileTextField";
+import AbstractForm from "../common/AbstractForm";
 import { authenticationService } from "../../services/authentication";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment
-} from "semantic-ui-react";
+import { Grid, Message } from "semantic-ui-react";
 
-class LoginPage extends React.Component {
+class LoginPage extends AbstractForm {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: false,
-      email: "",
-      password: "",
-      emailErrors: [],
-      passwordErrors: [],
-      formErrors: []
-    };
-
-    this.validateAndSubmit = this.validateAndSubmit.bind(this);
+    this.state.fields = [
+      {
+        name: "email",
+        label: "E-mail address",
+        icon: "user"
+      },
+      {
+        name: "password",
+        label: "Password",
+        icon: "lock",
+        type: "password"
+      }
+    ];
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  submitForm = () => {
+    return authenticationService.login(
+      this.getValueForField("email"),
+      this.getValueForField("password")
+    );
+  };
 
-  validateAndSubmit(event) {
-    event.preventDefault();
-    let clean = true;
-
-    this.setState({
-      emailErrors: [],
-      passwordErrors: [],
-      formErrors: []
-    });
-    const { email, password } = this.state;
-
-    //Process e-mail
-    if (!email || email === "") {
-      clean = false;
-      this.setState({
-        emailErrors: ["Email is required to log in"]
-      });
-    }
-
-    //Process password
-    if (!password || password === "") {
-      clean = false;
-      this.setState({
-        passwordErrors: ["Password is required to log in"]
-      });
-    }
-
-    if (clean) {
-      this.setState({ loading: true });
-      authenticationService
-        .login(email, password)
-        .then(user => console.log("Logged user in"))
-        .catch(error => {
-          this.setState({
-            loading: false,
-            formErrors: [].concat(error)
-          });
-        });
-    }
-  }
+  handleSuccess = result => {
+    console.log("Logged user in");
+  };
 
   render() {
     if (this.props.store.isLoggedIn()) {
@@ -83,52 +47,13 @@ class LoginPage extends React.Component {
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="teal" textAlign="center">
-            Log-in to your account
-          </Header>
-          <Form
-            size="large"
-            loading={this.state.loading}
-            error={this.state.formErrors.length > 0}
-            onSubmit={this.validateAndSubmit}
-          >
-            {this.state.formErrors.length > 0 && (
-              <Message
-                error
-                header="Error attempting to log in"
-                list={this.state.formErrors}
-              />
-            )}
-            <Segment>
-              <ProfileTextField
-                name="email"
-                icon="user"
-                label="E-mail address"
-                placeholder="E-mail address"
-                errors={this.state.emailErrors}
-                handleChange={this.handleChange}
-              />
-              <ProfileTextField
-                name="password"
-                icon="lock"
-                label="Password"
-                placeholder="Password"
-                type="password"
-                errors={this.state.passwordErrors}
-                handleChange={this.handleChange}
-              />
-              <Form.Field
-                id="form-button-control-public"
-                control={Button}
-                content="Login"
-                label=""
-                color="teal"
-                fluid
-                size="large"
-                onClick={event => this.validateAndSubmit(event)}
-              />
-            </Segment>
-          </Form>
+          {this.renderHeaderAndForm(
+            "login",
+            "Log-in to your account",
+            "Login",
+            "Logged in successfully",
+            "Error attempting to log in"
+          )}
           <Message>
             New to us? <a href="/register">Sign Up</a>
           </Message>

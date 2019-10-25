@@ -6,33 +6,21 @@ function setStore(localStore) {
 
 //Methods to handle storing users while logged in
 function storeUser(user, token) {
-  console.log("Storing user: ", JSON.stringify(user, null, 2));
   this.store.setUser(user, token.token);
   localStorage.setItem("currentUser", JSON.stringify(token));
 }
 
 function updateProfile(user) {
-  console.log(
-    "Updating user: ",
-    JSON.stringify(user, null, 2),
-    " from ",
-    JSON.stringify(this.store.getUser(), null, 2)
-  );
   this.store.setUser(user, this.store.getUser().token);
 }
 
 function logout() {
-  console.log("Removing user ", JSON.stringify(this.store.getUser(), null, 2));
   // remove user from local storage to log user out
   localStorage.removeItem("currentUser");
   this.store.logout();
 }
 
 function getUser() {
-  console.log(
-    "Returning user: ",
-    JSON.stringify(this.store.getUser(), null, 2)
-  );
   return this.store.getUser();
 }
 

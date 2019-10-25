@@ -71,10 +71,10 @@ function postSearchCall(title, location) {
     //Post for history
     fetch("/user/search", {
       method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      }),
+
       body: JSON.stringify({ title, location })
     })
       .then(res => resolve(res))

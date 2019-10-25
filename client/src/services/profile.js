@@ -1,96 +1,78 @@
 import { authenticationService } from "./authentication";
-import { profileValidationService } from "./profileValidation";
 import { handleResponse } from "./handleResponse";
 import { loginService } from "./login";
 
-function updateProfile(email, firstName, lastName) {
+function updateCall(url, data, success, failure) {
   return new Promise(function(resolve, reject) {
-    let errors = [];
-
-    errors = errors.concat(
-      profileValidationService.areProfileValuesValid(email, firstName, lastName)
-    );
-
-    if (errors.length > 0) {
-      return reject(errors);
-    }
-
-    fetch("/user/updateProfile", {
+    fetch(url, {
       method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
-      body: JSON.stringify({ email, firstName, lastName })
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      }),
+
+      body: JSON.stringify(data)
     })
       .then(handleResponse.handlePrivateResponse)
-      .then(profile => {
-        loginService.updateProfile(profile);
-        resolve("SUCCESS");
+      .then(result => {
+        resolve(success(result));
       })
       .catch(error => {
+        failure(error);
         return reject(error);
       });
   });
 }
 
-function updatePassword(oldPassword, password, confirm) {
-  return new Promise(function(resolve, reject) {
-    console.log(
-      "Submitting password update with ",
-      oldPassword,
-      password,
-      confirm
-    );
-    let errors = [];
-
-    if (confirm !== password) {
-      errors.push("Passwords do not match");
-    }
-
-    errors = errors
-      .concat(
-        profileValidationService.requiredValueCheck(
-          oldPassword,
-          "Current Password"
-        )
-      )
-      .concat(
-        profileValidationService.requiredValueCheck(password, "New Password")
-      )
-      .concat(profileValidationService.isValidPassword(password))
-      .concat(
-        profileValidationService.requiredValueCheck(confirm, "Confirm Password")
-      );
-
-    if (errors.length > 0) {
-      console.log("Rejecting password with ", JSON.stringify(errors, null, 2));
-      return reject(errors);
-    }
-
-    console.log("Fetching password with ", JSON.stringify(errors, null, 2));
-
-    fetch("/user/updatePassword", {
-      method: "POST",
-      headers: {
-        ...authenticationService.authHeader(),
-        ...{ "Content-Type": "application/json" }
-      },
-      body: JSON.stringify({ oldPassword, password, confirm })
-    })
-      .then(handleResponse.handlePrivateResponse)
-      .then(profile => {
-        console.log("Updated password");
-        resolve("SUCCESS");
+function register(email, firstName, lastName, password, confirm) {
+  return updateCall(
+    "/user/register",
+    { email, firstName, lastName, password, confirm },
+    token => {
+      fetch("/user/profile", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token.token}`
+        }
       })
-      .catch(error => {
-        console.log("Errored password with ", JSON.stringify(error, null, 2));
-        return reject(error);
-      });
-  });
+        .then(handleResponse.handlePrivateResponse)
+        .then(profile => {
+          loginService.storeUser(profile, token);
+          return token;
+        })
+        .catch(error => {
+          loginService.logout();
+          throw error;
+        });
+    },
+    error => {}
+  );
+}
+
+function updateProfile(email, firstName, lastName) {
+  return updateCall(
+    "/user/updateProfile",
+    { email, firstName, lastName },
+    profile => {
+      loginService.updateProfile(profile);
+      return "SUCCESS";
+    },
+    error => {}
+  );
+}
+
+function updatePassword(oldPassword, password, confirm) {
+  return updateCall(
+    "/user/updatePassword",
+    { oldPassword, password, confirm },
+    profile => {
+      return "SUCCESS";
+    },
+    error => {}
+  );
 }
 
 export const profileService = {
   updateProfile,
-  updatePassword
+  updatePassword,
+  register
 };
