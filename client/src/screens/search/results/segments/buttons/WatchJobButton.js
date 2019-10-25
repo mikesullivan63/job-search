@@ -1,24 +1,23 @@
 import React from "react";
-import { observer } from "mobx-react";
+import CommonButton from "./CommonButton";
 import { jobService } from "../../../../../services/job";
 
 const WatchJobButton = props => {
   return (
-    <button
-      className="jobToggleButton watchButton"
-      onClick={event => {
+    <CommonButton
+      className="watchButton"
+      label="Watch"
+      callback={event => {
+        props.callback(event);
         jobService.watchJob(
-          event,
           props.company,
           props.job.url,
           props.job.title,
           props.job.location
         );
       }}
-    >
-      Watch
-    </button>
+    />
   );
 };
 
-export default observer(WatchJobButton);
+export default WatchJobButton;

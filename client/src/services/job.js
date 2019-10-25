@@ -5,8 +5,7 @@ let store = null;
 function setStore(localStore) {
   this.store = localStore;
 }
-function addJobToList(event, data, url, updateCallback) {
-  event.preventDefault();
+function addJobToList(data, url, updateCallback) {
   fetch(url, {
     method: "POST",
     headers: authenticationService.authHeader({
@@ -19,29 +18,26 @@ function addJobToList(event, data, url, updateCallback) {
     .catch(reason => console.log("Error: " + reason));
 }
 
-function ignoreJob(event, board, url, title, location) {
-  addJobToList(
-    event,
-    { board, url, title, location },
-    "/job/ignore-job",
-    result => this.store.addIgnoredJob(result.find(el => el.url === url))
+function ignoreJob(board, url, title, location) {
+  addJobToList({ board, url, title, location }, "/job/ignore-job", result =>
+    this.store.addIgnoredJob(result.find(el => el.url === url))
   );
 }
 
-function watchJob(event, board, url, title, location) {
-  addJobToList(event, { board, url, title, location }, "/job/add-job", result =>
+function watchJob(board, url, title, location) {
+  addJobToList({ board, url, title, location }, "/job/add-job", result =>
     this.store.addActiveJob(result.find(el => el.url === url))
   );
 }
 
-function archiveJob(event, jobId) {
-  addJobToList(event, { jobId }, "/job/archive-job", result => {
+function archiveJob(jobId) {
+  addJobToList({ jobId }, "/job/archive-job", result => {
     this.store.archiveActiveJob(jobId);
   });
 }
 
-function watchIgnoredJob(event, jobId) {
-  addJobToList(event, { jobId }, "/job/watch-ignore-job", result => {
+function watchIgnoredJob(jobId) {
+  addJobToList({ jobId }, "/job/watch-ignore-job", result => {
     this.store.addActiveJobFromIgnored(jobId);
   });
 }

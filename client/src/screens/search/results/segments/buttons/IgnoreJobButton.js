@@ -1,22 +1,22 @@
 import React from "react";
+import CommonButton from "./CommonButton";
 import { jobService } from "../../../../../services/job";
 
 const IgnoreJobButton = props => {
   return (
-    <button
-      className="jobToggleButton ignoreButton"
-      onClick={event =>
+    <CommonButton
+      className="ignoreButton"
+      label="Ignore"
+      callback={event => {
+        props.callback(event);
         jobService.ignoreJob(
-          event,
           props.company,
           props.job.url,
           props.job.title,
           props.job.location
-        )
-      }
-    >
-      Ignore
-    </button>
+        );
+      }}
+    />
   );
 };
 

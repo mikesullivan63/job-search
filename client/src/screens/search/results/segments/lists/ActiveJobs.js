@@ -13,20 +13,28 @@ const ActiveJobs = props => {
       )}
       {props.jobs && props.jobs.length > 0 && (
         <JobList store={props.store} columns={3} jobs={props.jobs}>
-          {(/*store, company,*/ job) => (
+          {(job, callback) => (
             <Grid.Column>
-              {job._id && <ArchiveJobButton store={props.store} job={job} />}
+              {job._id && (
+                <ArchiveJobButton
+                  store={props.store}
+                  job={job}
+                  callback={callback}
+                />
+              )}
               {!job._id && (
                 <React.Fragment>
                   <WatchJobButton
                     store={props.store}
                     job={job}
                     company={props.company.company}
+                    callback={callback}
                   />
                   <IgnoreJobButton
                     store={props.store}
                     job={job}
                     company={props.company.company}
+                    callback={callback}
                   />
                 </React.Fragment>
               )}
