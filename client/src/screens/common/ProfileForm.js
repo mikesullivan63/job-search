@@ -47,12 +47,6 @@ class ProfileForm extends React.Component {
 
       const data = this.state.fields.reduce((result, field) => {
         result[field.name] = field.value;
-        console.log(
-          "After processing",
-          JSON.stringify(field, null, 2),
-          "result",
-          JSON.stringify(result, null, 2)
-        );
         return result;
       }, {});
 
@@ -60,7 +54,17 @@ class ProfileForm extends React.Component {
         .submitForm(data)
         .then(result => {
           this.props.handleSuccess(result);
-          this.setState({ loading: false, success: true });
+
+          const newState = { loading: false, success: true };
+          if (this.props.clearOnSuccess) {
+            const newFields = this.state.fields.slice().map(field => {
+              field.value = "";
+              return field;
+            });
+            newState.fields = newFields;
+          }
+
+          this.setState(newState);
         })
         .catch(error => {
           if (Array.isArray(error)) {
@@ -81,14 +85,17 @@ class ProfileForm extends React.Component {
   }
 
   render() {
+    console.log("this.props.redirectOnSuccess", this.props.redirectOnSuccess);
     console.log(
-      "this.state.success",
-      this.state.success,
-      "this.props.redirectOnSuccess",
-      this.props.redirectOnSuccess,
+      'this.props.redirectOnSuccess !== ""',
       this.props.redirectOnSuccess !== ""
     );
-    if (this.state.success && this.props.redirectOnSuccess !== "") {
+    if (
+      this.state.success &&
+      typeof this.props.redirectOnSuccess !== "undefined" &&
+      this.props.redirectOnSuccess !== ""
+    ) {
+      console.log("Redirecting");
       return <Redirect to={this.props.redirectOnSuccess} />;
     }
 
@@ -118,7 +125,7 @@ class ProfileForm extends React.Component {
             {this.state.fields.map(field => {
               return (
                 <ProfileTextField
-                  form={this.props.form}
+                  form={this.props.name}
                   {...field}
                   errors={this.state.errors
                     .filter(el => el.field === field.name)
@@ -128,7 +135,7 @@ class ProfileForm extends React.Component {
               );
             })}
             <Form.Field
-              id={this.props.form + "form-button-control-public"}
+              id={this.props.name + "form-button-control-public"}
               control={Button}
               content={this.props.buttonLabel}
               label=""

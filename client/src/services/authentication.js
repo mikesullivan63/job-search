@@ -1,12 +1,12 @@
 import { loginService } from "./login";
 import { handleResponse } from "./handleResponse";
 
-function login(email, password) {
+function login(data) {
   return new Promise((resolve, reject) => {
     fetch("/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify(data)
     })
       .then(response => handleResponse.handlePrivateResponse(response))
       .then(token => {

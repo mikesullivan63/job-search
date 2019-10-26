@@ -1,5 +1,4 @@
 import React from "react";
-import { observer } from "mobx-react";
 import ProfileForm from "../common/ProfileForm";
 import { profileService } from "../../services/profile";
 import { Grid } from "semantic-ui-react";
@@ -17,9 +16,7 @@ const RegisterPage = props => {
           fields={profileService.PROFILE_FIELDS.concat(
             profileService.PASSWORD_FIELDS
           )}
-          submitForm={data => {
-            return profileService.register(data);
-          }}
+          submitForm={data => profileService.register(data)}
           handleSuccess={() => console.log("Saved registration")}
           redirectOnSuccess="/"
         />
@@ -28,4 +25,4 @@ const RegisterPage = props => {
   );
 };
 
-export default observer(RegisterPage);
+export default RegisterPage;

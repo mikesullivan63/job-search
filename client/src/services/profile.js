@@ -84,10 +84,10 @@ function register(data) {
   );
 }
 
-function updateProfile(email, firstName, lastName) {
+function updateProfile(data) {
   return updateCall(
     "/user/updateProfile",
-    { email, firstName, lastName },
+    data,
     profile => {
       loginService.updateProfile(profile);
       return "SUCCESS";
@@ -96,10 +96,10 @@ function updateProfile(email, firstName, lastName) {
   );
 }
 
-function updatePassword(oldPassword, password, confirm) {
+function updatePassword(data) {
   return updateCall(
     "/user/updatePassword",
-    { oldPassword, password, confirm },
+    data,
     profile => {
       return "SUCCESS";
     },
