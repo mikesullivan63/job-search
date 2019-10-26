@@ -1,14 +1,15 @@
 import React from "react";
-import ProfileTextField from "../common/ProfileTextField";
+import { Redirect } from "react-router-dom";
+import ProfileTextField from "./ProfileTextField";
 import { Button, Form, Header, Message, Segment } from "semantic-ui-react";
 
-class AbstractForm extends React.Component {
+class ProfileForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loading: false,
-      fields: [],
+      fields: this.props.fields,
       errors: [],
       success: false
     };
@@ -25,13 +26,6 @@ class AbstractForm extends React.Component {
   getValueForField(fieldName) {
     return this.state.fields.find(field => field.name === fieldName).value;
   }
-
-  submitForm = () => {
-    console.log("To be implemented by children");
-  };
-  handleSuccess = result => {
-    console.log("To be implemented by children");
-  };
 
   validateAndSubmit(event) {
     event.preventDefault();
@@ -50,9 +44,22 @@ class AbstractForm extends React.Component {
       this.setState({ errors });
     } else {
       this.setState({ loading: true });
-      this.submitForm()
+
+      const data = this.state.fields.reduce((result, field) => {
+        result[field.name] = field.value;
+        console.log(
+          "After processing",
+          JSON.stringify(field, null, 2),
+          "result",
+          JSON.stringify(result, null, 2)
+        );
+        return result;
+      }, {});
+
+      this.props
+        .submitForm(data)
         .then(result => {
-          this.handleSuccess(result);
+          this.props.handleSuccess(result);
           this.setState({ loading: false, success: true });
         })
         .catch(error => {
@@ -73,11 +80,22 @@ class AbstractForm extends React.Component {
     }
   }
 
-  renderHeaderAndForm(key, title, buttonLabel, successMessage, errorMessage) {
+  render() {
+    console.log(
+      "this.state.success",
+      this.state.success,
+      "this.props.redirectOnSuccess",
+      this.props.redirectOnSuccess,
+      this.props.redirectOnSuccess !== ""
+    );
+    if (this.state.success && this.props.redirectOnSuccess !== "") {
+      return <Redirect to={this.props.redirectOnSuccess} />;
+    }
+
     return (
       <React.Fragment>
         <Header as="h2" color="teal" textAlign="center">
-          {title}
+          {this.props.title}
         </Header>
         <Form
           size="large"
@@ -88,17 +106,19 @@ class AbstractForm extends React.Component {
         >
           <Message
             error
-            header={errorMessage}
+            header={this.props.errorMessage}
             list={this.state.errors
               .filter(el => el.field === "")
               .map(el => el.message)}
           />
-          {this.state.success && <Message positive header={successMessage} />}
+          {this.state.success && (
+            <Message positive header={this.props.successMessage} />
+          )}
           <Segment>
             {this.state.fields.map(field => {
               return (
                 <ProfileTextField
-                  form={key}
+                  form={this.props.form}
                   {...field}
                   errors={this.state.errors
                     .filter(el => el.field === field.name)
@@ -108,9 +128,9 @@ class AbstractForm extends React.Component {
               );
             })}
             <Form.Field
-              id={key + "form-button-control-public"}
+              id={this.props.form + "form-button-control-public"}
               control={Button}
-              content={buttonLabel}
+              content={this.props.buttonLabel}
               label=""
               color="teal"
               fluid
@@ -124,4 +144,4 @@ class AbstractForm extends React.Component {
   }
 }
 
-export default AbstractForm;
+export default ProfileForm;

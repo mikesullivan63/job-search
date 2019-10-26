@@ -1,11 +1,11 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { observer } from "mobx-react";
-import AbstractForm from "../common/AbstractForm";
+import ProfileForm from "../common/ProfileForm";
 import { authenticationService } from "../../services/authentication";
 import { Grid, Message } from "semantic-ui-react";
 
-class LoginPage extends AbstractForm {
+class LoginPage extends ProfileForm {
   constructor(props) {
     super(props);
 

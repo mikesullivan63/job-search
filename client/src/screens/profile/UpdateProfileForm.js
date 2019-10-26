@@ -1,7 +1,7 @@
-import AbstractForm from "../common/AbstractForm";
+import ProfileForm from "../common/ProfileForm";
 import { profileService } from "../../services/profile";
 
-class UpdateProfileForm extends AbstractForm {
+class UpdateProfileForm extends ProfileForm {
   constructor(props) {
     super(props);
 

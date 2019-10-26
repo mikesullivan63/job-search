@@ -59,10 +59,10 @@ function updateCall(url, data, success, failure) {
   });
 }
 
-function register(email, firstName, lastName, password, confirm) {
+function register(data) {
   return updateCall(
     "/user/register",
-    { email, firstName, lastName, password, confirm },
+    data,
     token => {
       fetch("/user/profile", {
         headers: {
