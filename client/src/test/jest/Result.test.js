@@ -18,12 +18,14 @@ describe("Result Display tests", () => {
     store.setActiveJobs([
       {
         _id: "ABC123",
+        board: "Example.com",
         title: "Job Title ABC123",
         location: "San Francisco",
         url: "https://www.example.com/job/ABC123"
       },
       {
         _id: "ABC456",
+        board: "Example.org",
         title: "Job Title ABC456",
         location: "San Francisco",
         url: "https://www.example.org/job/ABC456"
@@ -33,12 +35,14 @@ describe("Result Display tests", () => {
     store.setIgnoredJobs([
       {
         _id: "DEF123",
+        board: "Example.com",
         title: "Job Title DEF123",
         location: "San Francisco",
         url: "https://www.example.com/job/DEF123"
       },
       {
         _id: "DEF456",
+        board: "Example.org",
         title: "Job Title DEF456",
         location: "San Francisco",
         url: "https://www.example.org/job/DEF456"
@@ -54,24 +58,28 @@ describe("Result Display tests", () => {
         jobs: [
           {
             _id: "ABC123",
+            board: "Example.com",
             title: "Job Title ABC123",
             location: "San Francisco",
             url: "https://www.example.com/job/ABC123"
           },
           {
             _id: "DEF123",
+            board: "Example.com",
             title: "Job Title DEF123",
             location: "San Francisco",
             url: "https://www.example.com/job/DEF123"
           },
           {
             _id: "",
+            board: "Example.com",
             title: "Job Title GHI123",
             location: "San Francisco",
             url: "https://www.example.com/job/GHI123"
           },
           {
             _id: "",
+            board: "Example.com",
             title: "Job Title JKL123",
             location: "San Francisco",
             url: "https://www.example.com/job/JKL123"
@@ -80,6 +88,7 @@ describe("Result Display tests", () => {
         otherJobs: [
           {
             _id: "",
+            board: "Example.com",
             title: "Job Title MNO123",
             location: "San Francisco",
             url: "https://www.example.com/job/MNO123"
@@ -94,12 +103,14 @@ describe("Result Display tests", () => {
         jobs: [
           {
             _id: "ABC456",
+            board: "Example.org",
             title: "Job Title ABC456",
             location: "San Francisco",
             url: "https://www.example.org/job/ABC456"
           },
           {
             _id: "DEF456",
+            board: "Example.org",
             title: "Job Title DEF456",
             location: "San Francisco",
             url: "https://www.example.org/job/DEF456"
@@ -231,6 +242,7 @@ describe("Result Display tests", () => {
             JSON.stringify([
               {
                 _id: "GHI123",
+                board: "Example.com",
                 title: "Job Title GHI123",
                 location: "San Francisco",
                 url: "https://www.example.com/job/GHI123"
@@ -289,6 +301,7 @@ describe("Result Display tests", () => {
             JSON.stringify([
               {
                 _id: "JKL123",
+                board: "Example.com",
                 title: "Job Title JKL123",
                 location: "San Francisco",
                 url: "https://www.example.com/job/JKL123"
