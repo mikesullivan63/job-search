@@ -85,17 +85,11 @@ class ProfileForm extends React.Component {
   }
 
   render() {
-    console.log("this.props.redirectOnSuccess", this.props.redirectOnSuccess);
-    console.log(
-      'this.props.redirectOnSuccess !== ""',
-      this.props.redirectOnSuccess !== ""
-    );
     if (
       this.state.success &&
       typeof this.props.redirectOnSuccess !== "undefined" &&
       this.props.redirectOnSuccess !== ""
     ) {
-      console.log("Redirecting");
       return <Redirect to={this.props.redirectOnSuccess} />;
     }
 
