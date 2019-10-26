@@ -54,13 +54,13 @@ function updateStateWithFetch(url, response) {
 }
 
 function setActiveJobs() {
-  return updateStateWithFetch("/job/active-jobs", res => {
+  return updateStateWithFetch("/job/active-jobs", function setJobs(res) {
     this.store.setActiveJobs(res);
     return res;
   });
 }
 function setIgnoredJobs() {
-  return updateStateWithFetch("/job/ignored-jobs", res => {
+  return updateStateWithFetch("/job/ignored-jobs", function setJobs(res) {
     this.store.setIgnoredJobs(res);
     return res;
   });

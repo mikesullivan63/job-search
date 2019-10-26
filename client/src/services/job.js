@@ -46,10 +46,24 @@ function watchIgnoredJob(jobId, callback) {
   });
 }
 
+function getWatchedJobWithStatus(jobId) {
+  fetch("/job/active-jobs-status/" + jobId, {
+    headers: authenticationService.authHeader({
+      "Content-Type": "application/json"
+    })
+  })
+    .then(res => res.json())
+    .then(res => {
+      return res;
+    })
+    .catch(reason => console.log("Error: " + reason));
+}
+
 export const jobService = {
   setStore,
   ignoreJob,
   watchJob,
   archiveJob,
-  watchIgnoredJob
+  watchIgnoredJob,
+  getWatchedJobWithStatus
 };
