@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Segment, Grid, Button } from "semantic-ui-react";
+import WatchedJobRow from "./WatchedJobRow";
 import { jobService } from "../../services/job";
 import { searchService } from "../../services/search";
 import { objectComparator } from "../../util/comparator";
@@ -33,6 +34,7 @@ class WatchedJobsPage extends React.Component {
               job.status = "Pending";
               return job;
             })
+            .sort(objectComparator(["board", "title", "location", "url"]))
         });
 
         this.state.jobs.forEach(job => {
@@ -60,7 +62,7 @@ class WatchedJobsPage extends React.Component {
         <h2>Watched Jobs ({this.state.jobs.length})</h2>
         <Segment.Group>
           <Segment inverted color="black">
-            <Grid columns={5}>
+            <Grid columns={6}>
               <Grid.Column>Company</Grid.Column>
               <Grid.Column>Title</Grid.Column>
               <Grid.Column>Location</Grid.Column>
@@ -71,24 +73,17 @@ class WatchedJobsPage extends React.Component {
           {this.state.jobs &&
             this.state.jobs.map(job => {
               return (
-                <Segment key={job._id}>
-                  <Grid columns={5}>
-                    <Grid.Column>{job.board}</Grid.Column>
-                    <Grid.Column>{job.title}</Grid.Column>
-                    <Grid.Column>{job.location}</Grid.Column>
-                    <Grid.Column>
-                      <Button
-                        as="a"
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Link to Posting
-                      </Button>
-                    </Grid.Column>
-                    <Grid.Column>{job.status}</Grid.Column>
-                  </Grid>
-                </Segment>
+                <WatchedJobRow
+                  store={this.props.store}
+                  job={job}
+                  callback={jobId => {
+                    this.setState({
+                      jobs: this.state.jobs
+                        .slice()
+                        .filter(el => el._id.toString() !== jobId)
+                    });
+                  }}
+                />
               );
             })}
         </Segment.Group>
