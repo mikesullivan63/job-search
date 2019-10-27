@@ -168,7 +168,7 @@ describe("Result Display tests", () => {
     expect(component.find("div.ignoredJobs a").length).toBe(1); //1 'Ignored' job
     expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
 
-    expect(component.find("button.archiveButton").length).toBe(1);
+    expect(component.find("button.ignoreWatchedButton").length).toBe(1);
     expect(component.find("button.watchButton").length).toBe(2);
     expect(component.find("button.ignoreButton").length).toBe(2);
     expect(component.find("button.watchIgnoredButton").length).toBe(1);
@@ -198,15 +198,15 @@ describe("Result Display tests", () => {
     expect(component.find("div.ignoredJobs a").length).toBe(1); //1 'Ignored' job
     expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job
 
-    expect(component.find("button.archiveButton").length).toBe(1);
-    component.find("button.archiveButton").simulate("click");
+    expect(component.find("button.ignoreWatchedButton").length).toBe(1);
+    component.find("button.ignoreWatchedButton").simulate("click");
 
     setTimeout(() => {
       component.update();
 
       expect(store.activeJobs.length).toBe(1);
       expect(store.ignoredJobs.length).toBe(3);
-      expect(component.find("button.archiveButton").length).toBe(0);
+      expect(component.find("button.ignoreWatchedButton").length).toBe(0);
       expect(component.find("div.activeJobs a").length).toBe(2); //2 'Active' jobs remaining
       expect(component.find("div.ignoredJobs a").length).toBe(2); //2 'Ignored' job, as we just added 0ne
       expect(component.find("div.otherJobs a").length).toBe(1); //1 'Other' job, unchanged
@@ -215,7 +215,7 @@ describe("Result Display tests", () => {
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(global.fetch).toHaveBeenCalledWith(
-        "/job/archive-job",
+        "/job/ignore-watched-job",
         expect.anything()
       );
       global.fetch.mockClear();
@@ -263,7 +263,7 @@ describe("Result Display tests", () => {
       expect(store.activeJobs.length).toBe(3);
       expect(store.ignoredJobs.length).toBe(2);
 
-      expect(component.find("button.archiveButton").length).toBe(2);
+      expect(component.find("button.ignoreWatchedButton").length).toBe(2);
       expect(component.find("button.watchButton").length).toBe(1);
 
       expect(component.find("div.activeJobs a").length).toBe(3); //3 'Active' jobs
@@ -322,7 +322,7 @@ describe("Result Display tests", () => {
 
       expect(store.activeJobs.length).toBe(2);
       expect(store.ignoredJobs.length).toBe(3);
-      expect(component.find("button.archiveButton").length).toBe(1);
+      expect(component.find("button.ignoreWatchedButton").length).toBe(1);
       expect(component.find("button.watchButton").length).toBe(1);
 
       expect(component.find("div.activeJobs a").length).toBe(2); //2 'Active' jobs, we ignored one
