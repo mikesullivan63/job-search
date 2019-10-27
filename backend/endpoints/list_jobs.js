@@ -58,8 +58,6 @@ routes.get("/active-job-status/:jobId", auth, (req, res) => {
           return;
         }
 
-        console.log("Requesting ", job.url);
-
         request
           .get({ uri: job.url, resolveWithFullResponse: true, simple: false })
           .then(response => {

@@ -157,13 +157,12 @@ routes.post("/updateProfile", auth, (req, res) => {
       User.findOne({ email })
         .exec()
         .then(existingUser => {
-          console.log(
-            "Existing user found with email",
-            existingUser,
-            req.payload._id
-          );
           if (existingUser && existingUser._id.toString() !== req.payload._id) {
-            console.log("errors after collision push", errors);
+            console.log(
+              "Error updating current user e-mail to another user's email: ",
+              email,
+              errors
+            );
             res.status(500).json("Error setting email to " + email);
             return;
           }

@@ -77,16 +77,6 @@ routes.post("/ignore-job", auth, function(req, res) {
 
 routes.post("/watch-ignore-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
-    console.log("req.body.jobId", req.body.jobId);
-    userJobs.ignored.slice().forEach(job => {
-      console.log("job._id", job._id);
-      console.log("match", job._id.toString() === req.body.jobId);
-    });
-
-    console.log(
-      "userJobs.active before",
-      JSON.stringify(userJobs.active, null, 2)
-    );
     userJobs.active = userJobs.active
       .slice()
       .concat(
@@ -95,23 +85,9 @@ routes.post("/watch-ignore-job", auth, function(req, res) {
           .find(job => job._id.toString() === req.body.jobId)
       );
 
-    console.log(
-      "userJobs.active after",
-      JSON.stringify(userJobs.active, null, 2)
-    );
-    console.log(
-      "userJobs.ignored before",
-      JSON.stringify(userJobs.ignored, null, 2)
-    );
-
     userJobs.ignored = userJobs.ignored
       .slice()
       .filter(job => job._id.toString() !== req.body.jobId);
-
-    console.log(
-      "userJobs.ignored after",
-      JSON.stringify(userJobs.ignored, null, 2)
-    );
 
     handleSaveAndReturn(res, userJobs, userJobs => {
       return {

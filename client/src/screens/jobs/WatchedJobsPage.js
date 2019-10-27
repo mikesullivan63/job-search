@@ -36,7 +36,6 @@ class WatchedJobsPage extends React.Component {
         });
 
         this.state.jobs.forEach(job => {
-          console.log("componentDidMount: job._id", job._id);
           jobService
             .getWatchedJobWithStatus(job._id)
             .then(newJobs => this.updateJobResult(newJobs))
@@ -56,7 +55,6 @@ class WatchedJobsPage extends React.Component {
   }
 
   render() {
-    console.log("Rendering list:", this.state.jobs.map(job => job.status));
     return (
       <div class="jobListPage">
         <h2>Watched Jobs ({this.state.jobs.length})</h2>
