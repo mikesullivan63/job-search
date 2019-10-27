@@ -54,16 +54,18 @@ function updateStateWithFetch(url, response) {
 }
 
 function setActiveJobs() {
-  return updateStateWithFetch("/job/active-jobs", function setJobs(res) {
+  const handleResponse = res => {
     this.store.setActiveJobs(res);
     return res;
-  });
+  };
+  return updateStateWithFetch("/job/active-jobs", handleResponse);
 }
 function setIgnoredJobs() {
-  return updateStateWithFetch("/job/ignored-jobs", function setJobs(res) {
+  const handleResponse = res => {
     this.store.setIgnoredJobs(res);
     return res;
-  });
+  };
+  return updateStateWithFetch("/job/ignored-jobs", handleResponse);
 }
 
 function postSearchCall(title, location) {
@@ -106,8 +108,8 @@ function processBoard(board, title, location, store) {
 function executeSearch(title, location) {
   //Refresh job lists
   Promise.all([
-    setActiveJobs(),
-    setIgnoredJobs(),
+    this.setActiveJobs(),
+    this.setIgnoredJobs(),
     postSearchCall(title, location)
   ])
     .then(

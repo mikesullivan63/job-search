@@ -1,9 +1,9 @@
 const routes = require("express").Router();
+const request = require("request-promise-native");
 const mongoose = require("mongoose");
 const UserJobs = mongoose.model("UserJobs");
 const auth = require("../config/jwt").auth;
 const jwt = require("../config/jwt");
-const request = require("request-promise-native");
 
 //Utility functions
 function findUserJobs(userId) {

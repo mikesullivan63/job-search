@@ -47,16 +47,22 @@ function watchIgnoredJob(jobId, callback) {
 }
 
 function getWatchedJobWithStatus(jobId) {
-  fetch("/job/active-jobs-status/" + jobId, {
-    headers: authenticationService.authHeader({
-      "Content-Type": "application/json"
+  return new Promise((resolve, reject) => {
+    fetch("/job/active-job-status/" + jobId, {
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      })
     })
-  })
-    .then(res => res.json())
-    .then(res => {
-      return res;
-    })
-    .catch(reason => console.log("Error: " + reason));
+      .then(res => res.json())
+      .then(res => {
+        console.log("getWatchedJobWithStatus: jobId", jobId, "returning", res);
+        resolve(res);
+      })
+      .catch(error => {
+        console.log("Error: " + error);
+        reject(error);
+      });
+  });
 }
 
 export const jobService = {
