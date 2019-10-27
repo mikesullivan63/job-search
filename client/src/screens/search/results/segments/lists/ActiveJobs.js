@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import JobList from "../lists/JobList";
-import WatchJobButton from "../buttons/WatchJobButton";
-import IgnoreJobButton from "../buttons/IgnoreJobButton";
-import ArchiveJobButton from "../buttons/ArchiveJobButton";
+import WatchJobButton from "../../../../common/buttons/WatchJobButton";
+import IgnoreJobButton from "../../../../common/buttons/IgnoreJobButton";
+import IgnoreWatchedJobButton from "../../../../common/buttons/IgnoreWatchedJobButton";
 
 const ActiveJobs = props => {
   return (
@@ -16,7 +16,7 @@ const ActiveJobs = props => {
           {(job, beforeCallback, afterCallback) => (
             <Grid.Column>
               {job._id && (
-                <ArchiveJobButton
+                <IgnoreWatchedJobButton
                   store={props.store}
                   {...{ job, beforeCallback, afterCallback }}
                 />

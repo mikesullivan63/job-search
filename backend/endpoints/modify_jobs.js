@@ -98,7 +98,7 @@ routes.post("/watch-ignore-job", auth, function(req, res) {
   });
 });
 
-routes.post("/archive-job", auth, function(req, res) {
+routes.post("/ignore-watched-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
     let jobToIgnore = userJobs.active.find(
       job => job._id.toString() === req.body.jobId
@@ -112,6 +112,57 @@ routes.post("/archive-job", auth, function(req, res) {
         return {
           active: userJobs.active,
           ignored: userJobs.ignored
+        };
+      });
+    } else {
+      res.status(500).json({
+        message: "Job not found in Active list"
+      });
+    }
+  });
+});
+
+routes.post("/archive-watched-job", auth, function(req, res) {
+  processJobModifications(req, res, (req, res, userJobs) => {
+    let jobToIgnore = userJobs.active.find(
+      job => job._id.toString() === req.body.jobId
+    );
+    if (jobToIgnore) {
+      userJobs.active = userJobs.active.filter(
+        job => job._id.toString() !== req.body.jobId
+      );
+      userJobs.history = userJobs.ignored.slice().concat(jobToIgnore);
+      handleSaveAndReturn(res, userJobs, userJobs => {
+        return {
+          active: userJobs.active,
+          ignored: userJobs.ignored,
+          history: userJobs.history
+        };
+      });
+    } else {
+      res.status(500).json({
+        message: "Job not found in Active list"
+      });
+    }
+  });
+});
+
+//TODO: Write
+routes.post("/archive-ignored-job", auth, function(req, res) {
+  processJobModifications(req, res, (req, res, userJobs) => {
+    let jobToIgnore = userJobs.ignored.find(
+      job => job._id.toString() === req.body.jobId
+    );
+    if (jobToIgnore) {
+      userJobs.ignored = userJobs.ignored.filter(
+        job => job._id.toString() !== req.body.jobId
+      );
+      userJobs.history = userJobs.history.slice().concat(jobToIgnore);
+      handleSaveAndReturn(res, userJobs, userJobs => {
+        return {
+          active: userJobs.active,
+          ignored: userJobs.ignored,
+          history: userJobs.history
         };
       });
     } else {

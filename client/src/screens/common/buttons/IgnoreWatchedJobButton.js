@@ -1,12 +1,12 @@
 import React from "react";
 import CommonButton from "./CommonButton";
-import { jobService } from "../../../../../services/job";
+import { jobService } from "../../../services/job";
 
-const ArchiveJobButton = props => {
+const IgnoreWatchedJobButton = props => {
   return (
     <CommonButton
-      className="archiveButton"
-      label="Archive"
+      className="ignoreWatchedButton"
+      label="Ignore"
       callback={event => {
         props.beforeCallback(event);
         jobService.archiveJob(props.job._id, props.afterCallback);
@@ -15,4 +15,4 @@ const ArchiveJobButton = props => {
   );
 };
 
-export default ArchiveJobButton;
+export default IgnoreWatchedJobButton;

@@ -1,6 +1,6 @@
 import React from "react";
 import CommonButton from "./CommonButton";
-import { jobService } from "../../../../../services/job";
+import { jobService } from "../../../services/job";
 
 const WatchJobButton = props => {
   return (

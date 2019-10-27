@@ -32,9 +32,9 @@ function watchJob(board, url, title, location, callback) {
   });
 }
 
-function archiveJob(jobId, callback) {
-  addJobToList({ jobId }, "/job/archive-job", result => {
-    this.store.archiveActiveJob(jobId);
+function ignoreWatchedJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/ignore-watched-job", result => {
+    this.store.ignoreActiveJob(jobId);
     callback();
   });
 }
@@ -42,6 +42,19 @@ function archiveJob(jobId, callback) {
 function watchIgnoredJob(jobId, callback) {
   addJobToList({ jobId }, "/job/watch-ignore-job", result => {
     this.store.addActiveJobFromIgnored(jobId);
+    callback();
+  });
+}
+
+function archiveWatchedJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/archive-watched-job", result => {
+    this.store.archiveActiveJob(jobId);
+    callback();
+  });
+}
+function archiveIgnoredJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/archive-ignored-job", result => {
+    this.store.archiveIgnoredJob(jobId);
     callback();
   });
 }
@@ -68,7 +81,7 @@ export const jobService = {
   setStore,
   ignoreJob,
   watchJob,
-  archiveJob,
+  archiveJob: ignoreWatchedJob,
   watchIgnoredJob,
   getWatchedJobWithStatus
 };

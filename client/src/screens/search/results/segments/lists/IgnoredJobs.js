@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import CollapsibleJobList from "../lists/CollapsibleJobList";
-import WatchIgnoredJobButton from "../buttons/WatchIgnoredJobButton";
+import WatchIgnoredJobButton from "../../../../common/buttons/WatchIgnoredJobButton";
 
 const IgnoredJobs = props => {
   return (
