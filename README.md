@@ -6,10 +6,14 @@ This app is designed to allow users to search job postings in real-time across m
 
 It is functional in its current state: users can register and login, a few dozen sites can be searched, and specifc jobs can be tagged for active review, to be ignored, or to be archived. Additional functionality is intended:
 
-- Build out of profile section
-- Closer inspection of Active and Ignored jobs
-- Removal of current design frameworks to simplify markup and styling
-- Introduction of consistent deisgn tools across all pages
+- ~~Build out of profile section~~
+- ~~Closer inspection of Active and Ignored jobs~~
+- ~~Removal of current design frameworks to simplify markup and styling~~
+- ~~Introduction of consistent deisgn tools across all pages~~
+- Search history with paging
+- Improved button styling
+- Tablet and Phone updates
+- Improved interaction for Active and Ignored jobs
 - Auth0 integration for additional login support
 - Email integration
 - TBD
