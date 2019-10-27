@@ -1,11 +1,16 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { Grid, Column } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import Result from "./Result";
+import { searchService } from "../../../services/search";
 
 class Results extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    searchService.loadCompanies();
   }
 
   render() {

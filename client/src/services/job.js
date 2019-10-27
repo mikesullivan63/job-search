@@ -32,9 +32,9 @@ function watchJob(board, url, title, location, callback) {
   });
 }
 
-function archiveJob(jobId, callback) {
-  addJobToList({ jobId }, "/job/archive-job", result => {
-    this.store.archiveActiveJob(jobId);
+function ignoreWatchedJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/ignore-watched-job", result => {
+    this.store.ignoreActiveJob(jobId);
     callback();
   });
 }
@@ -46,10 +46,63 @@ function watchIgnoredJob(jobId, callback) {
   });
 }
 
+function archiveWatchedJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/archive-watched-job", result => {
+    this.store.archiveActiveJob(jobId);
+    callback();
+  });
+}
+function archiveIgnoredJob(jobId, callback) {
+  addJobToList({ jobId }, "/job/archive-ignored-job", result => {
+    this.store.archiveIgnoredJob(jobId);
+    callback();
+  });
+}
+
+function getWatchedJobWithStatus(jobId) {
+  return new Promise((resolve, reject) => {
+    fetch("/job/active-job-status/" + jobId, {
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        console.log("Error: " + error);
+        reject(error);
+      });
+  });
+}
+
+function getIgnoredJobWithStatus(jobId) {
+  return new Promise((resolve, reject) => {
+    fetch("/job/ignored-job-status/" + jobId, {
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        console.log("Error: " + error);
+        reject(error);
+      });
+  });
+}
+
 export const jobService = {
   setStore,
   ignoreJob,
   watchJob,
-  archiveJob,
-  watchIgnoredJob
+  ignoreWatchedJob,
+  watchIgnoredJob,
+  archiveWatchedJob,
+  archiveIgnoredJob,
+  getWatchedJobWithStatus,
+  getIgnoredJobWithStatus
 };

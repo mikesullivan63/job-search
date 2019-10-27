@@ -53,17 +53,19 @@ function updateStateWithFetch(url, response) {
   });
 }
 
-function setActiveJobs(store) {
-  return updateStateWithFetch("/job/active-jobs", res => {
-    store.setActiveJobs(res);
+function setActiveJobs() {
+  const handleResponse = res => {
+    this.store.setActiveJobs(res);
     return res;
-  });
+  };
+  return updateStateWithFetch("/job/active-jobs", handleResponse);
 }
-function setIgnoredJobs(store) {
-  return updateStateWithFetch("/job/ignored-jobs", res => {
-    store.setIgnoredJobs(res);
+function setIgnoredJobs() {
+  const handleResponse = res => {
+    this.store.setIgnoredJobs(res);
     return res;
-  });
+  };
+  return updateStateWithFetch("/job/ignored-jobs", handleResponse);
 }
 
 function postSearchCall(title, location) {
@@ -106,8 +108,8 @@ function processBoard(board, title, location, store) {
 function executeSearch(title, location) {
   //Refresh job lists
   Promise.all([
-    setActiveJobs(this.store),
-    setIgnoredJobs(this.store),
+    this.setActiveJobs(),
+    this.setIgnoredJobs(),
     postSearchCall(title, location)
   ])
     .then(
@@ -124,5 +126,7 @@ export const searchService = {
   setStore,
   loadCompanies,
   loadLastSearch,
-  executeSearch
+  executeSearch,
+  setActiveJobs,
+  setIgnoredJobs
 };

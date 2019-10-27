@@ -23,9 +23,14 @@ const ResultsStore = types
       let temp = self.ignoredJobs.find(el => el._id === jobId);
       self.activeJobs.push(detach(temp));
     },
-    archiveActiveJob(jobId) {
+    ignoreActiveJob(jobId) {
       let temp = self.activeJobs.find(el => el._id === jobId);
       self.ignoredJobs.push(detach(temp));
+    },
+    archiveActiveJob(jobId) {
+      let temp = self.activeJobs.find(el => el._id === jobId);
+      detach(temp);
+      self.activeJobs.remove(temp);
     }
   }))
   .actions(self => ({
@@ -34,6 +39,11 @@ const ResultsStore = types
     },
     addIgnoredJob(job) {
       self.ignoredJobs.push(job);
+    },
+    archiveIgnoredJob(jobId) {
+      let temp = self.ignoredJobs.find(el => el._id === jobId);
+      detach(temp);
+      self.ignoredJobs.remove(temp);
     }
   }))
   .actions(self => ({
@@ -73,8 +83,14 @@ const ResultsStore = types
     getActiveJob(job) {
       return self.activeJobs.find(el => el.url === job.url);
     },
+    getActiveJobs() {
+      return self.activeJobs.slice();
+    },
     getIgnoredJob(job) {
       return self.ignoredJobs.find(el => el.url === job.url);
+    },
+    getIgnoredJobs() {
+      return self.ignoredJobs.slice();
     },
     getSearchResults() {
       return self.searchResults.slice();

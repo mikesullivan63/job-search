@@ -77,16 +77,6 @@ routes.post("/ignore-job", auth, function(req, res) {
 
 routes.post("/watch-ignore-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
-    console.log("req.body.jobId", req.body.jobId);
-    userJobs.ignored.slice().forEach(job => {
-      console.log("job._id", job._id);
-      console.log("match", job._id.toString() === req.body.jobId);
-    });
-
-    console.log(
-      "userJobs.active before",
-      JSON.stringify(userJobs.active, null, 2)
-    );
     userJobs.active = userJobs.active
       .slice()
       .concat(
@@ -95,23 +85,9 @@ routes.post("/watch-ignore-job", auth, function(req, res) {
           .find(job => job._id.toString() === req.body.jobId)
       );
 
-    console.log(
-      "userJobs.active after",
-      JSON.stringify(userJobs.active, null, 2)
-    );
-    console.log(
-      "userJobs.ignored before",
-      JSON.stringify(userJobs.ignored, null, 2)
-    );
-
     userJobs.ignored = userJobs.ignored
       .slice()
       .filter(job => job._id.toString() !== req.body.jobId);
-
-    console.log(
-      "userJobs.ignored after",
-      JSON.stringify(userJobs.ignored, null, 2)
-    );
 
     handleSaveAndReturn(res, userJobs, userJobs => {
       return {
@@ -122,7 +98,7 @@ routes.post("/watch-ignore-job", auth, function(req, res) {
   });
 });
 
-routes.post("/archive-job", auth, function(req, res) {
+routes.post("/ignore-watched-job", auth, function(req, res) {
   processJobModifications(req, res, (req, res, userJobs) => {
     let jobToIgnore = userJobs.active.find(
       job => job._id.toString() === req.body.jobId
@@ -136,6 +112,57 @@ routes.post("/archive-job", auth, function(req, res) {
         return {
           active: userJobs.active,
           ignored: userJobs.ignored
+        };
+      });
+    } else {
+      res.status(500).json({
+        message: "Job not found in Active list"
+      });
+    }
+  });
+});
+
+routes.post("/archive-watched-job", auth, function(req, res) {
+  processJobModifications(req, res, (req, res, userJobs) => {
+    let jobToIgnore = userJobs.active.find(
+      job => job._id.toString() === req.body.jobId
+    );
+    if (jobToIgnore) {
+      userJobs.active = userJobs.active.filter(
+        job => job._id.toString() !== req.body.jobId
+      );
+      userJobs.history = userJobs.ignored.slice().concat(jobToIgnore);
+      handleSaveAndReturn(res, userJobs, userJobs => {
+        return {
+          active: userJobs.active,
+          ignored: userJobs.ignored,
+          history: userJobs.history
+        };
+      });
+    } else {
+      res.status(500).json({
+        message: "Job not found in Active list"
+      });
+    }
+  });
+});
+
+//TODO: Write
+routes.post("/archive-ignored-job", auth, function(req, res) {
+  processJobModifications(req, res, (req, res, userJobs) => {
+    let jobToIgnore = userJobs.ignored.find(
+      job => job._id.toString() === req.body.jobId
+    );
+    if (jobToIgnore) {
+      userJobs.ignored = userJobs.ignored.filter(
+        job => job._id.toString() !== req.body.jobId
+      );
+      userJobs.history = userJobs.history.slice().concat(jobToIgnore);
+      handleSaveAndReturn(res, userJobs, userJobs => {
+        return {
+          active: userJobs.active,
+          ignored: userJobs.ignored,
+          history: userJobs.history
         };
       });
     } else {
