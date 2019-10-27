@@ -14,7 +14,6 @@ class WatchedJobsPage extends React.Component {
   }
 
   updateJobResult(job) {
-    console.log("updateJobResult: job", job);
     const newJobs = this.state.jobs.slice();
     newJobs[newJobs.findIndex(el => el.url === job.url)] = job;
     this.setState({
@@ -57,7 +56,7 @@ class WatchedJobsPage extends React.Component {
   }
 
   render() {
-    console.log("Rendering list:", this.state.jobs);
+    console.log("Rendering list:", this.state.jobs.map(job => job.status));
     return (
       <div class="jobListPage">
         <h2>Watched Jobs ({this.state.jobs.length})</h2>
@@ -89,10 +88,7 @@ class WatchedJobsPage extends React.Component {
                         Link to Posting
                       </Button>
                     </Grid.Column>
-                    <Grid.Column>
-                      {typeof job.satus === "undefined" && "Pending"}
-                      {typeof job.satus !== "undefined" && job.satus}
-                    </Grid.Column>
+                    <Grid.Column>{job.status}</Grid.Column>
                   </Grid>
                 </Segment>
               );

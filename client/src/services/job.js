@@ -55,7 +55,6 @@ function getWatchedJobWithStatus(jobId) {
     })
       .then(res => res.json())
       .then(res => {
-        console.log("getWatchedJobWithStatus: jobId", jobId, "returning", res);
         resolve(res);
       })
       .catch(error => {

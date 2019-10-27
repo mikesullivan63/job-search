@@ -58,46 +58,26 @@ routes.get("/active-job-status/:jobId", auth, (req, res) => {
           return;
         }
 
-        request
-          .get({ uri: job.url })
-          .then(response => {
-            console.log(
-              "Response  for ",
-              job.board,
-              job.title,
-              JSON.stringify(response.status, null, 2)
-            );
+        console.log("Requesting ", job.url);
 
-            if (response.status == 200) {
-              console.log(
-                "Setting status for ",
-                job.board,
-                job.title,
-                "to ACTIVE"
-              );
-              job.status = "ACTIVE";
-            } else {
-              console.log(
-                "Setting status for ",
-                job.board,
-                job.title,
-                "to INACTIVE"
-              );
-              job.status = "INACTIVE - " + response.statusText;
-            }
+        request
+          .get({ uri: job.url, resolveWithFullResponse: true, simple: false })
+          .then(response => {
+            const status =
+              response.statusCode == 200
+                ? "Active"
+                : "INACTIVE (" +
+                  response.statusCode +
+                  ": " +
+                  response.statusText +
+                  ")";
+
             res.status(200);
-            res.json(job);
+            res.json({ ...job._doc, ...{ status: status } });
           })
           .catch(error => {
-            console.log(
-              "Setting status for ",
-              job.board,
-              job.title,
-              "to ERROR"
-            );
-            job.status = "ERROR - " + error;
             res.status(200);
-            res.json(job);
+            res.json({ ...job._doc, ...{ status: "ERROR - " + error } });
           });
       })
       .catch(error => {
