@@ -9,7 +9,7 @@ const IgnoreWatchedJobButton = props => {
       label="Ignore"
       callback={event => {
         props.beforeCallback(event);
-        jobService.archiveJob(props.job._id, props.afterCallback);
+        jobService.ignoreWatchedJob(props.job._id, props.afterCallback);
       }}
     />
   );

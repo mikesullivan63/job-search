@@ -7,6 +7,7 @@ import LoginPage from "./screens/login/LoginPage";
 import RegisterPage from "./screens/register/RegisterPage";
 import EditProfilePage from "./screens/profile/EditProfilePage";
 import WatchedJobsPage from "./screens/jobs/WatchedJobsPage";
+import IgnoredJobsPage from "./screens/jobs/IgnoredJobsPage";
 import { authenticationService } from "./services/authentication";
 
 class App extends React.Component {
@@ -39,7 +40,8 @@ class App extends React.Component {
       if (
         location !== "/" &&
         location !== "/profile" &&
-        location !== "/watched-jobs"
+        location !== "/watched-jobs" &&
+        location !== "/ignored-jobs"
       ) {
         return <Redirect to="/" />;
       }
@@ -88,6 +90,13 @@ class App extends React.Component {
                 path="/watched-jobs"
                 render={props => (
                   <WatchedJobsPage {...props} store={this.props.store} />
+                )}
+              />
+              <Route
+                exact
+                path="/ignored-jobs"
+                render={props => (
+                  <IgnoredJobsPage {...props} store={this.props.store} />
                 )}
               />
             </React.Fragment>

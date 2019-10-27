@@ -29,7 +29,8 @@ const ResultsStore = types
     },
     archiveActiveJob(jobId) {
       let temp = self.activeJobs.find(el => el._id === jobId);
-      self.activeJobs.remove(detach(temp));
+      detach(temp);
+      self.activeJobs.remove(temp);
     }
   }))
   .actions(self => ({
@@ -40,8 +41,9 @@ const ResultsStore = types
       self.ignoredJobs.push(job);
     },
     archiveIgnoredJob(jobId) {
-      let temp = self.activeJobs.find(el => el._id === jobId);
-      self.ignoredJobs.remove(detach(temp));
+      let temp = self.ignoredJobs.find(el => el._id === jobId);
+      detach(temp);
+      self.ignoredJobs.remove(temp);
     }
   }))
   .actions(self => ({

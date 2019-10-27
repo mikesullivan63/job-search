@@ -77,11 +77,32 @@ function getWatchedJobWithStatus(jobId) {
   });
 }
 
+function getIgnoredJobWithStatus(jobId) {
+  return new Promise((resolve, reject) => {
+    fetch("/job/ignored-job-status/" + jobId, {
+      headers: authenticationService.authHeader({
+        "Content-Type": "application/json"
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        console.log("Error: " + error);
+        reject(error);
+      });
+  });
+}
+
 export const jobService = {
   setStore,
   ignoreJob,
   watchJob,
-  archiveJob: ignoreWatchedJob,
+  ignoreWatchedJob,
   watchIgnoredJob,
-  getWatchedJobWithStatus
+  archiveWatchedJob,
+  archiveIgnoredJob,
+  getWatchedJobWithStatus,
+  getIgnoredJobWithStatus
 };
