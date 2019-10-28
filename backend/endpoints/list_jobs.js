@@ -110,7 +110,7 @@ routes.get("/ignored-job-status/:jobId", auth, (req, res) => {
           .get({ uri: job.url, resolveWithFullResponse: true, simple: false })
           .then(response => {
             const status =
-              response.statusCode == 200
+              response.statusCode === 200
                 ? "Active"
                 : "INACTIVE (" +
                   response.statusCode +
@@ -119,7 +119,7 @@ routes.get("/ignored-job-status/:jobId", auth, (req, res) => {
                   ")";
 
             res.status(200);
-            res.json({ ...job._doc, ...{ status: status } });
+            res.json({ ...job._doc, ...{ status } });
           })
           .catch(error => {
             res.status(200);
