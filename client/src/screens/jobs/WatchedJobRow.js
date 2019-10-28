@@ -1,5 +1,4 @@
 import React from "react";
-import { Segment, Grid, Dimmer, Button } from "semantic-ui-react";
 import JobListRow from "./JobListRow";
 import IgnoreWatchedJobButton from "../common/buttons/IgnoreWatchedJobButton";
 import ArchiveWatchedJobButton from "../common/buttons/ArchiveWatchedJobButton";

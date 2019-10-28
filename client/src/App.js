@@ -9,6 +9,7 @@ import EditProfilePage from "./screens/profile/EditProfilePage";
 import WatchedJobsPage from "./screens/jobs/WatchedJobsPage";
 import IgnoredJobsPage from "./screens/jobs/IgnoredJobsPage";
 import { authenticationService } from "./services/authentication";
+import { searchService } from "./services/search";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class App extends React.Component {
   componentDidMount() {
     authenticationService.remember().then(profile => {
       this.setState({ remembered: true });
+      searchService.loadCompanies();
     });
   }
 

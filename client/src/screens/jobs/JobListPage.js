@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { Segment, Grid, Button } from "semantic-ui-react";
+import { Segment, Grid } from "semantic-ui-react";
 import { objectComparator } from "../../util/comparator";
 
 class JobListPage extends React.Component {

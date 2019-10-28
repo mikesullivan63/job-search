@@ -1,7 +1,5 @@
 import React from "react";
 import { Segment, Grid, Dimmer, Button } from "semantic-ui-react";
-import IgnoreWatchedJobButton from "../common/buttons/IgnoreWatchedJobButton";
-import ArchiveWatchedJobButton from "../common/buttons/ArchiveWatchedJobButton";
 
 class JobListRow extends React.Component {
   _isMounted = false; //Used to prevent Asynchronous updates to unmounted rows

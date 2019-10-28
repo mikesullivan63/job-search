@@ -14,7 +14,6 @@ exports.findOneObject = function(model, query) {
 
 exports.processUserObjects = function(req, res, model, query, callback) {
   jwt.protectedRequest(req, res, (req, res) => {
-    console.log("model", model, "query", query);
     this.findOneObject(model, query)
       .then(result => {
         callback(req, res, result);

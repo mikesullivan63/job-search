@@ -1,6 +1,5 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { Segment, Grid, Accordion, Icon } from "semantic-ui-react";
 import CommonSegment from "./CommonSegment";
 import ActiveJobs from "./lists/ActiveJobs";
 import IgnoredJobs from "./lists/IgnoredJobs";

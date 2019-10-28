@@ -48,12 +48,7 @@ exports.processGreenhouseEmbed = (board, title, location, debug) => {
         locationExtractor: (el, $) => el.find("span.location").text(),
         linkExtractor: (el, $) => {
           const fullHref = el.find("a").attr("href");
-          console.log("fullHref", fullHref, typeof fullHref);
-
           const code = /gh_jid=([\d]+)(&|$|\?)/.exec(fullHref.trim());
-
-          console.log("code", JSON.stringify(code, null, 2));
-
           if (code && code.length > 0) {
             return (
               "https://boards.greenhouse.io/embed/job_app?for=" +

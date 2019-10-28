@@ -1,7 +1,6 @@
 import { authenticationService } from "./authentication";
 
 //Pass in reference to MobX-State-Tree store to allow for simpler manipultion
-let store = null;
 function setStore(localStore) {
   this.store = localStore;
 }
