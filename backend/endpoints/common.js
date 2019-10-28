@@ -17,7 +17,6 @@ exports.processUserObjects = function(req, res, model, query, callback) {
     console.log("model", model, "query", query);
     this.findOneObject(model, query)
       .then(result => {
-        console.log("result", result);
         callback(req, res, result);
       })
       .catch(error => {
