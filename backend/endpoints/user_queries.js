@@ -4,29 +4,17 @@ const Query = mongoose.model("Query");
 const UserQueries = mongoose.model("UserQueries");
 const auth = require("../config/jwt").auth;
 const jwt = require("../config/jwt");
+const commonFunctions = require("./common");
 
 //Common logic
-
-function findUserQueries(userId) {
-  return new Promise(function(resolve, reject) {
-    UserQueries.findOne({ userId }).exec(function(err, userQueries) {
-      if (err) {
-        return reject(err);
-      } else {
-        return resolve(userQueries);
-      }
-    });
-  });
-}
-
-function processUserQueries(req, res, processUserQueries) {
+function processUserQueries(req, res, process) {
   jwt.protectedRequest(req, res, (req, res) => {
-    findUserQueries(req.payload._id)
+    commonFunctions
+      .findOneObject(UserQueries, { userId: req.payload._id })
       .then(userQueries => {
-        processUserQueries(req, res, userQueries);
+        process(req, res, userQueries);
       })
       .catch(error => {
-        console.log("Error", error);
         res.status(500).json({ message: "Error during lookup: " + error });
       });
   });

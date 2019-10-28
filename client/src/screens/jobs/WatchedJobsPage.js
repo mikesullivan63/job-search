@@ -1,95 +1,36 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Segment, Grid, Button } from "semantic-ui-react";
+import JobListPage from "./JobListPage";
 import WatchedJobRow from "./WatchedJobRow";
 import { jobService } from "../../services/job";
 import { searchService } from "../../services/search";
 import { objectComparator } from "../../util/comparator";
 
-class WatchedJobsPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      jobs: []
-    };
-  }
-
-  updateJobResult(job) {
-    const newJobs = this.state.jobs.slice();
-    newJobs[newJobs.findIndex(el => el.url === job.url)] = job;
-    this.setState({
-      jobs: newJobs
-    });
-  }
-
-  componentDidMount() {
-    searchService
-      .setActiveJobs()
-      .then(result => {
-        this.setState({
-          jobs: this.props.store
-            .getActiveJobs()
-            .slice()
-            .map(job => {
-              job.status = "Pending";
-              return job;
-            })
-            .sort(objectComparator(["board", "title", "location", "url"]))
-        });
-
-        this.state.jobs.forEach(job => {
-          jobService
-            .getWatchedJobWithStatus(job._id)
-            .then(newJobs => this.updateJobResult(newJobs))
-            .catch(error => {
-              console.log(
-                "Error looking up job: ",
-                JSON.stringify(job, null, 2)
-              );
-              job.status = "Error: " + error;
-              this.updateJobResult(job);
+const WatchedJobsPage = props => {
+  return (
+    <JobListPage
+      store={props.store}
+      setupList={searchService.setActiveJobs}
+      retrieveList={props.store.getActiveJobs}
+      lookupJob={jobService.getWatchedJobWithStatus}
+      title="Watched Jobs"
+    >
+      {(job, parent) => (
+        <WatchedJobRow
+          store={props.store}
+          job={job}
+          callback={jobId => {
+            parent.setState({
+              jobs: parent.state.jobs
+                .slice()
+                .filter(el => el._id.toString() !== jobId)
             });
-        });
-      })
-      .catch(error => {
-        console.log("Error loading page", error);
-      });
-  }
-
-  render() {
-    return (
-      <div class="jobListPage">
-        <h2>Watched Jobs ({this.state.jobs.length})</h2>
-        <Segment.Group>
-          <Segment inverted color="black">
-            <Grid columns={6}>
-              <Grid.Column>Company</Grid.Column>
-              <Grid.Column>Title</Grid.Column>
-              <Grid.Column>Location</Grid.Column>
-              <Grid.Column>Link</Grid.Column>
-              <Grid.Column>Status</Grid.Column>
-            </Grid>
-          </Segment>
-          {this.state.jobs &&
-            this.state.jobs.map(job => {
-              return (
-                <WatchedJobRow
-                  store={this.props.store}
-                  job={job}
-                  callback={jobId => {
-                    this.setState({
-                      jobs: this.state.jobs
-                        .slice()
-                        .filter(el => el._id.toString() !== jobId)
-                    });
-                  }}
-                />
-              );
-            })}
-        </Segment.Group>
-      </div>
-    );
-  }
-}
+          }}
+        />
+      )}
+    </JobListPage>
+  );
+};
 
 export default observer(WatchedJobsPage);
