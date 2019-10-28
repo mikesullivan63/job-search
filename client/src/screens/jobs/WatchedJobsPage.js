@@ -1,11 +1,8 @@
 import React from "react";
-import { observer } from "mobx-react";
-import { Segment, Grid, Button } from "semantic-ui-react";
 import JobListPage from "./JobListPage";
 import WatchedJobRow from "./WatchedJobRow";
 import { jobService } from "../../services/job";
 import { searchService } from "../../services/search";
-import { objectComparator } from "../../util/comparator";
 
 const WatchedJobsPage = props => {
   return (
@@ -33,4 +30,4 @@ const WatchedJobsPage = props => {
   );
 };
 
-export default observer(WatchedJobsPage);
+export default WatchedJobsPage;
