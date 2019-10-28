@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useHistory, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { observer, inject } from "mobx-react";
 import { Container, Image, Menu } from "semantic-ui-react";
 import logo from "../../logo.svg";

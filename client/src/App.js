@@ -9,6 +9,7 @@ import EditProfilePage from "./screens/profile/EditProfilePage";
 import WatchedJobsPage from "./screens/jobs/WatchedJobsPage";
 import IgnoredJobsPage from "./screens/jobs/IgnoredJobsPage";
 import { authenticationService } from "./services/authentication";
+import { searchService } from "./services/search";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class App extends React.Component {
   componentDidMount() {
     authenticationService.remember().then(profile => {
       this.setState({ remembered: true });
+      searchService.loadCompanies();
     });
   }
 
@@ -29,20 +31,44 @@ class App extends React.Component {
     if (!this.state.remembered) {
       return null;
     }
+
+    const loggedOutPaths = [
+      {
+        path: "/register",
+        render: props => <RegisterPage {...props} store={this.props.store} />
+      },
+      {
+        path: "/login",
+        render: props => <LoginPage {...props} store={this.props.store} />
+      }
+    ];
+
+    const loggedInPaths = [
+      {
+        path: "/",
+        render: props => <SearchPage {...props} store={this.props.store} />
+      },
+      {
+        path: "/profile",
+        render: props => <EditProfilePage {...props} store={this.props.store} />
+      },
+      {
+        path: "/watched-jobs",
+        render: props => <WatchedJobsPage {...props} store={this.props.store} />
+      },
+      {
+        path: "/ignored-jobs",
+        render: props => <IgnoredJobsPage {...props} store={this.props.store} />
+      }
+    ];
+
     const location = this.props.location.pathname;
     if (!this.props.store.isLoggedIn()) {
-      if (location !== "/login" && location !== "/register") {
+      if (!loggedOutPaths.some(path => path.path === location)) {
         return <Redirect to="/login" />;
       }
-    }
-
-    if (this.props.store.isLoggedIn()) {
-      if (
-        location !== "/" &&
-        location !== "/profile" &&
-        location !== "/watched-jobs" &&
-        location !== "/ignored-jobs"
-      ) {
+    } else {
+      if (!loggedInPaths.some(path => path.path === location)) {
         return <Redirect to="/" />;
       }
     }
@@ -51,56 +77,14 @@ class App extends React.Component {
       <React.Fragment>
         <Header store={this.props.store} />
         <Switch>
-          {!this.props.store.isLoggedIn() && (
-            <React.Fragment>
-              <Route
-                exact
-                path="/register"
-                render={props => (
-                  <RegisterPage {...props} store={this.props.store} />
-                )}
-              />
-              <Route
-                exact
-                path="/login"
-                render={props => (
-                  <LoginPage {...props} store={this.props.store} />
-                )}
-              />
-            </React.Fragment>
-          )}
-          {this.props.store.isLoggedIn() && (
-            <React.Fragment>
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <SearchPage {...props} store={this.props.store} />
-                )}
-              />
-              <Route
-                exact
-                path="/profile"
-                render={props => (
-                  <EditProfilePage {...props} store={this.props.store} />
-                )}
-              />
-              <Route
-                exact
-                path="/watched-jobs"
-                render={props => (
-                  <WatchedJobsPage {...props} store={this.props.store} />
-                )}
-              />
-              <Route
-                exact
-                path="/ignored-jobs"
-                render={props => (
-                  <IgnoredJobsPage {...props} store={this.props.store} />
-                )}
-              />
-            </React.Fragment>
-          )}
+          {!this.props.store.isLoggedIn() &&
+            loggedOutPaths.map(path => (
+              <Route exact path={path.path} render={path.render} />
+            ))}
+          {this.props.store.isLoggedIn() &&
+            loggedInPaths.map(path => (
+              <Route exact path={path.path} render={path.render} />
+            ))}
         </Switch>
       </React.Fragment>
     );

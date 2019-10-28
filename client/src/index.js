@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "mobx-react";
 import ResultsStore from "./models/ResultsStore";
-import { authenticationService } from "./services/authentication";
 import { loginService } from "./services/login";
 import { searchService } from "./services/search";
 import { jobService } from "./services/job";
