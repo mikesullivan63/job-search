@@ -70,4 +70,29 @@ routes.get("/last-search", auth, function(req, res) {
   });
 });
 
+routes.get("/search-history/:startIndex/:pageSize", auth, function(req, res) {
+  processUserQueries(req, res, (req, res, userQueries) => {
+    if (userQueries && userQueries.queries && userQueries.queries.length > 0) {
+      res.status(200);
+      //Pass in 1, 20 return [0...19], Pass in 10, 10 return [9, 19]
+      res.json({
+        total: userQueries.queries.length,
+        results: userQueries.queries
+          .reverse()
+          .slice(
+            req.params.startIndex - 1,
+            req.params.startIndex + req.params.pageSize - 1
+          )
+      });
+    } else {
+      res.status(200);
+      res.json({
+        title: "",
+        location: "",
+        time: new Date()
+      });
+    }
+  });
+});
+
 module.exports = routes;

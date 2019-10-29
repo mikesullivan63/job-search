@@ -10,6 +10,7 @@ import WatchedJobsPage from "./screens/jobs/WatchedJobsPage";
 import IgnoredJobsPage from "./screens/jobs/IgnoredJobsPage";
 import { authenticationService } from "./services/authentication";
 import { searchService } from "./services/search";
+import SearchHistoryPage from "./screens/history/SearchHistoryPage";
 
 class App extends React.Component {
   constructor(props) {
@@ -59,6 +60,12 @@ class App extends React.Component {
       {
         path: "/ignored-jobs",
         render: props => <IgnoredJobsPage {...props} store={this.props.store} />
+      },
+      {
+        path: "/search-history",
+        render: props => (
+          <SearchHistoryPage {...props} store={this.props.store} />
+        )
       }
     ];
 

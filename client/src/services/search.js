@@ -121,11 +121,26 @@ function executeSearch(title, location) {
     .catch(error => console.log("Errors", JSON.stringify(error, null, 2)));
 }
 
+function getSearchHistory(start, pageSize) {
+  return new Promise((resolve, reject) => {
+    fetch("/user/search-history/" + start + "/" + pageSize, {
+      headers: authenticationService.authHeader()
+    })
+      .then(res => res.json())
+      .then(res => resolve(res))
+      .catch(error => {
+        console.log("Error loading history: ", error);
+        reject(error);
+      });
+  });
+}
+
 export const searchService = {
   setStore,
   loadCompanies,
   loadLastSearch,
   executeSearch,
   setActiveJobs,
-  setIgnoredJobs
+  setIgnoredJobs,
+  getSearchHistory
 };
