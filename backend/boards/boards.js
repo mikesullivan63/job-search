@@ -5,6 +5,7 @@ const processLever = require("./processors/lever").processLever;
 const processGoogle = require("./processors/google").processGoogle;
 const processBreezy = require("./processors/breezy").processBreezy;
 const processWorkable = require("./processors/workable").processWorkable;
+const processOther = require("./processors/other").processOther;
 
 exports.Boards = [
     {name: "InVision", url:"invision", processor: processGreenhouse, notes: "Design tool"},
@@ -54,42 +55,57 @@ exports.Boards = [
     {name: "Nearform", url:"nearform", processor: processBreezy, notes: ""},
     {name: "Piggy", url:"piggy-llc", processor: processBreezy, notes: ""},
     {name: "Time Doctor", url:"time-doctor", processor: processBreezy, notes: ""},
+
+    {name: "HashiCorp", url:"https://www.hashicorp.com/jobs", processor: processOther, notes: ""},
+    {name: "SitePen", url:"https://www.sitepen.com/about/jobs.html", processor: processOther, notes: ""},
+    {name: "Voxnest", url:"https://www.voxnest.com/careers", processor: processOther, notes: ""},
+    {name: "Voxnest", url:"https://www.voxnest.com/careers", processor: processOther, notes: ""},
+    {name: "Particular", url:"https://particular.net/careers", processor: processOther, notes: ""},
+    {name: "MARSBASED", url:"https://marsbased.com/jobs/", processor: processOther, notes: ""},
+    {name: "igalia", url:"https://www.igalia.com/jobs/", processor: processOther, notes: ""},
+    {name: "Heroku", url:"https://www.heroku.com/careers", processor: processOther, notes: ""},
+    {name: "Heap", url:"https://heap.io/careers/jobs", processor: processOther, notes: ""},
+    {name: "Gradle", url:"https://gradle.com/careers/", processor: processOther, notes: ""},
+    {name: "Ghost", url:"https://careers.ghost.org/ ", processor: processOther, notes: ""},
+    {name: "Fairwinds", url:"https://www.fairwinds.com/careers", processor: processOther, notes: ""},
+    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
+    {name: "Duck Duck Go", url:"https://duckduckgo.com/hiring", processor: processOther, notes: ""},
+    {name: "Datadog", url:"https://www.datadoghq.com/jobs-engineering/", processor: processOther, notes: ""},
+    {name: "Buffer", url:"https://journey.buffer.com/", processor: processOther, notes: ""},
+    {name: "Automattic", url:"https://automattic.com/work-with-us/", processor: processOther, notes: ""},
+    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
+    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
+    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
 ];
 
 
     /*
+    Temporary
     {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
     {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
     {name: "Barrel", url:"barrel", processor: processWorkable, notes: ""},
     {name: "Grafana", url:"grafana-labs", processor: processWorkable, notes: ""},
+    */
+    
+    /*
+    No data to use    
+        {name: "Olark", url:"https://www.olark.com/jobs/", processor: processOther, notes: ""},
+        https://www.lullabot.com/jobs
+        https://fire-engine-red.com/careers/
+        https://basecamp.com/about/jobs
+        https://balsamiq.com/company/jobs/openings/
 
-    https://www.hashicorp.com/jobs#engineering
-    https://www.sitepen.com/about/jobs.html
+    TBD
     https://stackoverflow.com/jobs?q=Manager&r=true
     https://stackoverflow.com/company/work-here
-    https://www.voxnest.com/careers
-        https://www.voxnest.com/careers/fullstack-engineer-php-nodejs
-    https://particular.net/careers
-    https://www.parse.ly/careers
-    https://www.olark.com/jobs/
-    https://marsbased.com/jobs/
-    https://www.lullabot.com/jobs
-    https://www.igalia.com/jobs/
-    https://www.heroku.com/careers
-        https://www.heroku.com/careers/heroku-platform-support-engineer-88
-        https://salesforce.wd1.myworkdayjobs.com/en-US/External_Career_Site
-    https://heap.io/careers/jobs
-    https://gradle.com/careers/
-    https://careers.ghost.org/ 
-    https://fire-engine-red.com/careers/
-    https://www.fairwinds.com/careers
-    https://jobs.elastic.co/jobs/department/engineering#/
-    https://duckduckgo.com/hiring/#open
-    https://www.datadoghq.com/jobs-engineering/#all
-    https://journey.buffer.com/
-    https://basecamp.com/about/jobs
-    https://balsamiq.com/company/jobs/openings/
-    https://automattic.com/work-with-us/
+       
+    
+    
+    
+    
+    
+    
+    
     https://www.aha.io/company/careers/current-openings
     https://stripe.com/jobs
 
