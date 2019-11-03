@@ -73,9 +73,9 @@ exports.Boards = [
     {name: "Datadog", url:"https://www.datadoghq.com/jobs-engineering/", processor: processOther, notes: ""},
     {name: "Buffer", url:"https://journey.buffer.com/", processor: processOther, notes: ""},
     {name: "Automattic", url:"https://automattic.com/work-with-us/", processor: processOther, notes: ""},
-    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
-    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
-    {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
+    {name: "Aha!", url:"https://www.aha.io/company/careers/current-openings", processor: processOther, notes: ""},
+    {name: "Stripe", url:"https://stripe.com/jobs/search", processor: processOther, notes: ""},
+    {name: "Olo", url:"https://olo.theresumator.com/", processor: processOther, notes: ""},
 ];
 
 
@@ -94,6 +94,7 @@ exports.Boards = [
         https://fire-engine-red.com/careers/
         https://basecamp.com/about/jobs
         https://balsamiq.com/company/jobs/openings/
+        https://madewithlove.recruitee.com/
 
     TBD
     https://stackoverflow.com/jobs?q=Manager&r=true
@@ -106,12 +107,12 @@ exports.Boards = [
     
     
     
-    https://www.aha.io/company/careers/current-openings
-    https://stripe.com/jobs
+    
+    
 
-    https://madewithlove.recruitee.com/
+    
 
-    https://olo.theresumator.com/
+    
 
     
     */

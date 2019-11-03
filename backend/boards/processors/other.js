@@ -25,7 +25,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find(".title").text(),
         locationExtractor: (el, $) => el.find(".pin").text(),
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://www.sitepen.com/about/jobs.html
@@ -43,7 +43,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("h3.title").text(),
         locationExtractor: (el, $) => "Remote United States US",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://www.voxnest.com/careers
@@ -61,7 +61,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("h4.title").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
 
@@ -73,7 +73,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("a").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*
@@ -93,8 +93,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("h5").text(),
         locationExtractor: (el, $) => el.find("div.JobListing__badge").text(),
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
-          el.attr("href")
+          board.url.substring(0, board.url.indexOf("/", 15)) + el.attr("href")
       },
       /*    https://marsbased.com/jobs/
       <div class="">
@@ -108,7 +107,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("h2").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://www.igalia.com/jobs/
@@ -129,7 +128,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("a").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://www.heroku.com/careers
@@ -142,7 +141,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("a").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://heap.io/careers/jobs
@@ -216,7 +215,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("div.position-title").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
       },
       /*    https://jobs.elastic.co/jobs/department/engineering
@@ -242,7 +241,7 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("td a").text(),
         locationExtractor: (el, $) => el.find("td spav small").text(),
         linkExtractor: el =>
-          board.url.substring(0, board.url.substring.indexOf("/", 15)) +
+          board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("td a").attr("href")
       },
       /*    https://duckduckgo.com/hiring
@@ -322,6 +321,67 @@ exports.processOther = (board, title, location, debug) => {
         titleExtractor: el => el.find("div.position-listing-title").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el => el.attr("href")
+      },
+      /*  https://www.aha.io/company/careers/current-openings
+          <li data-location="United States,Canada,United Kingdom,Ireland,South Africa,Australia,New Zealand">
+            <a href="/company/careers/current-openings/customer_success_specialist_product_marketing_us">
+              <div class="job-list-title">
+                <span>Customer Success Specialist <span>(product marketing experience required)</span></span>
+              </div>
+              <div class="job-list-location">
+                Anywhere in the United States, Canada, the United Kingdom, 
+                Ireland, South Africa, Australia, or New Zealand
+              </div>
+            </a>
+          </li>
+       */
+      {
+        jobSelector: "ul.job-list li a",
+        titleExtractor: el => el.find("div.job-list-title").text(),
+        locationExtractor: (el, $) => el.find("div.job-list-location").text(),
+        linkExtractor: el =>
+          board.url.substring(0, board.url.indexOf("/", 15)) + el.attr("href")
+      },
+      /*  https://stripe.com/jobs/search
+          <li class="sc-EHOje ibgwSN">
+            <div class="sc-bZQynM bCelqW">
+              <a class="common-Link sc-bwzfXH dPudUq" href="/jobs/listing/account-associate/1487130">
+                <div class="sc-bdVaJa hDQELU">Account Associate - Singapore</div>
+              </a>
+              <span class="sc-htpNat vYuBx common-BodyText">Sales</span>
+              <div class="sc-ifAKCX hdwfUL">
+                <div class="sc-bxivhb izpDGV common-FlagIcon common-FlagIcon--sg"></div>
+                <span class=" common-BodyText">Singapore</span>
+              </div>
+            </div>
+          </li>
+      */
+      {
+        jobSelector: "ul.ToolListings div div ul li",
+        titleExtractor: el => el.find("a div").text(),
+        locationExtractor: (el, $) => el.find("div div span").text(),
+        linkExtractor: el =>
+          board.url.substring(0, board.url.indexOf("/", 15)) +
+          el.find("a").attr("href")
+      },
+      /*  https://olo.theresumator.com/
+          <li class="list-group-item">
+            <h4 class="list-group-item-heading">
+              <a href="http://olo.theresumator.com/apply/wK80srGENv/Account-Coordinator-Delivery-Specialist">
+                Account Coordinator - Delivery Specialist                                    
+              </a>
+            </h4>
+            <ul class="list-inline list-group-item-text">
+              <li><i class="fa fa-map-marker"></i>New York or Remote, NY</li>
+              <li><i class="fa fa-sitemap"></i>Customer Success</li>
+            </ul>
+          </li>
+      */
+      {
+        jobSelector: "div.job-board-list div.jobs-list ul li.list-group-item",
+        titleExtractor: el => el.find("h4 a").text(),
+        locationExtractor: (el, $) => el.find("ul li .lifa-map-marker").text(),
+        linkExtractor: el => el.find("h4 a").attr("href")
       }
     ],
     debug
