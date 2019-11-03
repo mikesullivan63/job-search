@@ -18,7 +18,6 @@ exports.Boards = [
     {name: "CB Insights", url:"cbinsights", processor: processGreenhouse, notes: ""},
     {name: "Security Scorecard", url:"securityscorecard", processor: processGreenhouse, notes: ""},
     {name: "Karat", url:"karat", processor: processGreenhouse, notes: ""},    
-    {name: "Algorithmia", url:"algorithmia", processor: processGreenhouse, notes: ""},    
     {name: "ReCharge", url:"recharge", processor: processGreenhouse, notes: ""},       
     {name: "Good Money", url:"goodmoney", processor: processGreenhouse, notes: ""},       
     //    https://boards.greenhouse.getrake.io/digitalocean98/
@@ -70,7 +69,6 @@ exports.Boards = [
     {name: "Elastic", url:"https://jobs.elastic.co/jobs/department/engineering", processor: processOther, notes: ""},
     {name: "Duck Duck Go", url:"https://duckduckgo.com/hiring", processor: processOther, notes: ""},
     {name: "Datadog", url:"https://www.datadoghq.com/jobs-engineering/", processor: processOther, notes: ""},
-    {name: "Buffer", url:"https://journey.buffer.com/", processor: processOther, notes: ""},
     {name: "Automattic", url:"https://automattic.com/work-with-us/", processor: processOther, notes: ""},
     {name: "Aha!", url:"https://www.aha.io/company/careers/current-openings", processor: processOther, notes: ""},
     {name: "Stripe", url:"https://stripe.com/jobs/search", processor: processOther, notes: ""},
@@ -80,6 +78,11 @@ exports.Boards = [
 
     /*
     Temporary
+    {name: "Algorithmia", url:"algorithmia", processor: processGreenhouse, notes: ""},    
+    {name: "Buffer", url:"https://journey.buffer.com/", processor: processOther, notes: ""},
+    
+    
+    
     {name: "Harvest", url:"harvest", processor: processWorkable, notes: ""},
     {name: "Doist", url:"doist", processor: processWorkable, notes: ""},
     {name: "Barrel", url:"barrel", processor: processWorkable, notes: ""},

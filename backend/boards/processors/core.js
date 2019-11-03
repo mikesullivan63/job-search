@@ -30,14 +30,33 @@ module.exports = (board, url, title, location, selectors, debug) => {
           .map(selector => {
             //Debug section - skip for actual logic
             if (debug) {
-              console.log("jobSelector: " + JSON.stringify(selector, null, 2));
-              console.log("$(jobSelector): " + $(selector.jobSelector).length);
-              if ($(selector.jobSelector).length === 0) {
-                console.log(
-                  "jobSelector",
-                  selector.jobSelector + " didn't match anything in Body",
-                  $.html("body")
-                );
+              console.log(
+                'selector "',
+                selector.jobSelector,
+                '" results in ',
+                $(selector.jobSelector).length,
+                "matches"
+              );
+
+              if (
+                $(selector.jobSelector).length === 0 &&
+                selector.jobSelector.indexOf(" ") > -1
+              ) {
+                let tempSelector = selector.jobSelector;
+                while (tempSelector.indexOf(" ") > -1) {
+                  tempSelector = tempSelector.substring(
+                    0,
+                    tempSelector.lastIndexOf(" ")
+                  );
+                  console.log(
+                    '\tselector "',
+                    tempSelector,
+                    '" results in ',
+                    $(tempSelector).length,
+                    "matches with markup",
+                    $(tempSelector).html()
+                  );
+                }
               }
             }
 
@@ -45,6 +64,9 @@ module.exports = (board, url, title, location, selectors, debug) => {
             //This map is non-standard - from doc:
             //  "If an array is returned, the elements inside the array are inserted into the set.
             //  If the function returns null or undefined, no element will be inserted."
+
+            if (debug) {
+            }
             const cheerioResults = $(selector.jobSelector).map((index, el) => {
               //Map to result format
               const result = {
@@ -87,7 +109,7 @@ module.exports = (board, url, title, location, selectors, debug) => {
                 return result;
               }
               return null;
-            }, []);
+            });
 
             //Needed to convert from Cheerio Object to array of results
             const convertedResults = [];
@@ -113,6 +135,10 @@ module.exports = (board, url, title, location, selectors, debug) => {
             },
             [[], []]
           );
+
+        if (jobLists[0].length === 0 && jobLists[1].length === 0 && debug) {
+          console.log("No jobs found for markup: ", $.html("body"));
+        }
 
         //Sort resulting list
         jobLists[0].sort(objectComparator(["title", "location", "url"]));

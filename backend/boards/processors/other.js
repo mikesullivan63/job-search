@@ -315,7 +315,7 @@ exports.processOther = (board, title, location, debug) => {
       
       */
       {
-        jobSelector: "h4#open-positions ul.position-listings-list li a",
+        jobSelector: "ul.position-listings-list li a.position-listing",
         titleExtractor: el => el.find("div.position-listing-title").text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el => el.attr("href")
@@ -382,6 +382,6 @@ exports.processOther = (board, title, location, debug) => {
         linkExtractor: el => el.find("h4 a").attr("href")
       }
     ],
-    debug
+    true
   );
 };
