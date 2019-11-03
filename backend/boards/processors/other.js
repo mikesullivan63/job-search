@@ -23,7 +23,7 @@ exports.processOther = (board, title, location, debug) => {
       {
         jobSelector: "div#job-listings li",
         titleExtractor: el => el.find(".title").text(),
-        locationExtractor: (el, $) => el.find(".pin").text(),
+        locationExtractor: (el, $) => el.find(".top span").text(),
         linkExtractor: el =>
           board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("a").attr("href")
@@ -69,12 +69,11 @@ exports.processOther = (board, title, location, debug) => {
         <li><strong><a href="/careers/sales">Inside Sales &amp; Account Manager</a></strong></li>
       */
       {
-        jobSelector: "div.careers ul li",
-        titleExtractor: el => el.find("a").text(),
+        jobSelector: "div.careers ul li strong a",
+        titleExtractor: el => el.text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.indexOf("/", 15)) +
-          el.find("a").attr("href")
+          board.url.substring(0, board.url.indexOf("/", 15)) + el.attr("href")
       },
       /*
         <a class="Link JobListing" href="/careers/python_data_engineer">
@@ -137,12 +136,11 @@ exports.processOther = (board, title, location, debug) => {
           </li>
       */
       {
-        jobSelector: "div.job-categroy li",
-        titleExtractor: el => el.find("a").text(),
+        jobSelector: "div.job-categroy li a",
+        titleExtractor: el => el.text(),
         locationExtractor: (el, $) => "Remote",
         linkExtractor: el =>
-          board.url.substring(0, board.url.indexOf("/", 15)) +
-          el.find("a").attr("href")
+          board.url.substring(0, board.url.indexOf("/", 15)) + el.attr("href")
       },
       /*    https://heap.io/careers/jobs
             <div data-department="Sales" data-location="London" class="single-job active">
@@ -193,7 +191,7 @@ exports.processOther = (board, title, location, debug) => {
       */
       {
         jobSelector: "div#vacancies div div div div a",
-        titleExtractor: el => el.find("p").text(),
+        titleExtractor: el => el.find("div p").text(),
         locationExtractor: (el, $) => el.find("div p").text(),
         linkExtractor: el => el.attr("href")
       },
@@ -239,7 +237,7 @@ exports.processOther = (board, title, location, debug) => {
       {
         jobSelector: "div#job-container table tr",
         titleExtractor: el => el.find("td a").text(),
-        locationExtractor: (el, $) => el.find("td spav small").text(),
+        locationExtractor: (el, $) => el.find("td span small").text(),
         linkExtractor: el =>
           board.url.substring(0, board.url.indexOf("/", 15)) +
           el.find("td a").attr("href")

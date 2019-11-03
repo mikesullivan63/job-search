@@ -16,6 +16,7 @@ function match(needles, haystack) {
 
 module.exports = (board, url, title, location, selectors, debug) => {
   return new Promise(function(resolve, reject) {
+    console.log("Posting request to", url);
     request
       .get({
         uri: url,
@@ -41,21 +42,52 @@ module.exports = (board, url, title, location, selectors, debug) => {
             }
 
             //Locate all jobs for a given selector
-            const cheerioResults = $(selector.jobSelector).map((i, el) => {
-              if (debug) {
-                console.log("el: " + $(el).html());
-                console.log("title: " + selector.titleExtractor($(el)));
-                console.log("loc: " + selector.locationExtractor($(el), $));
-                console.log("link: " + selector.linkExtractor($(el), $));
-              }
-
+            //This map is non-standard - from doc:
+            //  "If an array is returned, the elements inside the array are inserted into the set.
+            //  If the function returns null or undefined, no element will be inserted."
+            const cheerioResults = $(selector.jobSelector).map((index, el) => {
               //Map to result format
-              return {
+              const result = {
                 title: selector.titleExtractor($(el), $),
                 location: selector.locationExtractor($(el), $),
                 url: selector.linkExtractor($(el), $)
               };
-            });
+
+              //Found some data orth exploring details
+              if (!!result.title || !!result.title) {
+                if (!result.title || result.title === "") {
+                  console.log(
+                    "Title is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                } else if (!result.location || result.location === "") {
+                  console.log(
+                    "Location is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                } else if (!result.url || result.url === "") {
+                  console.log(
+                    "URL is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                }
+
+                return result;
+              }
+              return null;
+            }, []);
 
             //Needed to convert from Cheerio Object to array of results
             const convertedResults = [];

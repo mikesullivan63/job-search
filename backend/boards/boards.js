@@ -59,7 +59,6 @@ exports.Boards = [
     {name: "HashiCorp", url:"https://www.hashicorp.com/jobs", processor: processOther, notes: ""},
     {name: "SitePen", url:"https://www.sitepen.com/about/jobs.html", processor: processOther, notes: ""},
     {name: "Voxnest", url:"https://www.voxnest.com/careers", processor: processOther, notes: ""},
-    {name: "Voxnest", url:"https://www.voxnest.com/careers", processor: processOther, notes: ""},
     {name: "Particular", url:"https://particular.net/careers", processor: processOther, notes: ""},
     {name: "MARSBASED", url:"https://marsbased.com/jobs/", processor: processOther, notes: ""},
     {name: "igalia", url:"https://www.igalia.com/jobs/", processor: processOther, notes: ""},
