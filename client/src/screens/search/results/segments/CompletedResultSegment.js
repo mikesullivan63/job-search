@@ -4,7 +4,6 @@ import CommonSegment from "./CommonSegment";
 import ActiveJobs from "./lists/ActiveJobs";
 import IgnoredJobs from "./lists/IgnoredJobs";
 import OtherJobs from "./lists/OtherJobs";
-
 const CompletedResultSegment = props => {
   //Determine lists for subsections and formatting
   let jobsToDisplay = !props.company.jobs
@@ -45,6 +44,8 @@ const CompletedResultSegment = props => {
       className="completedResult"
       style={segmentProps}
       company={props.company}
+      store={props.store}
+      redo={true}
     >
       <ActiveJobs
         store={props.store}

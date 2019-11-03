@@ -111,6 +111,7 @@ function executeSearch(title, location) {
     this.setIgnoredJobs(),
     postSearchCall(title, location)
   ])
+    .then(this.store.setLastSearch(title, location))
     .then(
       this.store
         .getSearchResults()
@@ -142,5 +143,6 @@ export const searchService = {
   executeSearch,
   setActiveJobs,
   setIgnoredJobs,
-  getSearchHistory
+  getSearchHistory,
+  processBoard
 };
