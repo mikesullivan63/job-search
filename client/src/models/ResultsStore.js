@@ -9,8 +9,8 @@ const ResultsStore = types
     user: types.optional(User, {}),
     lastSearch: types.optional(
       types.model("Search", {
-        title: types.string,
-        location: types.string
+        title: types.optional(types.string, ""),
+        location: types.optional(types.string, "")
       }),
       {}
     ),
