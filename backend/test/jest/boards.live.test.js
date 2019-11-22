@@ -22,6 +22,6 @@ xtest("Ensure all boards return values for title, location, and URL", () => {
         );
     })
     .catch(error => {
-      console.log("Error procssing", board.name, error);
+      console.log("Error processing", board.name, error);
     });
 }, 10000);

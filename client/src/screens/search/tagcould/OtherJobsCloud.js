@@ -3,42 +3,66 @@ import { observer } from "mobx-react";
 import { Segment, Header } from "semantic-ui-react";
 import { TagCloud } from "react-tagcloud";
 
-function processJobData(boards, getJobs, getField) {
-  return Array.from(
-    boards
-      .reduce((results, board) => {
-        getJobs(board)
-          .flatMap(job =>
-            getField(job)
-              .trim()
-              .toLowerCase()
-              .replace(/(())/g, "")
-              .split(" ")
-          )
-          .forEach(word => {
-            results.set(word, 1 + (results.has(word) ? results.get(word) : 0));
-          });
-        return results;
-      }, new Map())
-      .entries(),
-    ([key, value]) => {
-      return { value: key, count: value };
-    }
-  )
+function processJobData(boards, getJobs, getField, searchTerms) {
+  const searchTermIndex = searchTerms
+    .toLowerCase()
+    .split(" or ")
+    .map(term => term.trim());
+
+  //Convert boards to cleaned up job terms
+  const allFieldTerms = boards
+    .flatMap(board => getJobs(board))
+    .map(job =>
+      getField(job)
+        .trim()
+        .toLowerCase()
+        .replace(/([(),-])/g, "")
+    );
+
+  //Remove terms that match search
+  const filteredTerms = allFieldTerms.filter(
+    terms => !searchTermIndex.some(exclude => terms.indexOf(exclude) > -1)
+  );
+
+  //Convert to single words
+  const words = filteredTerms.flatMap(terms =>
+    terms
+      .split(" ")
+      .map(term => term.trim())
+      .filter(term => term !== "")
+  );
+
+  //Generate map of word counts
+  const wordCounts = words.reduce((updatedResult, word) => {
+    updatedResult.set(
+      word,
+      1 + (updatedResult.has(word) ? updatedResult.get(word) : 0)
+    );
+    return updatedResult;
+  }, new Map());
+
+  //Convert map to an array of terms and counts
+  const result = Array.from(wordCounts.entries(), ([key, value]) => {
+    return { value: key, count: value };
+  })
     .sort((left, right) => right.count - left.count)
     .slice(0, 100);
+
+  return result;
 }
 
 const OtherJobsCloud = props => {
   const titleWordSet = processJobData(
     props.store.searchResults,
     board => board.otherJobs,
-    job => job.title
+    job => job.title,
+    props.store.lastSearch.title
   );
   const locationWordSet = processJobData(
     props.store.searchResults,
     board => board.otherJobs,
-    job => job.location
+    job => job.location,
+    props.store.lastSearch.location
   );
 
   return (
