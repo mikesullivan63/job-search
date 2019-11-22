@@ -7,6 +7,13 @@ import { objectComparator } from "../util/comparator";
 const ResultsStore = types
   .model("ResultsStore", {
     user: types.optional(User, {}),
+    lastSearch: types.optional(
+      types.model("Search", {
+        title: types.optional(types.string, ""),
+        location: types.optional(types.string, "")
+      }),
+      {}
+    ),
     loggedIn: types.optional(types.boolean, false),
     activeJobs: types.array(Job),
     ignoredJobs: types.array(Job),
@@ -73,6 +80,11 @@ const ResultsStore = types
       destroy(self.user);
     }
   }))
+  .actions(self => ({
+    setLastSearch(title, location) {
+      self.lastSearch = { title, location };
+    }
+  }))
   .views(self => ({
     isIgnored(job) {
       return self.ignoredJobs.some(el => el.url === job.url);
@@ -100,6 +112,9 @@ const ResultsStore = types
     },
     isLoggedIn() {
       return self.loggedIn;
+    },
+    getLastSearch() {
+      return self.lastSearch;
     }
   }));
 

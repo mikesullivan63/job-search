@@ -2,7 +2,6 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Grid } from "semantic-ui-react";
 import Result from "./Result";
-import { searchService } from "../../../services/search";
 
 const Results = props => {
   return (

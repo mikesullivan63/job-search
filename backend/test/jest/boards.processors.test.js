@@ -49,7 +49,7 @@ describe("Suite of tests to ensure all processors work", () => {
   });
 
   test("Ensure Google board works with sample content", done => {
-    return testBoard(processGoogle, 7, 32, done);
+    return testBoard(processGoogle, 7, 22, done);
   });
 
   test("Ensure Breezy board works with sample content", done => {

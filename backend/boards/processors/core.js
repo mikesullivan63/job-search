@@ -16,6 +16,7 @@ function match(needles, haystack) {
 
 module.exports = (board, url, title, location, selectors, debug) => {
   return new Promise(function(resolve, reject) {
+    console.log("Posting request to", url);
     request
       .get({
         uri: url,
@@ -29,32 +30,82 @@ module.exports = (board, url, title, location, selectors, debug) => {
           .map(selector => {
             //Debug section - skip for actual logic
             if (debug) {
-              console.log("jobSelector: " + JSON.stringify(selector, null, 2));
-              console.log("$(jobSelector): " + $(selector.jobSelector).length);
-              if ($(selector.jobSelector).length === 0) {
-                console.log(
-                  "jobSelector",
-                  selector.jobSelector + " didn't match anything in Body",
-                  $.html("body")
-                );
+              console.log(
+                "selector '",
+                selector.jobSelector,
+                "' results in ",
+                $(selector.jobSelector).length,
+                "matches"
+              );
+
+              if (
+                $(selector.jobSelector).length === 0 &&
+                selector.jobSelector.indexOf(" ") > -1
+              ) {
+                let tempSelector = selector.jobSelector;
+                while (tempSelector.indexOf(" ") > -1) {
+                  tempSelector = tempSelector.substring(
+                    0,
+                    tempSelector.lastIndexOf(" ")
+                  );
+                  console.log(
+                    "\tselector '",
+                    tempSelector,
+                    "' results in ",
+                    $(tempSelector).length,
+                    "matches with markup",
+                    $(tempSelector).html()
+                  );
+                }
               }
             }
 
             //Locate all jobs for a given selector
-            const cheerioResults = $(selector.jobSelector).map((i, el) => {
-              if (debug) {
-                console.log("el: " + $(el).html());
-                console.log("title: " + selector.titleExtractor($(el)));
-                console.log("loc: " + selector.locationExtractor($(el), $));
-                console.log("link: " + selector.linkExtractor($(el), $));
-              }
-
+            //This map is non-standard - from doc:
+            //  "If an array is returned, the elements inside the array are inserted into the set.
+            //  If the function returns null or undefined, no element will be inserted."
+            const cheerioResults = $(selector.jobSelector).map((index, el) => {
               //Map to result format
-              return {
+              const result = {
                 title: selector.titleExtractor($(el), $),
                 location: selector.locationExtractor($(el), $),
                 url: selector.linkExtractor($(el), $)
               };
+
+              //Found some data orth exploring details
+              if (!!result.title || !!result.title) {
+                if (!result.title || result.title === "") {
+                  console.log(
+                    "Title is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                } else if (!result.location || result.location === "") {
+                  console.log(
+                    "Location is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                } else if (!result.url || result.url === "") {
+                  console.log(
+                    "URL is missing from job: ",
+                    JSON.stringify(result, null, 2),
+                    "markup",
+                    $(el).html(),
+                    "selector",
+                    selector.jobSelector
+                  );
+                }
+
+                return result;
+              }
+              return null;
             });
 
             //Needed to convert from Cheerio Object to array of results
@@ -81,6 +132,10 @@ module.exports = (board, url, title, location, selectors, debug) => {
             },
             [[], []]
           );
+
+        if (jobLists[0].length === 0 && jobLists[1].length === 0 && debug) {
+          console.log("No jobs found for markup: ", $.html("body"));
+        }
 
         //Sort resulting list
         jobLists[0].sort(objectComparator(["title", "location", "url"]));
