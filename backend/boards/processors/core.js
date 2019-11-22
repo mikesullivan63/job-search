@@ -31,9 +31,9 @@ module.exports = (board, url, title, location, selectors, debug) => {
             //Debug section - skip for actual logic
             if (debug) {
               console.log(
-                'selector "',
+                "selector '",
                 selector.jobSelector,
-                '" results in ',
+                "' results in ",
                 $(selector.jobSelector).length,
                 "matches"
               );
@@ -49,9 +49,9 @@ module.exports = (board, url, title, location, selectors, debug) => {
                     tempSelector.lastIndexOf(" ")
                   );
                   console.log(
-                    '\tselector "',
+                    "\tselector '",
                     tempSelector,
-                    '" results in ',
+                    "' results in ",
                     $(tempSelector).length,
                     "matches with markup",
                     $(tempSelector).html()
@@ -64,9 +64,6 @@ module.exports = (board, url, title, location, selectors, debug) => {
             //This map is non-standard - from doc:
             //  "If an array is returned, the elements inside the array are inserted into the set.
             //  If the function returns null or undefined, no element will be inserted."
-
-            if (debug) {
-            }
             const cheerioResults = $(selector.jobSelector).map((index, el) => {
               //Map to result format
               const result = {
