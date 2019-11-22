@@ -19,27 +19,9 @@ function processJobData(boards, getJobs, getField, searchTerms) {
         .replace(/([(),-])/g, "")
     );
 
-  console.log(
-    "All terms - searchTermIndex:",
-    searchTermIndex.length,
-    JSON.stringify(searchTermIndex, null, 2)
-  );
-
-  console.log(
-    "All terms - pre filter:",
-    allFieldTerms.length,
-    JSON.stringify(allFieldTerms, null, 2)
-  );
-
   //Remove terms that match search
   const filteredTerms = allFieldTerms.filter(
     terms => !searchTermIndex.some(exclude => terms.indexOf(exclude) > -1)
-  );
-
-  console.log(
-    "All terms - post filter:",
-    filteredTerms.length,
-    JSON.stringify(filteredTerms, null, 2)
   );
 
   //Convert to single words
@@ -66,11 +48,6 @@ function processJobData(boards, getJobs, getField, searchTerms) {
     .sort((left, right) => right.count - left.count)
     .slice(0, 100);
 
-  console.log(
-    "All terms - results:",
-    result.length,
-    JSON.stringify(result, null, 2)
-  );
   return result;
 }
 
