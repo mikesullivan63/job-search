@@ -29,7 +29,7 @@ function processJobData(boards, getJobs, getField, searchTerms) {
     terms
       .split(" ")
       .map(term => term.trim())
-      .filter(term => term != "")
+      .filter(term => term !== "")
   );
 
   //Generate map of word counts
