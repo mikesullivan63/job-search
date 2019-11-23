@@ -16,7 +16,6 @@ function match(needles, haystack) {
 
 module.exports = (board, url, title, location, selectors, debug) => {
   return new Promise(function(resolve, reject) {
-    console.log("Posting request to", url);
     request
       .get({
         uri: url,
@@ -30,14 +29,6 @@ module.exports = (board, url, title, location, selectors, debug) => {
           .map(selector => {
             //Debug section - skip for actual logic
             if (debug) {
-              console.log(
-                "selector '",
-                selector.jobSelector,
-                "' results in ",
-                $(selector.jobSelector).length,
-                "matches"
-              );
-
               if (
                 $(selector.jobSelector).length === 0 &&
                 selector.jobSelector.indexOf(" ") > -1
@@ -47,14 +38,6 @@ module.exports = (board, url, title, location, selectors, debug) => {
                   tempSelector = tempSelector.substring(
                     0,
                     tempSelector.lastIndexOf(" ")
-                  );
-                  console.log(
-                    "\tselector '",
-                    tempSelector,
-                    "' results in ",
-                    $(tempSelector).length,
-                    "matches with markup",
-                    $(tempSelector).html()
                   );
                 }
               }
