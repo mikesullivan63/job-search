@@ -7,24 +7,18 @@ const IgnoredJobRow = props => {
   return (
     <JobListRow store={props.store} job={props.job} callback={props.callback}>
       {(job, beforeCallback, afterCallback) => {
-        if (job.status === "Active") {
-          return (
             <WatchIgnoredJobButton
               store={props.store}
               job={props.job}
               beforeCallback={beforeCallback}
               afterCallback={afterCallback}
             />
-          );
-        } else {
-          return (
             <ArchiveIgnoredJobButton
               store={props.store}
               job={props.job}
               beforeCallback={beforeCallback}
               afterCallback={afterCallback}
             />
-          );
         }
       }}
     </JobListRow>
