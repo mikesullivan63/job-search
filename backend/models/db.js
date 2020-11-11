@@ -4,7 +4,7 @@ const MONGO_PATH =
 
 mongoose.connect(MONGO_PATH, { useNewUrlParser: true }, error => {
   if (error) {
-    console.log("Error connecting to Mongo Database: " + error);
+    console.log("Error connecting to Mongo Database: '" + MONGO_PATH + "': " + error);
   } else {
     console.log("Connected to Mongo Database");
   }
