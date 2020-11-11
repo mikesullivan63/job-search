@@ -2,9 +2,10 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || "DEVELOPMENT_KEY";
 
-module.exports.auth = expressJwt({
+module.exports.auth = expressJwt({  
   secret: ENCRYPTION_KEY,
-  userProperty: "payload"
+  userProperty: "payload",
+  algorithms: ['HS256']
 });
 
 module.exports.generateJwt = function(user) {
